@@ -1,0 +1,182 @@
+<div id="cbc_htc_sec" style="display:block;">
+    <div class="row p-custom">
+        <div class="col">
+            <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">CBC and HCT Information</h6>
+        </div>
+    </div>
+</div>
+
+
+<div class="row p-custom">
+    <div class="col-2">
+        <div class="form-group">
+            <label>HCT First Reading % (mm3)</label>
+            <input type="text" class="form-control" value="<%= form.hct_first_reading  %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>HCT First Reading Date</label>
+            <input type="text" class="form-control" value="<%= date form.hct_first_reading_date %>" readonly>
+        </div>
+    </div>
+
+
+    <div class="col-2">
+    <div class="form-group">
+            <label>WBC First Reading (mm3)</label>
+            <input type="text" class="form-control" value="<%= form.wbc_first_reading %>" readonly>
+    </div>
+    </div>
+
+
+    <div class="col">
+        <div class="form-group">
+            <label>WBC First Reading Date</label>
+            <input type="text" class="form-control" value="<%= date form.wbc_first_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col0">
+        <div class="form-group">
+            <label>Platelets First Reading (mm3)</label>
+            <input type="text" class="form-control" value="<%= form.platelet_first_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>Platelets First Reading Date</label>
+            <input type="text" class="form-control" value="<%= date form.platelet_first_reading_date %>" readonly>
+        </div>
+    </div>
+</div>
+
+<div class="row p-custom" >
+
+    <div class="col">
+        <div class="form-group">
+            <label>HCT Second Reading</label>
+            <input type="text" class="form-control" value="<%= form.hct_second_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>HCT Second Reading Date</label>
+            <input type="text" class="form-control" value="<%= date form.hct_second_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>WBC Second Reading (mm3)</label>
+            <input type="text" class="form-control" value="<%= form.wbc_second_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>WBC Second Reading Date</label>
+            <input type="text" class="form-control" value="<%= date form.wbc_second_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>Platelets Second Reading</label>
+            <input type="text" class="form-control" value="<%= form.platelet_second_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <div class="form-group">
+            <label>Platelets Second Reading Date</label>
+            <input type="text" class="form-control" value="<%= date form.platelet_second_reading_date %>" readonly>
+        </div>
+    </div>
+</div>
+
+<div class="row p-custom" >
+    <div class="col">
+        <div class="form-group">
+            <label>HCT Third Reading</label>
+            <input type="text" class="form-control" value="<%= form.hct_third_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>HCT Third Reading Date</label>
+            <input type="text" class="form-control" value="<%= date form.hct_third_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+    <div class="form-group">
+        <label>WBC Third Reading (mm3)</label>
+        <input type="text" class="form-control" value="<%= form.wbc_third_reading %>" readonly>
+    </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>WBC Third Reading Date</label>
+            <input type="text" class="form-control" value="<%= date form.wbc_third_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>Platelets Third Reading</label>
+            <input type="text" class="form-control" value="<%= form.platelet_third_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>Platelets Third Reading Date</label>
+            <input type="text" class="form-control" value="<%= date form.platelet_third_reading_date %>" readonly>
+        </div>
+    </div>
+</div>
+
+<div id="lab_diagnostic">
+    <div class="row p-custom">
+        <div class="col">
+            <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">Lab and Diagnostic Information</h6>
+        </div>
+    </div>    
+
+    <div class="row p-custom">
+        <div class="col">
+            <div class="form-group">
+                <label>NS1</label>
+                <input type="text" class="form-control" value="<%= form.ns_1 %>" readonly>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label>PCR</label>
+                <input type="text" class="form-control" value="<%= form.pcr %>" readonly>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label>IGM</label>
+                <input type="text" class="form-control" value="<%= form.igm %>" readonly>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label>IGG</label>
+                <input type="text" class="form-control" value="<%= form.igg %>" readonly>
+            </div>
+        </div>
+
+    </div>
+</div>

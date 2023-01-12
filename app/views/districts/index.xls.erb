@@ -1,0 +1,19 @@
+<table class="table table-bordered table-hover listing-tbl">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Province</th>
+                                    <th>Division</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  <% @districts.each do |district| %>
+                                  <tr>
+                                    <td class="tbl-td-color2"><%= district.district_name %></td>
+                                    <td class="tbl-td-color2"><%= district.province.province_name %></td>
+                                    <td class="tbl-td-color2"><%= district.division.division_name %></td>
+                                  </tr>
+                                  <% end %>
+                                </tbody>
+                              </table>

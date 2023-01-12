@@ -1,0 +1,22 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+  <thead>
+    <tr>
+      <th>District</th>
+      <th>Town</th>
+      <th>Tag</th>
+      <th>UC</th>
+      <th>Name/Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @hotspots.each do |hotspot|%>
+      <tr>
+        <td><%= hotspot.district %></td>
+        <td><%= hotspot.tehsil %></td>
+        <td><%= hotspot.tag %></td>
+        <td><%= hotspot.uc %></td>
+        <td><%= hotspot.hotspot_name %>/<%= hotspot.address %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

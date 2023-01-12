@@ -1,0 +1,27 @@
+<table width="100%">
+    <thead>
+        <tr>
+            <th>Sr No </th>
+            <th>Department </th>
+            <th>Total Users</th>
+            <th>Total Dormancy Count</th>
+            <th>Dormancy percentage</th>
+        </tr>                    
+    </thead>
+    <tbody>
+        <% if are_user_wise_larva_filters_active? %>
+        <% @total_users.each_with_index do |dep_user,i| %>
+            <tr>
+                <% total = 0 %>
+                <td align="center"><%= i+1 %></td>
+                <td><%= dep_user[0] %></td>
+                <td align="center"><%= dep_user[1] %></td>
+                <td align="center"><%= @activities["#{dep_user[0]}"].to_i %></td>
+                <% tt = (dep_user[1].to_f) %>
+                <% dor = @activities["#{dep_user[0]}"].to_f %>
+                <td align="center"><%= ((dor/tt)*100).round(1) %>%</td>
+            </tr>
+        <% end %>
+        <% end %>
+    </tbody>
+</table>

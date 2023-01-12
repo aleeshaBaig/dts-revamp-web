@@ -1,0 +1,145 @@
+<table>
+  <thead>
+    <tr>
+      <th>Sr. #</th>
+      <th>GP User ID</th>
+      <th>Reporting Date</th>
+      <th>Patient Name</th>
+      <th>Father/Husband Name</th>
+      <th>Date of Birth</th>
+      <!-- <th>Age</th> -->
+      <th>Gender</th>
+      <th>CNIC</th>
+      <th>Phone Number</th>
+      <th>District</th>
+      <th>Town/Tehsil</th>
+      <th>UC Name</th>
+      <th>Occupation</th>
+      <th>Lat</th>
+      <th>Long</th>
+      <th>Onset Date Fever</th>
+      <th>Prev Dengue Fever</th>
+      <th>Fever</th>
+      <th>Warning Signs</th>
+      <th>Provisional Diagnosis</th>
+      <th>IgG Performed</th>
+      <th>IgM Performed</th>
+      <th>Antigen Performed</th>
+      <th>WBC First Reading</th>
+      <th>WBC First Reading Date</th>
+      <th>Diagnosis</th>
+      <th>Dengue Type</th>
+      <th>Patient Status</th>
+      <th>Comments</th>
+
+      <% if false %>
+      <th>Patient Type</th>
+      <th>Patient Condition</th>
+      <th>Street No/Name</th>
+      <th>House No.</th>
+      <th>Viral Detection Performed</th>
+      <th>Hospital Name</th>
+      <th>Locality</th>
+      <% end %>
+
+      <th>Added By</th>
+
+      <% if current_user.role == "patient_admin" and (current_user.designation == "Data Entry Operator" or current_user.designation == "Provisional Incharge" or current_user.designation == "Admin") %>
+      <th>Edit</th>
+      <% end %>
+      <% if current_user.username == "adg.epc" %>
+      <th>Delete</th>
+      <% end %>
+
+    </tr>
+  </thead>
+  <tbody>
+    <% if @patients.present? %>
+      <% @patients.each_with_index do |gp_patient, index| %>
+        <% if index.even? %>
+        <tr class="even">
+        <% else %>
+        <tr class="odd">
+        <% end %>
+
+          <td><%= index + 1 %></td>
+          <td><%= gp_patient.gp_user_id %></td>
+
+          <% if gp_patient.reporting_date.present? %>
+          <!-- <td><%#= gp_patient.reporting_date.strftime("%d/%m/%Y %H:%M:%S") %></td> -->
+          <td><%= gp_patient.reporting_date.to_date.to_formatted_s(:long_ordinal) %></td>
+          <% else %>
+          <td>Not Present</td>
+          <% end %>
+
+          <td><%= gp_patient.patient_name %></td>
+          <td><%= gp_patient.fh_name %></td>
+          <td><%= gp_patient.dob %></td>
+
+          <!-- <td><%#= gp_patient.age %></td> -->
+
+          <td><%= gp_patient.gender %></td>
+          <td><%= gp_patient.cnic %></td>
+          <td><%= gp_patient.phone_number %></td>
+          <td><%= gp_patient.district %></td>
+          <td><%= gp_patient.town_tehsil %></td>
+          <td><%= gp_patient.uc_name %></td>
+          <td><%= gp_patient.occupation %></td>
+          <td><%= gp_patient.lat %></td>
+          <td><%= gp_patient.long %></td>
+
+          <% if gp_patient.onset_date_fever.present? %>
+          <!-- <td><%#= gp_patient.onset_date_fever.strftime("%d/%m/%Y %H:%M:%S") %></td> -->
+          <td><%= gp_patient.onset_date_fever.to_date.to_formatted_s(:long_ordinal) %></td>
+          <% else %>
+          <td>Not Present</td>
+          <% end %>
+
+          <td><%= gp_patient.prev_dengue_fever %></td>
+          <td><%= gp_patient.fever %></td>
+          <td><%= gp_patient.warning_signs %></td>
+          <td><%= gp_patient.provisional_diagnosis %></td>
+          <td><%= gp_patient.igg_performed %></td>
+          <td><%= gp_patient.igm_performed %></td>
+          <td><%= gp_patient.antigen_performed %></td>
+          <td><%= gp_patient.wbc_first_reading %></td>
+          <td><%= gp_patient.wbc_first_date %></td>
+          <td><%= gp_patient.diagnosis %></td>
+          <td><%= gp_patient.dengue_type %></td>
+          <td><%= gp_patient.patient_status %></td>
+          <td><%= gp_patient.comments %></td>
+
+          <% if false %>
+          <td><%= gp_patient.patient_type %></td>
+          <td><%= gp_patient.patient_condition %></td>
+          <td><%= gp_patient.street_no_name %></td>
+          <td><%= gp_patient.house_no %></td>
+          <td><%= gp_patient.viral_detection_performed %></td>
+          <td><%= gp_patient.hospital_name %></td>
+          <td><%= gp_patient.locality %></td>
+          <% end %>
+
+          <!-- -------- -->
+          <!-- Added By -->
+          <!-- -------- -->
+          <td><%= gp_patient.gp_user.try(:name) %></td>
+
+          <!-- ----------- -->
+          <!-- Edit Action -->
+          <!-- ----------- -->
+          <% if current_user.role == "patient_admin" and (current_user.designation == "Data Entry Operator" or current_user.designation == "Provisional Incharge" or current_user.designation == "Admin") %>
+          <td><%= link_to 'Edit', edit_gp_patients_list_path(gp_patient) %></td>
+          <% end %>
+
+          <!-- ------------- -->
+          <!-- Delete Action -->
+          <!-- ------------- -->
+          <% if current_user.username == "adg.epc" %>
+          <td><%= link_to 'Delete', gp_patient, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
+
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

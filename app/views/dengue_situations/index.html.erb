@@ -1,0 +1,105 @@
+
+<div class="app-admin-wrap layout-horizontal-bar clearfix">
+  <div class="main-content-wrap  d-flex flex-column">
+    <div class="main-content"> 
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-body p-0">
+                <h5 class="card-title p-custom1">
+                  Dengue Situation App Data
+                </h5>
+                <%= render '/dengue_situations/filters' %>
+                <div class="separator-breadcrumb border-top mb-3"></div>
+                <div class="listing-tbl-area">
+                  <%= link_to 'Export to Excel',dengue_situations_path(request.parameters.merge({format: :csv})), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%> 
+                  <div class="table-responsive mt-3">
+                    <table class="table table-bordered table-hover listing-tbl datatable" width="100%">
+                      <thead>
+                          <tr>
+                            <th></th>
+                            <th class="text-center" colspan="6">Case Reporting</th>
+                            <th class="text-center" colspan="2">Larvae Detection</th>
+                            <th class="text-center" colspan="1"></th>
+                            <th class="text-center" colspan="1"></th>
+                            <th class="text-center" colspan="5">Dengue Enforcement Activities</th>
+                            <th class="text-center" colspan="3">DVRs</th>
+                            <th class="text-center" colspan="4">Enter By</th>
+                          </tr>
+                          <tr>
+                            <th>Sr No.#</th>
+                            <th>Confirmed patient</th>
+                            <th>Patient reported by lab</th>
+                            <th>Patient reported by hospital</th>
+                            <th>Death</th>
+                            <th>Admissions</th>
+                            <th>Case reponse</th>
+                            <th>Indoor positive larvae</th>
+                            <th>Outdoor positive larvae</th>
+                            <th>Hotspots Coverage %</th>
+                            <th>Dormant Users</th>
+                            <th>Firs</th>
+                            <th>Notices served</th>
+                            <th>Premises sealed</th>
+                            <th>Arrests</th>
+                            <th>Fines imposed</th>
+                            <th>Dvrs total</th>
+                            <th>Dvrs resolved</th>
+                            <th>Dvrs pending</th>
+                            <th>District</th>
+                            <th>Entered By</th>
+                            <th>Entery Date</th>
+                            <th>Created At</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <% count = ((params[:page] || 1).to_i - 1) * PER_PAGE %>
+                        <% @dengue_situations.each_with_index do |dengue_situation, i| %>
+                          <tr>
+                            <td class="text-center"><%= (count + i)+1 %></td>
+                            <td class="text-center"><%= dengue_situation.confirmed_patient%></td>
+                            <td class="text-center"><%= dengue_situation.patient_reported_by_lab%></td>
+                            <td class="text-center"><%= dengue_situation.patient_reported_by_hospital%></td>
+                            <td class="text-center"><%= dengue_situation.death%></td>
+                            <td class="text-center"><%= dengue_situation.admissions%></td>
+                            <td class="text-center"><%= dengue_situation.case_reponse%></td>
+                            <td class="text-center"><%= dengue_situation.indoor_positive_larvae%></td>
+                            <td class="text-center"><%= dengue_situation.outdoor_positive_larvae%></td>
+                            <td class="text-center"><%= dengue_situation.hotspots_coverage%></td>
+                            <td class="text-center"><%= dengue_situation.dormant_users%></td>
+                            <td class="text-center"><%= dengue_situation.firs%></td>
+                            <td class="text-center"><%= dengue_situation.notices_served%></td>
+                            <td class="text-center"><%= dengue_situation.premises_sealed%></td>
+                            <td class="text-center"><%= dengue_situation.arrests%></td>
+                            <td class="text-center"><%= dengue_situation.fines_imposed%></td>
+                            <td class="text-center"><%= dengue_situation.dvrs_total%></td>
+                            <td class="text-center"><%= dengue_situation.dvrs_resolved%></td>
+                            <td class="text-center"><%= dengue_situation.dvrs_pending%></td>
+                            <td class="text-center"><%= dengue_situation.district_name %></td>
+                            <td class="text-center"><%= dengue_situation.user.try(:username) %></td>
+                            <td class="text-center"><%= dengue_situation.entery_date.try(:to_date).try(:strftime, "%m/%d/%Y") %></td>
+                            <td class="text-center"><%= dengue_situation.created_at.to_datetime.strftime("%m/%d/%Y") %></td>
+
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-center">
+                    <% if @dengue_situations.present? %> 
+                      <%= will_paginate @dengue_situations, :class => 'apple_pagination'  %>
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @dengue_situations.total_entries %></div> 
+                    <% else %> 
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+                    <% end %>
+                  </div>
+             
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

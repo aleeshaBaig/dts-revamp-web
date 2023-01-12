@@ -1,0 +1,20 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+	<thead>
+		<tr>
+			<td>ID</td>
+			<td>Department</td>
+			<td>Submitted by</td>
+			<td>Entry Date/Time</td>
+			<td>Comment</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= @activity.patient_id %></td>
+			<td><%= @activity.department_name %></td>
+			<td><%= @activity.user.try(:username) %></td>
+			<td><%= @activity.created_at.strftime("%m/%d/%Y at %I:%M%p")%></td>
+			<td><%= @activity.comment %></td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,113 @@
+<table class="table table-bordered table-hover listing-tbl datatable" width="100%">
+  <thead>
+      <tr>
+        <th rowspan="2">No#</th>
+        <th rowspan="2">Hospital Name</th>
+        <th rowspan="2">District</th>
+        <th rowspan="2">Total Bed Capacity</th>
+        <th rowspan="2">Total Beds Ramp-Up</th>
+        <th colspan="3" class="text-center">Dengue Ward Beds</th>
+        <th colspan="3" class="text-center">HDU Dengue Ward beds</th>
+        <th rowspan="2">Total Occupied Beds</th>
+        <th rowspan="2">Total Vacant Beds</th>
+        <th rowspan="2">Last Updated At</th>
+      </tr>
+      <tr>
+        <th>Allocated</th>
+        <th>Occupied</th>
+        <th>Vacant</th>
+        <th>Allocated</th>
+        <th>Occupied</th>
+        <th>Vacant</th>
+      </tr>
+  </thead>
+  <tbody>
+    <% @net_hdu_vacc = 0 %>
+    <% @net_ward_vacc = 0 %>
+    <% @net_total_bed_cap = 0 %>
+    <% @net_total_bed_occ = 0 %>
+    <% @net_total_vacc  = 0%>
+    <% @net_bed_ramp_up  = 0%>
+
+    <%  @net_total_ward_beds = 0 %>
+    <%  @net_occupied_ward_beds = 0 %>
+    <%  @net_total_hdu_beds = 0 %>
+    <%  @net_occupied_hdu_beds = 0 %>
+    
+    <% @beds.each_with_index do |bed, index| %>
+      <tr>
+        <% total_bed_cap = (bed.total_ward_beds + bed.total_hdu_beds)  %>
+        <% total_bed_occ = (bed.occupied_ward_beds + bed.occupied_hdu_beds) %>
+        <% hdu_vacc = (bed.total_hdu_beds - bed.occupied_hdu_beds) %>
+        <% ward_vacc = (bed.total_ward_beds - bed.occupied_ward_beds) %>
+        
+        <% total_bed_ramp_up = (bed.ward_beds_ramp_up + bed.hdu_beds_ramp_up) %>
+        
+        <% if hdu_vacc < 0 %>
+          <% total_vacc = (0 + ward_vacc) %>
+        <% elsif ward_vacc < 0 %>
+          <% total_vacc = (hdu_vacc + 0) %>
+        <% else %>
+          <% total_vacc = (hdu_vacc + ward_vacc) %>
+        <% end %>
+        
+        <th class="text-center"><%= index + 1 %></th>
+        <td class="text-center"><%= bed.hospital.try(:hospital_name) %></td>
+        <td class="text-center"><%= bed.hospital.try(:district).try(:district_name)%></td>
+        <td class="text-center"><%= total_bed_cap %></th>
+        <td class="text-center"><%= total_bed_ramp_up %></th>
+        
+        <% @net_total_bed_cap = @net_total_bed_cap + total_bed_cap %>
+        <% @net_bed_ramp_up = @net_bed_ramp_up + total_bed_ramp_up %>
+
+
+        <!- Dengue Ward Beds -->
+        <td class="text-center"><%= bed.total_ward_beds %></td>
+        <td class="text-center"><%= bed.occupied_ward_beds %></td>
+        <td class="text-center"><%= ward_vacc %></td>
+
+
+        <% @net_total_ward_beds = @net_total_ward_beds + bed.total_ward_beds %>
+        <% @net_occupied_ward_beds = @net_occupied_ward_beds + bed.occupied_ward_beds %>
+        <% @net_ward_vacc = @net_ward_vacc + ward_vacc %>
+
+        <!- HDU Dengue Ward beds -->
+        <td class="text-center"><%= bed.total_hdu_beds %></td>
+        <td class="text-center"><%= bed.occupied_hdu_beds %></td>
+        <td class="text-center"><%= hdu_vacc %></td>
+
+        <% @net_total_hdu_beds = @net_total_hdu_beds + bed.total_hdu_beds %>
+        <% @net_occupied_hdu_beds = @net_occupied_hdu_beds + bed.occupied_hdu_beds %>
+        <% @net_hdu_vacc = @net_hdu_vacc + hdu_vacc %>
+
+        <td class="text-center"><%= total_bed_occ %></td>
+        <% @net_total_bed_occ = @net_total_bed_occ + total_bed_occ %>
+        <td class="text-center"><%= total_vacc %></th>
+        <td class="text-center"><%= bed.try(:last_updated_at).try(:to_datetime).try(:strftime, "on %m/%d/%Y at %I:%M:%S%p") %></th>
+        <% @net_total_vacc  = @net_total_vacc + total_vacc %>
+        
+        
+        </tr>
+    <% end %>
+  </tbody>
+  <%= request.format.html? ? '<tfoot>'.html_safe : '' %>
+      <tr class="text-center">
+        <td colspan="3" class="text-center">Total</td>
+        <td class="text-center"><%= @net_total_bed_cap  %></td>
+        <td class="text-center"><%= @net_bed_ramp_up  %></td>
+        
+        <!-- WARD -->
+        <td class="text-center"><%= @net_total_ward_beds  %></td>
+        <td class="text-center"><%= @net_occupied_ward_beds  %></td>
+        <td class="text-center"><%= @net_ward_vacc  %></td>
+        
+        <!-- HDU -->
+        <td class="text-center"><%= @net_total_hdu_beds  %></td>
+        <td class="text-center"><%= @net_occupied_hdu_beds  %></td>
+        <td class="text-center"><%= @net_hdu_vacc  %></td>
+        
+        <td class="text-center"><%= @net_total_bed_occ  %></td>
+        <td class="text-center"><%= @net_total_vacc  %></td>
+      </tr>
+  <%= request.format.html? ? '</tfoot>'.html_safe : '' %>
+</table>

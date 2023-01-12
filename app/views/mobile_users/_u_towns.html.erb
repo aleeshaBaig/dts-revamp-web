@@ -1,0 +1,11 @@
+<%= f.simple_fields_for :u_towns, f.object.u_towns, :wrapper => false do |ff| %>
+  <div class="fields u_town_fields">
+    <div class="col-md-6">
+      <%= ff.association :tehsil, collection: _get_u_towns_(@mobile_user.district_id), label_method: :tehsil_name, value_method: :id, include_blank: '-Select-', input_html: {class: 'form-control get_tehsils'}%>
+    </div>
+    <div class="col-md-2">
+      <%= ff.link_to_remove "<i class='fas fa-times fa-sm'></i>".html_safe, class: 'btn btn-xs btn-danger' , data: { method: :delete, confirm: 'Are you sure to delete?' }%>
+    </div>
+  </div>
+<% end %>
+<%= f.link_to_add "<i class='icon-large fas fa-plus'></i>&nbsp; Add Tehsil".html_safe, :u_towns, class: 'btn btn-block btn-primary add_u_town' %>

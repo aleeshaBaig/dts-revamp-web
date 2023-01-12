@@ -1,0 +1,27 @@
+<table class="table table-bordered table-hover listing-tbl">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Tags</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  <% @departments.each do |department| %>
+                                  <tr>
+                                    <td class="tbl-td-color2"><%= department.department_name %></td>
+                                    <td class="tbl-td-color2"><%= department.department_type %></td>
+                                    <% if department.tags.present? %>
+                                      <td class="tbl-td-color2">
+                                        <% department.tags.each do |t| %>
+                                          <%= t.tag_name %><br>
+                                        <% end %>
+                                      </td>
+                                    <% else %>
+                                      <td></td>
+                                    <% end %>
+                                  </tr>
+                                  <% end %>
+                                </tbody>
+                              </table>

@@ -1,0 +1,65 @@
+<div class="row">
+                    <div class="col-md-12">
+                        <div class="card ">
+                            <div class="card-body p-0">
+
+                                <!-- <h5 class="card-title p-custom1">
+                                    Filters
+                                </h5> -->
+
+                                <div class="separator-breadcrumb border-top mb-3"></div>
+                                <form>
+                                    <div class="row p-custom">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Date From</label>
+                                                <input type="datetime-local" class="form-control" id="d_from" value='<%= (params[:d_from].present?)? "#{params[:d_from]}" : nil %>'>
+                                            </div>
+                                        </div>
+
+                                    
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Date To</label>
+                                                <input type="datetime-local" class="form-control" id="d_to" value='<%= (params[:d_to].present?)? "#{params[:d_to]}" : nil %>'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row p-custom">
+
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn filter-btn col-md-12 m-t-23" onclick="filter_compliance_date()">Filter</button>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                                        </div>
+
+                                     
+
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+<script type="text/javascript">
+function filter_compliance_date(){
+  
+      window.location = "?" + "d_from=" + $("#d_from").val() + "&d_to=" + $("#d_to").val();
+    
+};
+function resetData(){
+    $("#d_from").val("");
+    $("#d_to").val("");    
+};
+
+$("#d_from").change(function() {
+    var date_from = this.value
+    document.getElementById("d_to").setAttribute("min", date_from);
+  });
+
+</script>

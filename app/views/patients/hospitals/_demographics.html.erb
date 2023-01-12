@@ -1,0 +1,198 @@
+
+<div class="row p-custom">
+  <div class="col">
+    <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+        Patient Demographics
+    </h6>
+  </div>
+</div>
+
+<div class="row p-custom">
+  <div class="col">
+    <div class="form-group">
+        <div class="radio-btn-area">
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              CNIC <%= form.radio_button :p_search_type, 'CNIC', class: "form-check-input patient_search_type"%>
+            </label>
+          </div>
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              Passport <%= form.radio_button :p_search_type, 'Passport', class: "form-check-input patient_search_type"%>
+            </label>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="form-group">
+        <div class="patient_cnic">
+            <label>Patient CNIC*</label>
+            <%= form.text_field :cnic, class: "form-control cnic"%>
+        </div>
+        <div class="patient_passport">
+            <label>Patient Passport*</label>
+            <%= form.text_field :passport, class: "form-control passport", maxLength: 9%>
+        </div>
+    </div>
+  </div>
+  
+
+  
+
+  <div class="col">
+    <div class="form-group">
+        <label>Hospital Name*</label>
+        <% if current_user.default_hospital_user? or (current_user.is_dpc_user? and !form.object.persisted?) %>
+          <input type="text" class="form-control" value="<%= current_user.hospital.try(:hospital_name) %>" readonly>
+        <% else %>
+          <%= form.select :hospital_id, options_for_select(user_wise_hospitals, :selected => form.object.hospital_id), {:include_blank => "Select"},{class: "form-control"} %>
+        <% end %>
+    </div>
+  </div>
+  <%= (form.hidden_field :hospital_id, value: current_user.hospital_id) if current_user.default_hospital_user? or (current_user.is_dpc_user? and !form.object.persisted?) %>
+  <%= (form.hidden_field :is_released, value: false) if params[:set_released_f].present? %>
+  <div class="col">
+      <div class="form-group">
+          <label>Patient Name*</label>
+          <%= form.text_field :patient_name, class: "form-control", :maxlength => 20,:onkeypress => "return onlyAlphabets(event,this);" %>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <label>Father  / Husband Name*</label>
+          <%= form.text_field :fh_name, class: "form-control", :maxlength => 30,:onkeypress => "return onlyAlphabets(event,this);" %>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <label>Gender*</label>
+          <%= form.select :gender, genders, {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+
+</div>
+
+<div class="row p-custom">
+
+  
+
+
+  
+
+  <div class="col">
+      <div class="form-group">
+          <label>Phone Number*</label>
+          <%= form.text_field :patient_contact, class: "form-control phone_contact", :minlength => 11, :maxlength => 11,:onkeypress => "return onlyNumerics(event,this);" %>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <label>Guardian's Relation</label>
+          <%= form.select :cnic_relation, guardians_relations, {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <label>Age*</label>
+          <%= form.number_field :age, class: "form-control", :max => 150, :min => 0, :maxLength => 5, :oninput => "maxLengthCheck(this)" %>
+      </div>
+  </div>
+
+  <div class="col" style="display:none;" id="age_months_div">
+      <div class="form-group">
+          <label>Age in Months</label>
+          <%= form.number_field :age_month, class: "form-control",:max => 12 , :min => 1 %>
+      </div>
+  </div> 
+
+  
+
+  <div class="col">
+      <div class="form-group">
+          <label>Guardian's Contact Number</label>
+          <%= form.text_field :relation_contact, class: "form-control phone_contact", :minlength => 11, :maxlength => 11,:onkeypress => "return onlyNumerics(event,this);" %>
+      </div>
+  </div> 
+  
+
+  
+
+  
+        
+</div>
+
+<div class="row p-custom">
+  
+
+  <div class="col">
+      <div class="form-group">
+          <label>Reporting Date*</label>
+          <%= form.date_field :reporting_date, class: "form-control", max: Date.today %>
+      </div>
+  </div>
+
+  <div class="col">
+  </div>
+
+  <div class="col">
+  </div>
+
+  <div class="col">
+  </div>
+
+  <div class="col">
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  function maxLengthCheck(object)
+  {
+    if (object.value.length > object.maxLength)
+      object.value = object.value.slice(0, object.maxLength)
+  }
+
+  function onlyAlphabets(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 0 || charCode == 46 || charCode == 45 || charCode == 32)
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+  function onlyNumerics(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode >= 48 && charCode <= 57) || (charCode == 189))
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+
+
+</script>

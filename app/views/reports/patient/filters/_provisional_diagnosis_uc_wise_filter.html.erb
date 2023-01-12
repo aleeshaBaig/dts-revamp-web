@@ -1,0 +1,100 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="card ">
+			<div class="card-body p-0 m-t-10">
+				<%= form_for provisional_diagnosis_uc_wise_reports_patient_index_path, method: :get do |f| %>
+					
+					<div class="row p-custom">
+						<div class="col-md-2">
+							<div class="form-group">
+							<label>Province</label>
+							<%= select_tag "province", options_for_select(all_provinces, :selected => params[:province]), {class: 'form-control', :include_blank => "-Select-"} %>
+							</div>
+	          			</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>District</label>
+								<%= select_tag "district", options_for_select(all_districts, :selected => params[:district]), {class: 'form-control user_district', :include_blank => "-Select-", id: 'patient_district_id'} %>
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Town</label>
+								<%= select_tag "town", options_for_select(district_wise_tehsils(params[:district]), :selected => params[:town]), {class: 'form-control', :include_blank => "-Select-", id: 'patient_tehsil_id'} %>
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Uc</label>
+								<%= select_tag "uc", options_for_select(tehsil_wise_ucs(params[:district],params[:town]), :selected => params[:uc]), {class: 'form-control', :include_blank => "-Select-", id: 'patient_uc_id'} %>
+							</div>
+						</div>
+					</div>
+
+					<div class="row p-custom">
+						<div class="col-md-2">
+							<button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+						</div>
+						<div class="col-md-2">
+							<button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+						</div>
+					</div>
+
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$("#province").change(function() {
+    $.ajax({
+      url:'/ajax/populate_province_district?province_id='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+
+        // Clear all options from District Dropdown
+        $("select#patient_district_id").removeAttr('disabled');
+        $("select#patient_district_id option").remove();
+
+        // Clear all options from Tehsil Dropdown
+        $("select#patient_tehsil_id").removeAttr('disabled');
+        $("select#patient_tehsil_id option").remove();
+
+        // Append -Select- Value to Tehsil Dropdown
+        var patient_tehsil_id_row = "<option value=\"" + "" + "\">" + "-Select-" + "</option>";
+        $(patient_tehsil_id_row).appendTo("select#patient_tehsil_id");
+
+        // Clear all options from UC Dropdown
+        $("select#patient_uc_id").removeAttr('disabled');
+        $("select#patient_uc_id option").remove();
+
+        // Append -Select- Value to UC Dropdown
+        var patient_uc_id_row = "<option value=\"" + "" + "\">" + "-Select-" + "</option>";
+        $(patient_uc_id_row).appendTo("select#patient_uc_id");
+
+        // Fill sub category select
+        if (transport.length >= 1) {
+          var row = "<option value=\"" + "" + "\">" + "-Select-" + "</option>";
+          $(row).appendTo("select#patient_district_id");
+          //// Fill sub category select
+          $.each(transport, function(i) {
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#patient_district_id");
+          });
+        } else {
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#patient_district_id");
+        }
+      },
+    });
+  });
+
+	function resetData() {
+		window.location.href = "<%= provisional_diagnosis_uc_wise_reports_patient_index_path %>";
+	};
+</script>

@@ -1,0 +1,194 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-body p-0 m-t-10">
+                <!-- <h5 class="card-title m-0 p-custom2">Filter Records</h5>
+                <div class="separator-breadcrumb border-top mb-3"></div> -->
+                <%= form_for hospitals_path, method: :get do |f| %>
+                    <div class="row p-custom">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Province</label>
+                                <%= select_tag "province_id", options_for_select(all_provinces, :selected => params[:province_id]), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>District</label>
+                                <%= select_tag "district_id", options_for_select(district_information(params[:province_id]),{:selected => params[:district_id]}), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <%= select_tag "category", options_for_select(hospital_category, :selected => params[:category]), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Facility Type</label>
+                                <%= select_tag "facility_type", options_for_select(facility_type, :selected => params[:facility_type]), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label><%= current_user.phc_user?? 'Hospital/Lab (Private)' : 'Hospital Name' %></label>
+                               <%= select_tag "hospital_id", options_for_select(all_hospital_names, :selected => params[:hospital_id]), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row p-custom">
+        
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                        </div>
+                      
+                    </div>
+                    
+
+               <% end %>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+function resetData(){
+    $("#category").val("");
+    $("#province_id").val("");
+    $("#district_id").val("");
+    $("#facility_type").val("");
+    $("#hospital_id").val("");
+};
+
+  $("#province_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_province_district?province_id='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+
+        // Clear all options from District Dropdown
+        $("select#district_id").removeAttr('disabled');
+        $("select#district_id option").remove();
+
+        // Fill sub category select
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#district_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#district_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#district_id");
+        }
+      },
+    });
+  });
+
+ $("#district_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_hospital?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#hospital_id").removeAttr('disabled');
+        $("select#hospital_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#hospital_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#hospital_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#hospital_id");
+        }
+      },
+    });
+  });
+
+  $("#category").change(function() {
+    var dist = document.getElementById("district_id").value;
+    $.ajax({
+      url:'/ajax/populate_hospital?category='+this.value+'&district='+dist,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#hospital_id").removeAttr('disabled');
+        $("select#hospital_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#hospital_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#hospital_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#hospital_id");
+        }
+      },
+    });
+  });
+
+
+  $("#facility_type").change(function() {
+    var dist = document.getElementById("district_id").value;
+    var category = document.getElementById("category").value;
+    $.ajax({
+      url:'/ajax/populate_hospital?facility_type='+this.value+'&district='+dist+'&category='+category,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#hospital_id").removeAttr('disabled');
+        $("select#hospital_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#hospital_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#hospital_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#hospital_id");
+        }
+      },
+    });
+  });
+
+</script>

@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card ">
+      <div class="card-body p-0 m-t-10">
+        <%= form_for hospitals_path, method: :get do |f| %>
+          <div class="row p-custom">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Hospital Category</label>
+                <%= select_tag :hospital_category, options_for_select(hospital_categories, {:selected => params[:hospital_category]}), {class: 'form-control', :include_blank => "All"} %>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>Facility Type</label>
+                <%= select_tag "facility_type", options_for_select(facility_type, :selected => params[:facility_type]), {class: 'form-control', :include_blank => "All"} %>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+            </div>
+
+            <div class="col-md-2">
+            </div>
+
+            <div class="col-md-2">
+              <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+            </div>
+
+            <div class="col-md-2">
+              <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+            </div>
+          </div>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+  function resetData(){
+    $("#hospital_category").prop('selectedIndex',0);
+    $("#facility_type").prop('selectedIndex',0);
+    window.location.href = '/medicine_stocks';
+  };
+</script>

@@ -1,0 +1,15 @@
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content"> 
+    <%= render :partial => "/reports/patient/filters/#{params[:action]}_filter" %>
+    <div class="row m-t-15">
+      <div class="col-md-12">
+        <div class="card ">
+          <h5 class="card-title p-custom1">Provisional Diagnosis UC wise</h5>
+          <div class="card-body p-0">
+            <%= render "/reports/patient/tables/#{params[:action]}_table" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

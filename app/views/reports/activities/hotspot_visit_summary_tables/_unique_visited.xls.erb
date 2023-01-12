@@ -1,0 +1,26 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+  <thead>
+    <tr>
+      <th>District</th>
+      <th>Town</th>
+      <th>Tag</th>
+      <th>UC</th>
+      <th>Name/Address</th>
+      <th>Last Visited Date</th>
+      <th>Activity Count </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @hotspots.each do |hotspot|%>
+      <tr>
+        <td><%= hotspot.district_name %></td>
+        <td><%= hotspot.tehsil_name %></td>
+        <td><%= hotspot.tag_name %></td>
+        <td><%= hotspot.uc_name %></td>
+        <td><%= hotspot.hotspot_name %>/<%= hotspot.address %></td>
+        <td class="text-center"><%= hotspot.last_visited.try(:strftime, "%m/%d/%Y at %I:%M%p") %></td>
+        <td class="text-center"><%= hotspot.total_visits %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

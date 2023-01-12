@@ -1,0 +1,40 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+  <thead>
+    <tr>
+      <th>Sr#</th>
+      <th>Province</th>
+      <th>Division</th>
+      <th>District</th>
+      <th>Hospital</th>
+
+      <th>Suspected</th>
+      <th>Probable</th>
+      <th>Confirmed</th>
+      <th>Death</th>
+      <th>LAMA</th>
+      <th>Admitted</th>
+    </tr>                    
+  </thead>
+  <tbody>
+    <% if is_epidemiological_filters_active? %>
+      <% @hospitals.each_with_index do |hospital, index| %>
+          <tr>
+            <!-- Base Data -->
+            <td class="text-center"><%= index +1 %></td>
+            <td><%= get_data_epidemiological(hospital)[:province] rescue nil %></td>
+            <td><%= get_data_epidemiological(hospital)[:division] rescue nil%></td>
+            <td><%= get_data_epidemiological(hospital)[:district] rescue nil %></td>
+            <td><%= hospital.hospital_name %></td>
+
+            <!-- display all informations -->
+            <td class="text-center"><%= @patient_provisional_diagnosis[["Suspected", hospital.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @patient_provisional_diagnosis[["Probable", hospital.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @patient_provisional_diagnosis[["Confirmed", hospital.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @patient_patient_outcome[["Death", hospital.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @patient_patient_outcome[["LAMA", hospital.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @patient_patient_outcome[["Admitted", hospital.hospital_name]].to_i %></td>
+          </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

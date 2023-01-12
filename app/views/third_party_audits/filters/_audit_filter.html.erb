@@ -1,0 +1,119 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-body p-0 m-t-10">
+                <!-- <h5 class="card-title m-0 p-custom2">Filter Records</h5>
+                <div class="separator-breadcrumb border-top mb-3"></div> -->
+                <%= form_for mobile_users_path, method: :get do |f| %>
+                    <div class="row p-custom">
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>District</label>
+                                <%= select_tag "district", options_for_select(all_districts, :selected => params[:district]), {class: 'form-control', :include_blank => "All", id: 'district_id'} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label> Town:</label>
+                                <%= select_tag :town, options_for_select(tehsil_information(params[:district]),{:selected => params[:town]}), {class: 'form-control', :include_blank => "All", id: 'tehsil'}%>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <%= select_tag "department", options_for_select(departments_list, :selected => params[:department]), {class: 'form-control', :include_blank => "All", id: 'department'} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Type</label>
+                                <%= select_tag "type", options_for_select(audit_types.map{|d| [d.last, d.first]}, :selected => params[:type]), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Date From</label>
+                                <%= date_field_tag :from , params[:from], class: 'form-control'  %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Date To</label>
+                                <%= date_field_tag :to , params[:to], class: 'form-control'  %>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row p-custom">
+        
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn filter-btn col-md-12 m-t-23" onclick="filter_patients()">Filter</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                        </div>
+                      
+                    </div>
+
+               <% end %>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+ $("#district_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#tehsil").removeAttr('disabled');
+        $("select#tehsil option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#tehsil");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#tehsil");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#tehsil");
+        }
+      },
+    });
+  });
+
+ function resetData(){
+    $("#username").val("");
+    $("#district_id").val("");
+    $("#department").val("");
+    $("#tehsil").val("");
+    $("#type").val("");
+    $("#from").val("");
+    $("#to").val("");
+};
+
+ </script>   

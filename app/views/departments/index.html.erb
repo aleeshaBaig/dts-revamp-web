@@ -1,0 +1,69 @@
+<style type="text/css">
+  th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<div class="main-content-wrap  d-flex flex-column">
+   <%= render :partial => 'departments/filters/line_list_filters', :locals => {} %>
+  <div class="row m-t-15">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="row">
+          <div class="col-md-8">
+            <h5 class="card-title p-custom1">Departments</h5>
+          </div>
+          <div class="col-md-2 mt-1">
+            <%= link_to 'Export to Excel', departments_path(format: :xls, pagination: "No", department: params[:department]), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+          </div>
+          <div class="col-md-2 mt-1">
+            <%= link_to 'Add Department', new_department_path, :class => 'btn btn-sm btn-warning btn-block', :title => "Export to Excel"%>
+          </div>
+        </div>
+        <div class="separator-breadcrumb border-top mb-3"></div>
+        <div class="listing-tbl-area table-responsive">
+          <table class="table table-bordered table-hover listing-tbl">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Tags</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @departments.each do |department| %>
+                <tr>
+                  <td class="tbl-td-color2"><%= department.department_name %></td>
+                  <td class="tbl-td-color2"><%= department.department_type %></td>
+                  <% if department.tags.present? %>
+                    <td class="tbl-td-color2">
+                      <% department.tags.each do |t| %>
+                        <%= t.tag_name %><br>
+                      <% end %>
+                    </td>
+                  <% else %>
+                    <td></td>
+                  <% end %>
+                  <td class="tbl-td-color2">
+                    <%= link_to "Edit".html_safe, edit_department_path(department), class: 'edit' %><br>
+                    <%= link_to 'Delete', department, method: :delete, data: { confirm: 'Are you sure you want to delete?' } %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="separator-breadcrumb border-top mb-3"></div>
+        <div class="text-center">
+          <% if @departments.present? %> 
+            <%= will_paginate @departments, :class => 'apple_pagination'  %>
+            <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @departments.total_entries %></div> 
+           <% else %> 
+             <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

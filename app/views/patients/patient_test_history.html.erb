@@ -1,0 +1,133 @@
+<div class="app-admin-wrap layout-horizontal-bar clearfix">
+  <div class="main-content-wrap  d-flex flex-column">
+    <div class="main-content"> 
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-body p-0">
+                <h5 class="card-title p-custom1">
+                  Patients Test Logs
+                </h5>
+                <%#= render partial: "/patients/#{dynamic_patient_listing}/filters", locals: {} %>
+                <div class="separator-breadcrumb border-top mb-3"></div>
+                <div class="listing-tbl-area">
+                  <div class="table-responsive mt-3">
+                    <table id="p_table" class="table table-bordered table-hover listing-tbl datatable table-centerd" width="100%">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Sr No.</th>
+                                <th colspan="5">Patient Demographics</th>
+                                <th colspan="2">Clinical Information</th>
+                                <th colspan="18">CBC and HCT Information</th>
+                                <th colspan="16" rowspan="2">Lab and Diagnostic Information</th>
+                                
+                            </tr>
+                            <tr> 
+                                <th rowspan="2">Patient ID</th>
+                                <th rowspan="2">Patient name</th>
+                                <th rowspan="2">CNIC/Passport</th>
+                                <th rowspan="2">Changed By</th>
+                                <th rowspan="2">Changed At</th>
+                                <th rowspan="2">Provisional diagnosis</th>
+                                <th rowspan="2">Reporting Date</th>
+
+                                <th colspan="6">HCT</th>
+                                <th colspan="6">WBC</th>
+                                <th colspan="6">Platelets</th>
+                            </tr>
+                            <tr>
+                                <th colspan="8"></th>
+                                <th>First Reading % (mm3)</th>
+                                <th>First Reading Date</th>
+                                <th>Second Reading % (mm3)</th>
+                                <th>Second Reading Date</th>
+                                <th>Third Reading % (mm3)</th>
+                                <th>Third Reading Date</th>
+
+                                <th>First Reading % (mm3)</th>
+                                <th>First Reading Date</th>
+                                <th>Second Reading % (mm3)</th>
+                                <th>Second Reading Date</th>
+                                <th>Third Reading % (mm3)</th>
+                                <th>Third Reading Date</th>
+
+                                <th>First Reading % (mm3)</th>
+                                <th>First Reading Date</th>
+                                <th>Second Reading % (mm3)</th>
+                                <th>Second Reading Date</th>
+                                <th>Third Reading % (mm3)</th>
+                                <th>Third Reading Date</th>
+                                
+                                <th>NS1</th>
+                                <th>PCR</th>
+                                <th>IGM</th>
+                                <th>IGG</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% @test_logs.each_with_index do |patient, i| %>
+                                <tr>
+                                    <td class="tbl-td-color text-center"><%= i + 1 %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.patient_id %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.patient_name %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.cnic %>/<%= patient.passport %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.change_by.try(:upcase) %></td>
+                                    <td class="tbl-td-color text-center"><%= datetime(patient.created_at)%></td>
+                                    <td class="tbl-td-color text-center"><%= patient.provisional_diagnosis %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.reporting_date? ? patient.reporting_date.strftime("%d/%m/%Y") : nil %></td>
+
+                                    <!-- HCT -->
+                                    <td class="tbl-td-color text-center"><%= patient.hct_first_reading %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.hct_first_reading_date %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.hct_second_reading %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.hct_second_reading_date %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.hct_third_reading %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.hct_third_reading_date %></td>
+
+
+                                    <!-- WBC -->
+                                    <td class="tbl-td-color text-center"><%= patient.wbc_first_reading %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.wbc_first_reading_date %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.wbc_second_reading %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.wbc_second_reading_date %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.wbc_third_reading %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.wbc_third_reading_date %></td>
+                                    
+                                    
+                                    <!-- PLATELET -->
+                                    <td class="tbl-td-color text-center"><%= patient.platelet_first_reading %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.platelet_first_reading_date %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.platelet_second_reading %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.platelet_second_reading_date %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.platelet_third_reading %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.platelet_third_reading_date %></td>
+                                    
+                                    <!-- TEST -->
+                                    <td class="tbl-td-color text-center"><%= patient.ns1 %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.pcr %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.igm %></td>
+                                    <td class="tbl-td-color text-center"><%= patient.igg %></td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+
+                  </div>
+                  <div class="text-center">
+                    <% if @test_logs.present? %> 
+                      <%= will_paginate @test_logs, :class => 'apple_pagination'  %>
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @test_logs.total_entries %></div> 
+                    <% else %> 
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

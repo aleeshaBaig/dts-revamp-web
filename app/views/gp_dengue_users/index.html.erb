@@ -1,0 +1,68 @@
+<div class="app-admin-wrap layout-horizontal-bar clearfix">
+  <div class="main-content-wrap  d-flex flex-column">
+    <div class="main-content"> 
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-body p-0">
+                <h5 class="card-title p-custom1">
+                  General Physicians
+                </h5>
+                <%= render '/gp_dengue_users/filters' %>
+                <div class="separator-breadcrumb border-top mb-3"></div>
+                <div class="listing-tbl-area">
+                  <%= link_to 'Export to Excel',gp_dengue_users_path(request.parameters.merge({format: :xls})), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%> 
+                  <div class="table-responsive mt-3">
+                    <table class="table table-bordered table-hover listing-tbl datatable" width="100%">
+                      <thead>
+                          <tr>
+                            <th>Sr No.</th>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Contact No#</th>
+                            <th>Clinic Name</th>
+                            <th>PMDC No#</th>
+                            <th>District</th>
+                            <th>Tehsil</th>
+                            <th>Uc</th>
+                            <th>Address</th>
+                            <th>Created At</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <% @gp_dengue_users.each_with_index do |gp_dengue_user, index| %>
+                          <tr>
+                            <td class="text-center"><%= index + 1 %></td>
+                            <td class="text-center"><%= gp_dengue_user.email %></td>
+                            <td class="text-center"><%= gp_dengue_user.name %></td>
+                            <td class="text-center"><%= gp_dengue_user.contact_no %></td>
+                            <td class="text-center"><%= gp_dengue_user.clinic_name %></td>
+                            <td class="text-center"><%= gp_dengue_user.pmdc_number %></td>
+                            <td class="text-center"><%= gp_dengue_user.district_name %></td>
+                            <td class="text-center"><%= gp_dengue_user.tehsil_name %></td>
+                            <td class="text-center"><%= gp_dengue_user.uc_name %></td>
+                            <td class="text-center"><%= gp_dengue_user.address %></td>
+                            <td class="text-center"><%= gp_dengue_user.created_at.to_datetime.strftime("%m/%d/%Y") %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-center">
+                    <% if @gp_dengue_users.present? %> 
+                      <%= will_paginate @gp_dengue_users, :class => 'apple_pagination'  %>
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @gp_dengue_users.total_entries %></div> 
+                    <% else %> 
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+                    <% end %>
+                  </div>
+             
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

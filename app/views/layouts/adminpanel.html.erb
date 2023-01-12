@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DTS</title>
+        <%= csrf_meta_tags %>
+        <%= csp_meta_tag %>
+        <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet">
+        <link rel="stylesheet" href="/assets/themes/lite-purple.min.css">
+        <link rel="stylesheet" href="/assets/font-awesome.css">
+        <link rel="stylesheet" href="/assets/vendor/perfect-scrollbar.css">
+        <script src="https://use.fontawesome.com/972cd49e22.js"></script>
+        <link rel="stylesheet" href="/assets/bootstrap-multiselect.css">
+        <link rel="stylesheet" href="/assets/custom.css">
+        <link rel="stylesheet" href="/assets/toastr.css">
+        <link rel="stylesheet" href="/assets/bootstrap-datepicker.css">
+        <link rel="stylesheet" href="/assets/spinner.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
+        <%= javascript_include_tag 'application'%>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        
+    </head>
+
+    <body class="text-left" onload="initialize();">
+        <!-- spinner ajax -->
+        <div class="loader"></div>
+
+        <div class="app-admin-wrap layout-horizontal-bar clearfix">
+            <%= render "/shared/navigation" %>
+            <%= yield %>
+        </div>
+        <script src="/assets/common-bundle-script"></script>    
+        <script src="/assets/es5/dashboard.v1.script"></script>
+        <script src="/assets/es5/script.min"></script>
+        <script src="/assets/es5/customizer.script.min"></script>
+        <script src="/assets/es5/customizer2.script.min"></script>
+        <script src="/assets/tooltip.script"></script>
+        <script type="text/javascript" src="/assets/forms/users.js"></script>
+        <%= render '/application/sidebar_navigate' %>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+        <script src="/assets/bootstrap-datepicker.js"></script>
+        <script type="text/javascript">
+          $('.cnic').mask('00000-0000000-0');
+        //   $('.passport').mask('00000-000-0');
+          $('.datepicker').datepicker({todayHighlight: true,format: 'yyyy-mm-dd', orientation: 'auto bottom'});
+          $('.disable_future_date').datepicker({todayHighlight: true,format: 'yyyy-mm-dd', endDate: new Date()});
+          
+          $(".date_from").datepicker({
+              format: 'yyyy-mm-dd', orientation: 'auto bottom'
+          }).on('changeDate', function (selected) {
+              var minDate = new Date(selected.date.valueOf());
+              $('.date_to').datepicker('setStartDate', minDate);
+          });
+          $(".date_to").datepicker({
+              format: 'yyyy-mm-dd', orientation: 'auto bottom'
+          }).on('changeDate', function (selected) {
+              var minDate = new Date(selected.date.valueOf());
+              $('.date_from').datepicker('setEndDate', minDate);
+          });
+          $('.phone_contact').mask('00000000000', {clearIfNotMatch: true});
+
+          function onlyAlphabets(e, t) {
+            try {
+              if (window.event) {
+                  var charCode = window.event.keyCode;
+              }
+              else if (e) {
+                  var charCode = e.which;
+              }
+              else { return true; }
+              if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 0 || charCode == 46 || charCode == 45 || charCode == 32)
+                  return true;
+              else
+                  return false;
+            }
+            catch (err) {
+              alert(err.Description);
+            }
+          }
+          function onlyNumerics(e, t) {
+            try {
+              if (window.event) {
+                  var charCode = window.event.keyCode;
+              }
+              else if (e) {
+                  var charCode = e.which;
+              }
+              else { return true; }
+              if ((charCode >= 48 && charCode <= 57)){
+                return true;
+              }else{
+                  return false;
+              }
+            }
+            catch (err) {
+                alert(err.Description);
+            }
+          }
+        </script>
+        <script type="text/javascript" src="/assets/bootstrap-multiselect.js"></script>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $('.multiselect').multiselect();
+          });
+        </script>
+        <script src="/assets/district_tehsil_uc.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"></script>
+        <script type="text/javascript">
+            $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({alwaysShowClose: true});
+            });
+        function isEmpty(value) {
+            return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
+        }
+        </script>
+    </body>
+    <%= render '/application/flash_messages' %>
+</html>

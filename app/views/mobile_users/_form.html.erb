@@ -1,0 +1,157 @@
+<style type="text/css">
+  .row.u_towns_fields{
+    margin-bottom: 6px;
+  }
+</style>
+<%= simple_nested_form_for(@mobile_user, html: {}, wrapper_mappings: {}) do |f| %>
+  <div class="row p-custom">
+    
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= f.input :role, collection: ['TPV', 'Anti Dengue', 'DsApp District User', 'DsApp Divisional User'], prompt: "Select-", input_html:{class: 'form-control mobile_user_role'} %>
+      </div>
+    </div>
+  </div>
+  <div class="row p-custom">
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= f.input :username, input_html:{class: "form-control" }%>
+      </div>
+    </div>
+    <% unless @mobile_user.persisted? %>
+      <div class="col-md-3">
+        <div class="form-group">
+          <%= f.input :password, input_html:{class: "form-control"}%>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="form-group">
+          <%= f.input :password_confirmation, input_html:{class: "form-control"}%>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="col-md-6 for_division_user">
+      <div class="form-group">
+        <%= f.association :division, label: 'Division', label_method: :division_name, value_method: :id, prompt: "Select-", input_html: {class: 'form-control'} %>
+      </div>
+    </div>
+    
+    <div class="col-md-6 not_for_division">
+      <div class="form-group">
+        <%= f.association :get_district, label: 'District', label_method: :district_name, value_method: :id, prompt: "Select-", input_html: {class: 'form-control mobile_user_district'} %>
+      </div>
+    </div>
+
+    <div class="col-md-6 not_for_district not_for_division">
+      <div class="form-group">
+          <%= f.association :tehsils, collection: _get_u_towns_(@mobile_user.district_id), label_method: :tehsil_name, input_html:{class: "form-control mobile_user_tehsil_ids"}  %>
+      </div>
+    </div>
+
+    <div class="col-md-6 not_for_district not_for_division">
+      <div class="form-group">
+        <%= f.association :department, label_method: :department_name, value_method: :id, include_blank: '-Select-', input_html: {class: 'form-control'}%>
+      </div>
+    </div>
+
+    <div class="col-md-6 not_for_tpv not_for_district not_for_division">
+      <div class="form-group">
+        <%= f.association :tag_categories, label_method: :category_name, input_html:{class: "form-control mobile_use_tag_category_ids"}  %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+         <%= f.input :status, collection: status_list, prompt: "-Select-", input_html:{class: "form-control", value:f.object.status}%>
+      </div>
+    </div>
+  </div>
+  <div class="separator-breadcrumb border-top mb-3"></div>
+  <div class="row p-custom">
+    <div class="col-md-2 offset-md-5">
+      <button type="submit" class="btn filter-btn col-md-12 mb-3">Save</button>
+    </div>
+  </div>
+
+<% end %>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+  $(".mobile_user_district").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        $("select.mobile_user_tehsil_ids").removeAttr('disabled');
+        $("select.mobile_user_tehsil_ids option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "";
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select.mobile_user_tehsil_ids");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select.mobile_user_tehsil_ids");
+        }         
+      }
+    });
+  });
+
+    function onlyAlphabets(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 0 || charCode == 46 || charCode == 45 || charCode == 32)
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+  
+  <% if @mobile_user.is_tpv_user? %>
+    $('.not_for_tpv, .for_division_user').hide();
+  <% elsif @mobile_user.is_district_user? %>
+    $('.not_for_district, .for_division_user').hide();
+  <% elsif @mobile_user.is_divisional_user? %>
+    $('.not_for_division').hide();
+    $('.for_division_user').show();
+  <% else %>
+    $('.not_for_tpv').show();
+    $('.for_division_user').hide();
+  <% end %>
+  
+  $('.mobile_user_role').on('change', function(){
+    var mobile_user_role = $(this).val();
+    
+    if(mobile_user_role != ''){
+      $('.not_for_tpv, .not_for_district, .not_for_division').show();
+      $('.for_division_user').hide();
+      console.log(mobile_user_role);
+      if(mobile_user_role == 'TPV'){
+        $('.not_for_tpv').hide();
+        $('#mobile_user_tag_category_ids option').prop("selected", false);
+      }else if(mobile_user_role == 'DsApp District User'){
+        $('.not_for_district').hide();
+      }else if(mobile_user_role == 'DsApp Divisional User'){
+        $('.not_for_division').hide();
+        $('.for_division_user').show();
+      }
+    }
+  })
+</script>

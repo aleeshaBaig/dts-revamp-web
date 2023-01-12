@@ -1,0 +1,66 @@
+<%= simple_form_for(@slideshow) do |f| %>
+  <div class="row p-custom">
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= f.input :name, input_html:{class: "form-control", :onkeypress => "return onlyAlphabets(event,this);" }%>
+
+        <%= f.input :activity_type, as: :hidden, input_html: {value: params[:activity_type]}%>
+      </div>
+    </div>
+    
+    <div class="col-md-2">
+      <button type="submit" class="btn filter-btn col-md-12 mb-3">Save</button>
+    </div>
+  </div>
+
+  <div class="separator-breadcrumb border-top mb-3"></div>
+  <div class="row p-custom">
+    <% activities.each do |activity| %>
+        <div class="col-md-3">
+          <div class="card mb-4">
+              <div class="custom-control custom-checkbox image-checkbox">
+                <input type="checkbox" value="<%= activity.id %>" class="custom-control-input" id="slide_show_activity_ids<%= activity.id %>" name="slideshow[activity_ids][]" <%= f.object.activity_ids.include?("#{activity.id}") ? "checked" : "" %>>
+                <label class="custom-control-label" for="slide_show_activity_ids<%= activity.id %>">
+                    <%= render partial: '/slideshows/before_picture', locals: {activity: activity} %>
+                </label>
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Activity ID
+                    <span class="badge badge-primary badge-pill"><%= activity.id %><span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Activity Date
+                    <span class="badge badge-primary badge-pill"><%= activity.created_at.strftime("%d-%m-%Y %I:%M %P")%><span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Submitted By
+                    <span class="badge badge-primary badge-pill"><%= activity.user.try(:username) %></span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Category
+                    <span class="badge badge-primary badge-pill"><%= activity.tag_name %></span>
+                  </li>
+                </ul>
+              </div>
+          </div>
+        </div>
+        <input type="hidden" name="activity_type" value="<%= params[:activity_type] %>">
+        <input type="hidden" name="district_id" value="<%= params[:district_id] %>">
+        <input type="hidden" name="category" value="<%= params[:category] %>">
+        <input type="hidden" name="facility_type" value="<%= params[:facility_type] %>">
+        <input type="hidden" name="hospital_id" value="<%= params[:hospital_id] %>">
+    <% end %>
+  </div>
+  <div class="text-center">
+    <% if activities.present? %> 
+      <% if action_name == 'create' %>  
+        <%= will_paginate activities, :params => {:action=>"new", district_id: params[:district_id], :activity_type=>"#{params[:activity_type]}", :controller=>"slideshows"}, :class => 'apple_pagination'  %>
+      <% else %>
+        <%= will_paginate activities, :class => 'apple_pagination'  %>
+      <% end %>
+      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= activities.total_entries %></div> 
+     <% else %> 
+       <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+    <% end %>
+  </div>    
+<% end %>

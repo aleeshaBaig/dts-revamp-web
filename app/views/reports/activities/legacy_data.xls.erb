@@ -1,0 +1,30 @@
+<table class="table table-bordered table-hover listing-tbl">
+    <thead>
+        <tr>
+        <th class="text-center">Sr#</th>
+        <th class="text-center">Date</th>
+        <th class="text-center">District</th>
+        <th class="text-center">Department</th>
+        <th class="text-center">Activities Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @total_act = 0%>
+        <% @legacy_activities.each_with_index do |legacy_activity,i| %>
+            <tr class="<%=  i.even? ? 'even' : 'odd' %>">
+                <td class="text-center"><%= i+1 %></td>
+                <td class="text-center"><%= legacy_activity[0] %></td>
+                <td class="text-center"><%= legacy_activity[1] %></td>
+                <td class="text-center"><%= legacy_activity[2] %></td>
+                <td class="text-center"><%= delimates_coma(legacy_activity[3]) %></td>
+                <% @total_act = legacy_activity[3] + @total_act %>
+            </tr>
+        <% end %>
+    </tbody>
+    <tfoot>
+        <tr>
+        <th colspan="4" class="text-right">Total Activities</th>
+        <th class="text-center"><%= delimates_coma(@total_act) %></th> 
+        </tr>
+    </tfoot>
+</table>

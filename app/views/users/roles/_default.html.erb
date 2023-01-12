@@ -1,0 +1,55 @@
+<div class="col-md-3">
+  <div class="form-group">
+    <%= f.input :username, input_html:{class: "form-control enter_username" }%>
+  </div>
+</div>
+    <div class="col-md-3">
+      <div class="form-group">
+         <%= f.input :status, label: '* Status', collection: status_list, prompt: "-Select-", input_html:{class: "form-control", value:f.object.status}%>
+      </div>
+    </div>
+<% unless current_user.admin? and params[:user_id].present? %>
+  <div class="col-md-3">
+    <div class="form-group">
+      <%= f.input :email, input_html:{class: "form-control"}%>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <%= f.input :password, input_html:{class: "form-control"}%>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <%= f.input :password_confirmation, input_html:{class: "form-control"}%>
+    </div>
+  </div>
+<% end %>
+<%= f.input :role, as: :hidden, input_html:{value: f.object.role} %>
+
+
+<script type="text/javascript">
+  $('#user_username').on('keyup', function(){
+    $('#user_email').val($(this).val()+"<%=Time.now.to_i %>@dts.com");
+  })
+
+    function onlyAlphabets(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 0 || charCode == 46 || charCode == 45 || charCode == 32)
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+
+</script>

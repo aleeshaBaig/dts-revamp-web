@@ -1,0 +1,28 @@
+<table>
+  <thead>
+    <tr>
+      <th>Hospital Category</th>
+      <th>Facility Type</th>
+      <th>Hospital Name</th>
+      <th>PCR Functional Machines</th>
+      <th>PCR Non-Functional Machines</th>
+      <th>Total PCR Machines</th>
+      <th>Last Updated By</th>
+      <th>Last Updated At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @pcr_machines.each do |record| %>
+      <tr>
+        <td><%= record.hospital.try(:category) %></td>
+        <td><%= record.hospital.try(:facility_type) %></td>
+        <td><%= record.hospital.try(:hospital_name) %></td>
+        <td><%= record.pcr_functional %></td>
+        <td><%= record.pcr_non_functional %></td>
+        <td><%= record.pcr_functional.to_i + record.pcr_non_functional.to_i %></td>
+        <td><%= record.user.try(:username) %></td>
+        <td><%= record.updated_at.to_formatted_s(:long) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

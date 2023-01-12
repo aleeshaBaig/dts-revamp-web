@@ -1,0 +1,64 @@
+<style>
+  .m-t-10 {
+      border: 1px solid #dcd6d6;
+      margin: 13px;
+      border-radius: 7px;
+  }
+  .form-group{
+    text-align:center;
+  }
+  input[type=text]{
+    border: none;
+    border-bottom: 1px solid #e2dcdc;
+    text-align: center;  
+  }
+@media print{
+  body *{
+    visibility: visible!important;
+ }
+ .main-content-wrap{
+   margin-top: 0!important
+ }
+ .layout-horizontal-bar .main-content-wrap{
+   margin-top: 0!important
+ }
+ .customizer2{
+   display:none;
+ }
+}
+</style>
+<div class="main-content-wrap  d-flex flex-column">
+
+    <div class="main-content">
+        
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="card-title p-custom1">Lab Patient Details <a href="javascript:void(0)" onclick="window.print()"></a></h5>
+
+                  <div class="card-body p-0 m-t-10">
+                      <%= render partial: '/lab_patients/show_pages/demographics', locals: {form: @lab_patient} %>
+                  </div>
+                  <div class="card-body p-0 m-t-10">
+                      <%= render partial: '/lab_patients/show_pages/address', locals: {form: @lab_patient} %>
+                  </div>
+                  <div class="card-body p-0 m-t-10">
+                      <%= render partial: '/lab_patients/show_pages/clinical', locals: {form: @lab_patient} %>
+                  </div>
+                  <div class="card-body p-0 m-t-10">
+                      <%= render partial: '/lab_patients/show_pages/cbc_hct_lab', locals: {form: @lab_patient} %>
+                  </div>
+                  <div class="row p-custom">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Comments</label>
+                            <input type="text" class="form-control" value="<%= @lab_patient.comments  %>" readonly>
+                        </div>
+                    </div>
+                  </div>
+            </div>
+        </div> 
+
+    </div><!-- main content -->
+    
+</div> <!-- main-content-wrap -->
+<script> function initialize(){}</script>

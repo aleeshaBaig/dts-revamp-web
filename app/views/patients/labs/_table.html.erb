@@ -1,0 +1,94 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+    <thead>
+        <tr>
+            <% if request.format != 'xls' %>
+                <th>Action</th>
+            <% end %>
+            <th>Sr No.</th>
+            <th>Patient ID</th>
+            <th>Lab</th>
+            <th>Patient name</th>
+            <th>Father/Husband name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>CNIC/Passport</th>
+            <th>CNIC Type</th>
+            <th>Patient contact</th>
+            <th>Guardian's Contact Number</th>
+            <th>Entry Date</th>
+            <!-- Current Address -->
+            <th>Address</th>
+            <th>District</th>
+            <th>Tehsil</th>
+            <th>Uc</th>
+
+            <!-- Permanent Address -->
+            <th>Permanent Address</th>
+            <th>Permanent District</th>
+            <th>Permanent Tehsil</th>
+            <th>Permanent UC</th>
+            
+            <!-- Workplace Address -->
+            <th>Workplace Address</th>
+            <th>Workplace District</th>
+            <th>Workplace Tehsil</th>
+            <th>Workplace UC</th>
+
+            <th>Provisional diagnosis</th>
+            <th>Reporting date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% @patients.each_with_index do |patient, i| %>
+            <tr>
+                <% if request.format != 'xls' %>
+                    <td class="text-center">
+                        <% if (can? :update, patient) %><%= link_to "Edit".html_safe, edit_patient_path(patient), class: 'edit', method: :get %> <br/><% end %>
+                        <% if can? :show, patient %><%= link_to "Details".html_safe, patient_path(patient), class: 'Patient Details', method: :get %> <br/><% end %>
+                        <% if can? :delete, patient %><%= link_to 'Delete', patient, method: :delete, data: { confirm: 'Are you sure?' } %><% end %>
+                    </td>
+                <% end %>
+                <td class="text-center"><%= i + 1 %></td>
+                <td class="text-center"><%= patient.id %></td>
+                <td class="text-left"><%= patient.lab_name %></td>
+                <td class="text-left"><%= patient.patient_name %></td>
+                <td class="text-left"><%= patient.fh_name %></td>
+                <td class="text-center"><%= patient.age %></td>
+                <td class="text-center"><%= patient.gender %></td>
+                <td class="text-center">
+                    <% if patient.p_search_type == 'CNIC'%>
+                        <%= patient.cnic %>
+                    <% else %>
+                        <%= patient.passport %>
+                    <% end %>
+                </td>
+                <td class="text-center"><%= patient.cnic_relation %></td>
+                <td class="text-center"><%= patient.patient_contact %></td>
+                <td class="text-center"><%= patient.relation_contact %></td>
+                <td class="text-center"><%= datetime patient.created_at %></td>
+                <!-- Current Address -->
+                <td class="text-left"><%= patient.address %></td>
+                <td class="text-center"><%= patient.district %></td>
+                <td class="text-center"><%= patient.tehsil %></td>
+                <td class="text-center"><%= patient.uc %></td>
+
+                <!-- Permanent Address -->
+                <td class="text-center"><%= patient.permanent_address %></td>
+                <td class="text-center"><%= patient.permanent_district %></td>
+                <td class="text-center"><%= patient.permanent_tehsil %></td>
+                <td class="text-center"><%= patient.permanent_uc %></td>
+                
+                <!-- Workplace Address -->
+                <td class="text-center"><%= patient.workplace_address %></td>
+                <td class="text-center"><%= patient.workplace_district %></td>
+                <td class="text-center"><%= patient.workplace_tehsil %></td>
+                <td class="text-center"><%= patient.workplace_uc %></td>
+
+
+                <td class="text-center"><%= patient.provisional_diagnosis %></td>
+                <td class="text-center"><%= patient.reporting_date? ? patient.reporting_date.strftime("on %m/%d/%Y at %I:%M%p") : nil %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

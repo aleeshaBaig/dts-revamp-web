@@ -1,0 +1,32 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+  <thead>
+    <tr>
+      <th>Sr No </th>
+      <th>Department </th>
+      <th>District </th>
+      <th>Username</th>
+      <th>Positive</th>
+      <th>Negative</th>
+      <th>Total Activities</th>
+    </tr>                    
+  </thead>
+   <tbody>
+      <% if are_user_wise_larva_filters_active? %>
+        <% @mobile_users.each_with_index do |mobile_user, i|%>
+          <tr class="text-center">
+            <td><%= i+1 %></td>
+            <td><%= mobile_user.department_name %></td>
+            <td><%= mobile_user.district %></td>
+            <td><%= mobile_user.username %></td>  
+            <% positive_larva = @activities[[mobile_user.department_id, mobile_user.district_id, mobile_user.id, 'positive']] %>
+            <% negative_larva = @activities[[mobile_user.department_id, mobile_user.district_id, mobile_user.id, 'negative']] %>
+            <% repat_larva = @activities[[mobile_user.department_id, mobile_user.district_id, mobile_user.id, 'repeat']] %>
+            <% nil_larva = @activities[[mobile_user.department_id, mobile_user.district_id, mobile_user.id, nil]] %>
+            <td><%= positive_larva.to_i %></td>
+            <td><%= negative_larva.to_i %></td>
+            <td><%= positive_larva.to_i + negative_larva.to_i + repat_larva.to_i + nil_larva.to_i %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+</table>

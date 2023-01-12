@@ -1,0 +1,21 @@
+<table class="table table-bordered table-hover listing-tbl">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>District</th>
+                                    <th>Type</th>
+                                    
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  <% @labs.each do |lab| %>
+                                  <tr>
+                                    <td class="tbl-td-color2"><%= lab.lab_name %></td>
+                                    <td class="tbl-td-color2"><%= lab.district.district_name %></td>
+                                    <td class="tbl-td-color2"><%= lab.lab_type %></td>
+                                    
+                                  </tr>
+                                  <% end %>
+                                </tbody>
+                              </table>

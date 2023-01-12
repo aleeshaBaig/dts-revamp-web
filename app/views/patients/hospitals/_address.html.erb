@@ -1,0 +1,133 @@
+<div class="row p-custom">
+  <div class="col">
+    <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+        Current Address
+    </h6>
+  </div>
+</div>    
+
+<div class="row p-custom">
+  <div class="col">
+      <div class="form-group">
+          <label>Address*</label>
+          <%= form.text_area :address, class: "form-control" %>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <label>District*</label>
+          <%= form.select :district_id, user_wise_districts, {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+  <%#= form.hidden_field :district %>
+
+  <div class="col">
+      <div class="form-group">
+          <label>Town / Tehsil*</label>
+          <%= form.select :tehsil_id, options_for_select(district_wise_tehsils(form.object.district_id), :selected => form.object.tehsil_id), {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+  <%#= form.hidden_field :tehsil %>
+
+  <div class="col">
+      <div class="form-group">
+          <label>UC</label>
+          <%= form.select :uc_id, options_for_select(tehsil_wise_ucs(form.object.district_id,form.object.tehsil_id),:selected => form.object.uc_id), {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+  <%#= form.hidden_field :uc %>
+  <div class="col">
+  </div>
+
+</div>
+
+
+<div class="row p-custom">
+  <div class="col">
+    <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+        Permanent Address
+    </h6>
+  </div>
+</div>    
+
+<div class="row p-custom">
+  <div class="col">
+      <div class="form-group">
+          <label>Address*</label>
+          <%= form.text_area :permanent_address, class: "form-control" %>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <label>District*</label>
+          <%= form.select :permanent_district_id, user_wise_districts, {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+  <%#= form.hidden_field :permanent_district %>
+  <div class="col">
+      <div class="form-group">
+          <label>Town / Tehsil*</label>
+          <%= form.select :permanent_tehsil_id, options_for_select(district_wise_tehsils(form.object.permanent_district_id), :selected => form.object.permanent_tehsil_id), {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+  <%#= form.hidden_field :permanent_tehsil %>
+
+  <div class="col">
+      <div class="form-group">
+          <label>UC</label>
+          <%= form.select :permanent_uc_id, options_for_select(tehsil_wise_ucs(form.object.permanent_district_id,form.object.permanent_tehsil_id),:selected => form.object.permanent_uc_id), {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+  <%#= form.hidden_field :permanent_uc %>
+  <div class="col">
+  </div>
+</div>
+
+<div class="row p-custom">
+  <div class="col">
+    <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+        Workplace Address
+    </h6>
+  </div>
+</div>    
+
+<div class="row p-custom">
+  <div class="col">
+      <div class="form-group">
+          <label>Address</label>
+          <%= form.text_area :workplace_address, class: "form-control" %>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <label>District</label>
+          <%= form.select :workplace_district_id, user_wise_districts, {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+  <%#= form.hidden_field :workplace_district %>
+  <div class="col">
+      <div class="form-group">
+          <label>Town / Tehsil</label>
+          <%= form.select :workplace_tehsil_id, options_for_select(district_wise_tehsils(form.object.workplace_district_id), :selected => form.object.workplace_tehsil_id), {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+  <%#= form.hidden_field :workplace_tehsil %>
+
+  <div class="col">
+      <div class="form-group">
+          <label>UC</label>
+          <%= form.select :workplace_uc_id, options_for_select(tehsil_wise_ucs(form.object.workplace_district_id,form.object.workplace_tehsil_id),:selected => form.object.workplace_uc_id), {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+  <%#= form.hidden_field :workplace_uc %>
+
+  <div class="col">
+  </div>
+</div>
+
+<script>
+  
+  </script>

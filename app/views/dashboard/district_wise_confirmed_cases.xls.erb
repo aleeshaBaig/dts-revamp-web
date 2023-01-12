@@ -1,0 +1,26 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+    <thead>
+        <tr>
+        <th>District</th>
+        <th>Confirmed Cases</th>
+        <th>Last 24 hours</th>
+        </tr>
+        
+    </thead>
+    <% confirmed_total = 0 %>
+    <% confirmed_total_24 = 0 %>
+    <% @districts.each do |d| %>
+        <tr>
+        <td class="text-center"><%= d %></td>
+        <td class="text-center"><%= @confirmed_cases[d] || 0 %></td>
+        <% confirmed_total = confirmed_total + (@confirmed_cases[d] || 0) %>
+        <td class="text-center"><%= @confirmed_cases_24_hours[d] || 0 %></td>
+        <% confirmed_total_24 = confirmed_total_24 + (@confirmed_cases_24_hours[d] || 0) %>
+        </tr>
+    <% end %>
+    <tr>
+        <th>Total</th>
+        <td class="text-center"><%= confirmed_total %></td>
+        <td class="text-center"><%= confirmed_total_24 %></td>
+    <tr>
+</table>

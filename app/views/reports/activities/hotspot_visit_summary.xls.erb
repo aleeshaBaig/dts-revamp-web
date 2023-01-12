@@ -1,0 +1,89 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+    <thead>
+      <tr>
+        <th>District</th>
+        <th>Town</th>
+        <th>Tag</th>
+        <th>Total Hotspots</th>
+        <th>Unique Visited Hotspots</th>
+        <th>Total Visits</th>
+        <th>Unvisited Hotspots</th>
+        <th>HS Result Percentage</th>
+        <th>Positive Hotspots</th>
+        <th>Percentage of Positive Hotspots</th>
+      </tr>                    
+    </thead>
+    <tbody>
+      <% grand_total_hotspots = 0; grand_total_uniq_visited=0; grand_total_visits = 0; grand_total_unvisted = 0; grand_total_positive_hotspots = 0;%>
+      <% @districts.each do |district| %>
+        <% @towns.each do |town| %>
+          <% @tags.each do |tag| %>
+            <% unvisited_hotspots = 0 %>
+            <% hs_percent = 0 %>
+            <% positive_percent = 0 %>
+        <tr>
+          <td><%= district[1] %></td>
+          <td><%= town[1] %></td>
+          <td><%= tag[0] %></td>
+          <% total_hotspots = @hotspots[[district[0],tag[1],town[0]]].present? ? @hotspots[[district[0],tag[1],town[0]]] : 0 %>
+          <% unique_visited = @visited_hotspots[[district[0],tag[1],town[0]]].present? ? @visited_hotspots[[district[0],tag[1],town[0]]][0] : 0 %>
+          <% total_visits = @visited_hotspots[[district[0],tag[1],town[0]]].present? ? @visited_hotspots[[district[0],tag[1],town[0]]][1] : 0 %>
+          <% positive_hotspots = @visited_hotspots[[district[0],tag[1],town[0]]].present? ? @visited_hotspots[[district[0],tag[1],town[0]]][2] : 0 %>
+
+          <td class="text-center">
+            <%= total_hotspots %> 
+          </td>
+          <td class="text-center">
+            <%= unique_visited %>
+          </td>
+          <td class="text-center">
+            <%= total_visits %>
+          </td>
+          <% if @visited_hotspots[[district[0],tag[1],town[0]]].present?  %>
+            <% unvisited_hotspots = total_hotspots.to_i - unique_visited.to_i %>
+            <% if @visited_hotspots[[district[0],tag[1],town[0]]].present? and total_hotspots != 0 %>
+              <% hs_percent = ((unique_visited.to_f/total_hotspots.to_f)*100).to_i %>
+            <% end %>
+            <% if @hotspots[[district[0],tag[1],town[0]]].present? and total_hotspots != 0 %>
+              <% positive_percent = ((positive_hotspots.to_f/total_hotspots.to_f)*100).to_i %>
+            <% end %>
+          <% else %>
+            <% unvisited_hotspots = total_hotspots.to_i %>
+          <% end %>
+          <td style="text-align: center;">
+            <%= unvisited_hotspots %>
+          </td>
+          <td style="text-align: center;"><%= hs_percent %>%</td>
+          <td style="text-align: center;">
+            <%= positive_hotspots %>
+          </td>
+          <td style="text-align: center;"><%= positive_percent %>%</td>
+
+          <!-- GRAND TOTAL CALCULATE -->
+          <% grand_total_hotspots = grand_total_hotspots +  total_hotspots %>
+          <% grand_total_uniq_visited = grand_total_uniq_visited +  unique_visited %>
+          <% grand_total_visits = grand_total_visits +  total_visits %>
+          <% grand_total_unvisted = grand_total_unvisted +  unvisited_hotspots %>
+          <% grand_total_positive_hotspots = grand_total_positive_hotspots +  positive_hotspots %>
+
+
+        </tr>
+      <% end %>
+      <% end %>
+      <% end %>
+    </tbody>
+    <% if @hotspots.present? %>
+      <tfoot>
+          <tr>
+            <th colspan="3" class="text-center">Total</th>
+            <th class="text-center"><%= grand_total_hotspots %></th>
+            <th class="text-center"><%= grand_total_uniq_visited %></th>
+            <th class="text-center"><%= grand_total_visits %></th>
+            <th class="text-center"><%= grand_total_unvisted %></th>
+            <th class="text-center"><%= ((grand_total_uniq_visited.to_f/grand_total_hotspots.to_f)*100).to_f.round(2) %>%</th>
+            <th class="text-center"><%= grand_total_positive_hotspots %></th>
+            <th class="text-center"><%= ((grand_total_positive_hotspots.to_f/grand_total_hotspots.to_f)*100).to_f.round(2) %>%</th>
+          </tr>
+      </tfoot>
+    <% end %>
+  </table>

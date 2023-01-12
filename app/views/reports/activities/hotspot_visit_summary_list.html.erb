@@ -1,0 +1,46 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<body class="text-left">
+    <div class="app-admin-wrap layout-horizontal-bar clearfix">
+        <div class="main-content-wrap  d-flex flex-column">
+        <div class="main-content"> 
+            <%#= render :partial => '/reports/activities/filters/hotspot_visit_summary_list' %>
+            <div class="row m-t-15">
+            <div class="col-md-12">
+                <div class="card ">
+                    <div class="card-body p-0">
+                        <h5 class="card-title p-custom1">
+                        Hotspot Visit Summary List
+                            <%= link_to 'Export to Excel', hotspot_visit_summary_list_reports_activities_path(
+                            format: :xls,
+                            :hotspot_district_id => params[:hotspot_district_id],
+                            :hotspot_tehsil_id => params[:hotspot_tehsil_id],
+                            :uc => params[:uc],
+                            :hotspot_tag_id => params[:hotspot_tag_id],
+                            :hotspot_status => params[:hotspot_status],
+                            :hotspot_from => params[:hotspot_from],
+                            :hotspot_to => params[:hotspot_to],
+                            :type => params[:type]), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel" %>
+                        </h5>
+                        <div class="separator-breadcrumb border-top mb-3"></div>
+                        <div class="listing-tbl-area">
+                            <%= render "/reports/activities/hotspot_visit_summary_tables/#{params[:type]}"%>
+                        </div>
+                        <div class="text-center">
+                            <% if @hotspots.present? %> 
+                                <%= will_paginate @hotspots, :class => 'apple_pagination'  %>
+                                <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @hotspots.total_entries %></div> 
+                            <% else %> 
+                                <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

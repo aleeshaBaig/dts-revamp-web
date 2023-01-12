@@ -1,0 +1,88 @@
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content">
+   <div class="row">
+    <div class="col-md-12">
+      <h5 class="card-title p-custom1">
+        <% if @tehsil.persisted? %>
+          Edit Tehsil
+        <% else %>
+
+          Add New Tehsil
+        <% end %>
+      </h5>
+      <div class="card ">
+        <div class="card-body p-0 m-t-10">
+
+          <%= form_with(model: tehsil, local: true) do |form| %>
+            <% if tehsil.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(tehsil.errors.count, "error") %> prohibited this tehsil from being saved:</h2>
+
+                <ul>
+                  <% tehsil.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            
+
+            <div class="row p-custom">
+
+
+              <div class="col">
+                <div class="form-group">
+                    <label>Tehsil Name</label>
+                    <%= form.text_field :tehsil_name, class: "form-control", maxlength: 30, :required => true, :onkeypress => "return onlyAlphabets(event,this);" %>
+                </div>
+            </div>    
+
+              <div class="col">
+                <div class="form-group">
+                  <label>District Name</label>
+
+                    <%= form.select :district_id, options_for_select(all_districts,:selected => form.object.district_id),{:include_blank => "Select"},{class: "form-control", required: true} %>
+
+                </div>
+              </div>
+
+          </div>
+            
+
+            <div class="separator-breadcrumb border-top mb-3"></div>
+              <div class="row p-custom">
+                <div class="col-md-2 offset-md-5">
+                  <button type="submit" class="btn filter-btn col-md-12 mb-3">Save</button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function onlyAlphabets(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 0 || charCode == 46 || charCode == 45 || charCode == 32)
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+</script>

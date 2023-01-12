@@ -1,0 +1,123 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<body class="text-left">
+  <div class="app-admin-wrap layout-horizontal-bar clearfix">
+    <div class="main-content-wrap  d-flex flex-column">
+      <div class="main-content"> 
+
+        <%= render :partial => '/reports/activities/filters/hotspot_visit_summary_filter' %>
+        
+        
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-body p-0">
+                <h5 class="card-title p-custom1">
+                  Hotspot Visit Summary
+                  <%#= link_to 'Export to Excel', hotspot_visit_summary_path(format: :xls, district_id: params[:district_id], tehsil_id: params[:tehsil_id], uc: params[:uc], tag_id: params[:tag_id], datefrom: params[:datefrom], dateto: params[:dateto]), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+                  <%= link_to 'Export to Excel', hotspot_visit_summary_path(request.parameters.merge({format: :xls})), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%> 
+                </h5>
+                <div class="separator-breadcrumb border-top mb-3"></div>
+                 <div class="listing-tbl-area">
+                  <table id="p_table" class="table table-bordered table-hover listing-tbl">
+                    <thead>
+                      <tr>
+                        <th>District</th>
+                        <th>Town</th>
+                        <th>Tag</th>
+                        <th>Total Hotspots</th>
+                        <th>Unique Visited Hotspots</th>
+                        <th>Total Visits</th>
+                        <th>Unvisited Hotspots</th>
+                        <th>HS Result Percentage</th>
+                        <th>Positive Hotspots</th>
+                        <th>Percentage of Positive Hotspots</th>
+                      </tr>                    
+                    </thead>
+                    <tbody>
+                      <% grand_total_hotspots = 0; grand_total_uniq_visited=0; grand_total_visits = 0; grand_total_unvisted = 0; grand_total_positive_hotspots = 0;%>
+                      <% @districts.each do |district| %>
+                        <% @towns.each do |town| %>
+                          <% @tags.each do |tag| %>
+                           <% unvisited_hotspots = 0 %>
+                           <% hs_percent = 0 %>
+                           <% positive_percent = 0 %>
+                        <tr>
+                          <td><%= district[1] %></td>
+                          <td><%= town[1] %></td>
+                          <td><%= tag[0] %></td>
+                          <% total_hotspots = @hotspots[[district[0],tag[1],town[0]]].present? ? @hotspots[[district[0],tag[1],town[0]]] : 0 %>
+                          <% unique_visited = @visited_hotspots[[district[0],tag[1],town[0]]].present? ? @visited_hotspots[[district[0],tag[1],town[0]]][0] : 0 %>
+                          <% total_visits = @visited_hotspots[[district[0],tag[1],town[0]]].present? ? @visited_hotspots[[district[0],tag[1],town[0]]][1] : 0 %>
+                          <% positive_hotspots = @visited_hotspots[[district[0],tag[1],town[0]]].present? ? @visited_hotspots[[district[0],tag[1],town[0]]][2] : 0 %>
+
+                          <td class="text-center">
+                            <%= total_hotspots > 0 ? (link_to "#{delimates_coma total_hotspots}", hotspot_visit_summary_list_reports_activities_path(hotspot_district_id: district[0], hotspot_tehsil_id: town[0], hotspot_tag_id: tag[1], hotspot_from: params[:datefrom], hotspot_to: params[:dateto], type: 'total_hotspots', uc: params[:uc], hotspot_status: params[:hotspot_status])) : 0 %>
+                          </td>
+                          <td class="text-center">
+                            <%= unique_visited > 0 ? (link_to "#{delimates_coma unique_visited}", hotspot_visit_summary_list_reports_activities_path(hotspot_district_id: district[0], hotspot_tehsil_id: town[0], hotspot_tag_id: tag[1], hotspot_from: params[:datefrom], hotspot_to: params[:dateto], type: 'unique_visited', uc: params[:uc], hotspot_status: params[:hotspot_status])) : 0 %>
+                          </td>
+                          <td class="text-center">
+                            <%= total_visits > 0 ? (link_to "#{delimates_coma total_visits}", hotspot_visit_summary_list_reports_activities_path(hotspot_district_id: district[0], hotspot_tehsil_id: town[0], hotspot_tag_id: tag[1], hotspot_from: params[:datefrom], hotspot_to: params[:dateto], type: 'total_visited', uc: params[:uc], hotspot_status: params[:hotspot_status])) : 0 %>
+                          </td>
+                          <% if @visited_hotspots[[district[0],tag[1],town[0]]].present?  %>
+                            <% unvisited_hotspots = total_hotspots.to_i - unique_visited.to_i %>
+                            <% if @visited_hotspots[[district[0],tag[1],town[0]]].present? and total_hotspots != 0 %>
+                              <% hs_percent = ((unique_visited.to_f/total_hotspots.to_f)*100).to_i %>
+                            <% end %>
+                            <% if @hotspots[[district[0],tag[1],town[0]]].present? and total_hotspots != 0 %>
+                              <% positive_percent = ((positive_hotspots.to_f/total_hotspots.to_f)*100).to_i %>
+                            <% end %>
+                          <% else %>
+                            <% unvisited_hotspots = total_hotspots.to_i %>
+                          <% end %>
+                          <td style="text-align: center;">
+                            <%= unvisited_hotspots > 0 ? (link_to "#{delimates_coma unvisited_hotspots}", hotspot_visit_summary_list_reports_activities_path(hotspot_district_id: district[0], hotspot_tehsil_id: town[0], hotspot_tag_id: tag[1], hotspot_from: params[:datefrom], hotspot_to: params[:dateto], type: 'unvisted_hotspots', uc: params[:uc], hotspot_status: params[:hotspot_status])) : 0 %>
+                          </td>
+                          <td style="text-align: center;"><%= hs_percent %>%</td>
+                          <td style="text-align: center;">
+                            <%= positive_hotspots > 0 ? (link_to "#{delimates_coma positive_hotspots}", hotspot_visit_summary_list_reports_activities_path(hotspot_district_id: district[0], hotspot_tehsil_id: town[0], hotspot_tag_id: tag[1], hotspot_from: params[:datefrom], hotspot_to: params[:dateto], type: 'positive_hotspots', uc: params[:uc], hotspot_status: params[:hotspot_status])) : 0 %>
+                          </td>
+                          <td style="text-align: center;"><%= positive_percent %>%</td>
+
+                          <!-- GRAND TOTAL CALCULATE -->
+                          <% grand_total_hotspots = grand_total_hotspots +  total_hotspots %>
+                          <% grand_total_uniq_visited = grand_total_uniq_visited +  unique_visited %>
+                          <% grand_total_visits = grand_total_visits +  total_visits %>
+                          <% grand_total_unvisted = grand_total_unvisted +  unvisited_hotspots %>
+                          <% grand_total_positive_hotspots = grand_total_positive_hotspots +  positive_hotspots %>
+
+
+                        </tr>
+                      <% end %>
+                      <% end %>
+                      <% end %>
+                    </tbody>
+                    <% if @hotspots.present? %>
+                      <tfoot>
+                          <tr>
+                            <th colspan="3" class="text-center">Total</th>
+                            <th class="text-center"><%= grand_total_hotspots %></th>
+                            <th class="text-center"><%= grand_total_uniq_visited %></th>
+                            <th class="text-center"><%= grand_total_visits %></th>
+                            <th class="text-center"><%= grand_total_unvisted %></th>
+                            <th class="text-center"><%= ((grand_total_uniq_visited.to_f/grand_total_hotspots.to_f)*100).to_f.round(2) %>%</th>
+                            <th class="text-center"><%= grand_total_positive_hotspots %></th>
+                            <th class="text-center"><%= ((grand_total_positive_hotspots.to_f/grand_total_hotspots.to_f)*100).to_f.round(2) %>%</th>
+                          </tr>
+                      </tfoot>
+                    <% end %>
+                  </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>

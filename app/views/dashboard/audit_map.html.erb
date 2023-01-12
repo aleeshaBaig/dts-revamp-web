@@ -1,0 +1,538 @@
+<%# <script src="http://maps.googleapis.com/maps/api/js"></script> %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<style type="text/css">
+    .fa-2x {
+        margin: 0 auto;
+        float: none;
+        display: table;
+        color: #4ad1e5;
+    }
+    .txt-center-stl{
+        text-align: center;
+        width: 100%;
+    }
+
+    .w100{
+        width: 100% !important;
+    }
+
+    .tile-icon-stlying{
+        padding: 19px 0px;
+        margin: 0 20px 0 15px;
+    }
+
+    .card-icon-bg .card-body .content{
+        width: 100% !important;	
+    }
+    .underline-border{
+        border-bottom: 2px solid #1c5c96;
+    }
+    .underline-border button{
+        width: 200px;
+    }
+</style>
+    
+<div class="main-content-wrap  d-flex flex-column">
+    <div class="main-content"> 
+        <div class="row">
+            <div class="col-md-12">
+            <div class="card ">
+                <div class="card-body p-0">
+                <%= render :partial => 'dashboard/filters/audit_map' %>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="row m-t-15">
+        <div class="col-md-12">
+            <div class="card">
+                
+                <!-- Map Stats -->
+                <div class="row mt-4">
+                    <!-- ICON BG -->
+                    <div class="col-lg col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4 tile-bg3">
+                            <div class="card-body text-center card-custom-pad">
+                                <i class="fa fa-home fa-2x text-white tile-icon-stlying"></i>
+                                <div class="content">
+                                    <p class="text-22 line-height-1 mb-1 text-bold text-white txt-center-stl" id="blue_pins_count"></p>
+                                    <p class="text-white text-12 font-weight-600 mb-0 popins-family text-center w100">Original Activity</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4 tile-bg1">
+                            <div class="card-body text-center card-custom-pad">
+                                <i class="fa fa-map-pin fa-2x text-white tile-icon-stlying"></i>
+                                <div class="content">
+                                    <p class="text-22 line-height-1 mb-1 text-bold text-white txt-center-stl" id="red_pins_count"></p>
+                                    <p class="text-white text-12 font-weight-600 mb-0 popins-family text-center w100">Non-compliance</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4 tile-bg2">
+                            <div class="card-body text-center card-custom-pad">
+                                <i class="fa fa-map-pin fa-2x text-white tile-icon-stlying"></i>
+                                <div class="content">
+                                    <p class="text-22 line-height-1 mb-1 text-bold text-white txt-center-stl" id="green_pins_count"></p>
+                                    <p class="text-white text-12 font-weight-600 mb-0 popins-family text-center text-center w100">satisfactory</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <% if @numberofpages > 1 %>
+                    <div class="row mt-12">
+                        <div class="col text-center pb-2">
+                            <button class="btn btn-lg btn-success" id="load_more"><i class="fa fa-sun-o"></i> Load More <span id="pages">(<%= @numberofpages %>)</span></button>
+                        </div>
+                    </div>
+                <% end %>
+
+                <!-- Map -->
+                <div class="card-body p-0">
+                    <div id="map_canvas" style="min-height: 600px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Counts -->
+    <div class="row m-t-15 underline-border">
+        <div class="col-md-12 text-center mt-2 pb-2">
+            <button class="btn btn-primary btn-lg"><i class="fa fa-database"></i> Total Entries: <%= delimates_coma(@activities.total_entries)%></button>
+        </div>
+    </div>
+</div>
+    
+<script type="text/javascript">
+    // set pins count
+    function setPinsCount(blue,red,green){
+        $('#blue_pins_count').text(blue);
+        $('#red_pins_count').text(red);
+        $('#green_pins_count').text(green);
+    }
+    function is_satisfactory_indoor(activity){
+        (activity.material_provided == 'true' && (activity.no_of_containers_checked == "1" || activity.no_of_containers_checked == '2') && activity.rooftop_checked != 'false' && activity.time_taken == '2' && activity.larvae_found  == 'false')
+    }	
+    function initialize(){
+        var latlng = new google.maps.LatLng(31.538063,74.346199);
+        var zoom = 6;
+            
+        var settings = {
+        zoom: zoom,
+        center: latlng,
+        mapTypeControl: true,
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        navigationControl: true,
+        navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+        mapTypeId: google.maps.MapTypeId.ROADMAP};
+        map = new google.maps.Map(document.getElementById("map_canvas"), settings);  
+        var infowindow = new google.maps.InfoWindow();
+
+        //var companyPos = new google.maps.LatLng(57.0442, 9.9116);
+        var companyMarker, i;
+        window.markers = new Array();
+        window.companyMarker1 = "";
+        // Stats Variables
+        window.blue_pins_count = 0;
+        window.red_pins_count = 0;
+        window.green_pins_count = 0;
+
+        //iniitalize counts
+        setPinsCount(blue_pins_count, red_pins_count, green_pins_count);
+
+        // Pin Colors
+        window.original_activity = 'blue-pin.png';
+        window.satisfactory = 'green-pin.png';
+        window.non_compliance = 'red-pin.png';
+
+        <% @activities.each do |activity| %>
+
+            // Markers of larvaciding pins display
+            <% if ['indoor', 'outdoor'].include?(params[:type])  %>
+                <% if activity.is_satisfactory_indoor? %>
+                    companyMarker1 = new google.maps.Marker({
+                        position: new google.maps.LatLng(<%= activity.location %>),
+                        map: map,
+                        draggable: true,
+                        icon: '/assets/map_pins/'+satisfactory,
+                        title: '<%= activity.simple_activity_id.to_i %>',
+                    });
+                    
+                    // add pins
+                    green_pins_count = green_pins_count + 1;
+                    markers.push(companyMarker1);
+                <% else %>
+                    companyMarker1 = new google.maps.Marker({
+                        position: new google.maps.LatLng(<%= activity.location %>),
+                        map: map,
+                        draggable: true,
+                        icon: '/assets/map_pins/'+non_compliance,
+                        title: '<%= activity.simple_activity_id.to_i  %>',
+                    });
+                    
+                    // add pins
+                    red_pins_count = red_pins_count + 1;
+                    markers.push(companyMarker1);
+                <% end %>
+
+                // on click pin open infobox
+                google.maps.event.addListener(companyMarker1, 'click', (function(companyMarker1, i){
+                    return function(){
+                        $.ajax({
+                            url: '/tpv_popup_data?activity_id=<%= activity.id %>'+'&type=<%= params[:type] %>',
+                            dataType: 'html' ,
+                            success: function(data){
+                                infowindow.setContent(data);
+                                infowindow.open(map, companyMarker1);
+                            }
+                        });// ajax end line
+                    }// return function end line
+                })(companyMarker1, i));
+                // Draw Circles
+                var circle = new google.maps.Circle({
+                    map: map,
+                    radius: 50,    // metres
+                        fillColor: '#4c8bff'
+                });
+                circle.bindTo('center', companyMarker1 , 'position');
+                
+            <% end %>
+            
+            companyMarker = new google.maps.Marker({
+                position: new google.maps.LatLng(<%= activity.location %>),
+                map: map,
+                draggable: true,
+                icon: '/assets/map_pins/'+original_activity,
+                title: '<%= params[:type] == 'cr' ? activity.patient_activity_id.to_i : activity.simple_activity_id.to_i %>',
+            });
+
+            // add pins
+            blue_pins_count = blue_pins_count + 1;
+            markers.push(companyMarker);
+            
+            // on click original activities
+            google.maps.event.addListener(companyMarker, 'click', (function(companyMarker, i){
+                return function(){
+                    $.ajax({
+                        url: "/google_map_popup_data?activity_id=<%= params[:type] == 'cr' ? activity.patient_activity_id.to_i : activity.simple_activity_id.to_i %>"+"&activity_type=<%= params[:type] == 'cr' ? 'patient_activity' : 'simple_activity'%>",
+                        dataType: 'html' ,
+                        success: function(data){
+                            infowindow.setContent(data);
+                            infowindow.open(map, companyMarker);
+                        }
+                    });// ajax end line
+                }// return function end line
+            })(companyMarker, i));
+
+            // Types [Larvae, Case Response, Indoor, Outdoor] condition wise display pins
+            <% if ["cr", "rest"].include?(params[:type]) %>
+                <% if params[:type] == "cr" %>
+                    <% if activity.is_satisfactory? %>
+                        companyMarker1 = new google.maps.Marker({
+                            position: new google.maps.LatLng(<%= activity.location %>),
+                            map: map,
+                            draggable: true,
+                            icon: '/assets/map_pins/'+satisfactory,
+                            title: '<%= activity.patient_activity_id %>',
+                            //zIndex: 3
+                        });
+                        
+                        // add pins
+                        green_pins_count = green_pins_count + 1;
+                        markers.push(companyMarker1);
+                    <% else %>
+                        console.log("non complaince")
+                        companyMarker1 = new google.maps.Marker({
+                            position: new google.maps.LatLng(<%= activity.location %>),
+                            map: map,
+                            draggable: true,
+                            icon: '/assets/map_pins/'+non_compliance,
+                            title: '<%= activity.patient_activity_id %>',
+                            //zIndex: 3
+                        });
+
+                        // add pins
+                        red_pins_count = red_pins_count + 1;
+
+                        markers.push(companyMarker1);
+                    <% end %>
+                <% elsif params[:type] == "rest" %>
+                    <% if activity.is_satisfactory? %>
+                        companyMarker1 = new google.maps.Marker({
+                            position: new google.maps.LatLng(<%= activity.location %>),
+                            map: map,
+                            draggable: true,
+                            icon: '/assets/map_pins/'+satisfactory,
+                            title: '<%= activity.simple_activity_id %>',
+                            //zIndex: 3
+                        });
+
+                        // add pins
+                        green_pins_count = green_pins_count + 1;
+
+                        markers.push(companyMarker1);
+                    <% else %>
+                        companyMarker1 = new google.maps.Marker({
+                            position: new google.maps.LatLng(<%= activity.location %>),
+                            map: map,
+                            draggable: true,
+                            icon: '/assets/map_pins/'+non_compliance,
+                            title: '<%= activity.simple_activity_id %>',
+                            //zIndex: 3
+                        });
+
+                        // add pins
+                        red_pins_count = red_pins_count + 1;
+
+                        markers.push(companyMarker1);
+                    <% end %>
+                <% end %>
+                // on click pin open infobox
+                google.maps.event.addListener(companyMarker1, 'click', (function(companyMarker1, i){
+                    return function(){
+                        $.ajax({
+                            url: '/tpv_popup_data?activity_id=<%= activity.id %>'+'&type=<%= params[:type] %>',
+                            dataType: 'html' ,
+                            success: function(data){
+                                infowindow.setContent(data);
+                                infowindow.open(map, companyMarker1);
+                            }
+                        });// ajax end line
+                    }// return function end line
+                })(companyMarker1, i));
+                // Draw Circles
+                var circle = new google.maps.Circle({
+                    map: map,
+                    radius: 50,    // metres
+                        fillColor: '#4c8bff'
+                });
+                circle.bindTo('center', companyMarker1 , 'position');                    
+            <% end %>
+        <% end %>
+
+        setPinsCount(blue_pins_count, red_pins_count, green_pins_count);
+    }
+</script>
+<!-- Load More -->
+<script type="text/javascript">	
+    var page = 2;
+    var totalpages = "<%= @numberofpages %>";
+    
+    // Load More
+    $("#load_more").on('click', function(){
+        var infowindow = new google.maps.InfoWindow();
+
+        // Get Selected Filters Values
+        var district_id = $("#district_id").val();
+        var tehsil_id = $("#tehsil").val();
+        var department_id = $("#department").val();
+        var type = $("#type").val();
+        var from = $(".date_from").val();
+        var to = $(".date_to").val();
+        // Ajax Call
+        $.ajax({
+            url: '/audit_map?district_id='+district_id+'&tehsil_id='+tehsil_id+'&department_id='+department_id+'&type='+type+'&from='+from+'&to='+to+'&page='+page+'&totalpages='+totalpages,
+            dataType: 'json',
+            success: function(data){
+            
+                markers = []
+                $.each(data["activities"], function(i){
+                    <% if params[:type] == "cr" %>
+                        var default_title = data["activities"][i].patient_activity_id;
+                        var activity_type = "patient_activity";
+                    <% else %>
+                        var default_title = data["activities"][i].simple_activity_id;
+                        var activity_type = "simple_activity";
+                    <% end %>
+
+                    // Markers of larvaciding pins display
+                    <% if ['indoor', 'outdoor'].include?(params[:type])  %>
+                        if(data["activities"][i].is_satisfactory_indoor(data['activities'][i])){
+                            companyMarker1 = new google.maps.Marker({
+                                position: new google.maps.LatLng(data['activities'][i].location),
+                                map: map,
+                                draggable: true,
+                                icon: '/assets/map_pins/'+satisfactory,
+                                title: default_title,
+                            });
+                            
+                            // add pins
+                            green_pins_count = green_pins_count + 1;
+                            markers.push(companyMarker1);
+                        }else{
+                            companyMarker1 = new google.maps.Marker({
+                                position: new google.maps.LatLng(data['activities'][i].location),
+                                map: map,
+                                draggable: true,
+                                icon: '/assets/map_pins/'+non_compliance,
+                                title: default_title,
+                            });
+                            
+                            // add pins
+                            red_pins_count = red_pins_count + 1;
+                            markers.push(companyMarker);
+                        }
+                        // on click pin of tpv data open infobox of TPV
+                        google.maps.event.addListener(companyMarker1, 'click', (function(companyMarker1, i) {
+                            return function() {
+                                $.ajax({
+                                    url: '/tpv_popup_data?activity_id='+ data["activities"][i].id+'&type=<%= params[:type] %>' ,
+                                    dataType: 'html' ,
+                                    success: function(data){
+                                        infowindow.setContent(data);
+                                        infowindow.open(map, companyMarker1);
+                                    }
+                                });
+                            }
+                        })(companyMarker1, i));
+                        
+                        // Draw Circles
+                        var circle = new google.maps.Circle({
+                            map: map,
+                            radius: 50,    // metres
+                            fillColor: '#4c8bff'
+                        });
+                        circle.bindTo('center', companyMarker1 , 'position'); 
+                    <% end %>
+                    companyMarker = new google.maps.Marker({
+                        position: new google.maps.LatLng(data['activities'][i].location),
+                        map: map,
+                        draggable: true,
+                        icon: '/assets/map_pins/'+original_activity,
+                        title: default_title,
+                    });
+
+                    // add pins
+                    blue_pins_count = blue_pins_count + 1;
+                    markers.push(companyMarker);
+                    // on click pin open infobox
+                    google.maps.event.addListener(companyMarker, 'click', (function(companyMarker, i) {
+                        return function() {
+                            $.ajax({
+                                url: '/google_map_popup_data?activity_id='+default_title+'&activity_type='+activity_type,
+                                dataType: 'html' ,
+                                success: function(data){
+                                    infowindow.setContent(data);
+                                    infowindow.open(map, companyMarker);
+                                }
+                            });
+                        }
+                    })
+                    (companyMarker, i));  
+                    <% if ["cr", "rest"].include?(params[:type]) %>
+                        // Types [Larvae, Case Response, Indoor, Outdoor] condition wise display pins
+                        <% if params[:type] == "cr" %>
+                            if( (data["activities"][i].larvae_found == 'false' || data["activities"][i].larvae_found == '') && (data["activities"][i].response_conducted_at_place == 'true' && data["activities"][i].sop_followed == 'true') ){
+                                companyMarker1 = new google.maps.Marker({
+                                    position: new google.maps.LatLng(data["activities"][i].location),
+                                    map: map,
+                                    draggable: true,
+                                    icon: '/assets/map_pins/'+satisfactory,
+                                    title: data["activities"][i].patient_activity_id,
+                                    //zIndex: 3
+                                });
+
+                                // add pins
+                                green_pins_count = green_pins_count + 1;
+
+                                markers.push(companyMarker1);
+                            }else{
+                                companyMarker1 = new google.maps.Marker({
+                                    position: new google.maps.LatLng(data["activities"][i].location),
+                                    map: map,
+                                    draggable: true,
+                                    icon: '/assets/map_pins/'+non_compliance,
+                                    title: data["activities"][i].patient_activity_id,
+                                    //zIndex: 3
+                                });
+
+                                // add pins
+                                red_pins_count = red_pins_count + 1;
+
+                                markers.push(companyMarker1);
+                            }
+                                
+                        <% elsif params[:type] == "rest" %>
+                                if(data["activities"][i].larviciding == 'true'){
+                                    companyMarker1 = new google.maps.Marker({
+                                        position: new google.maps.LatLng(data["activities"][i].location),
+                                        map: map,
+                                        draggable: true,
+                                        icon: '/assets/map_pins/'+satisfactory,
+                                        title: data["activities"][i].simple_activity_id,
+                                        //zIndex: 3
+                                    });
+
+                                    // add pins
+                                    green_pins_count = green_pins_count + 1;
+
+                                    markers.push(companyMarker1);
+                                }else{
+                                    companyMarker1 = new google.maps.Marker({
+                                        position: new google.maps.LatLng(data["activities"][i].location),
+                                        map: map,
+                                        draggable: true,
+                                        icon: '/assets/map_pins/'+non_compliance,
+                                        title: data["activities"][i].simple_activity_id,
+                                        //zIndex: 3
+                                    });
+
+                                    // add pins
+                                    red_pins_count = red_pins_count + 1;
+                                    
+                                    markers.push(companyMarker1);
+                                }
+                        <% end %>
+                            // on click pin of tpv data open infobox of TPV
+                            google.maps.event.addListener(companyMarker1, 'click', (function(companyMarker1, i) {
+                                return function() {
+                                    $.ajax({
+                                        url: '/tpv_popup_data?activity_id='+ data["activities"][i].id+'&type=<%= params[:type] %>' ,
+                                        dataType: 'html' ,
+                                        success: function(data){
+                                            infowindow.setContent(data);
+                                            infowindow.open(map, companyMarker1);
+                                        }
+                                    });
+                                }
+                            })(companyMarker1, i));
+                            
+                            // Draw Circles
+                            var circle = new google.maps.Circle({
+                                map: map,
+                                radius: 50,    // metres
+                                fillColor: '#4c8bff'
+                            });
+                            circle.bindTo('center', companyMarker1 , 'position');
+                    <% end %>
+                });
+            }
+        });
+        
+        setPinsCount(blue_pins_count, red_pins_count, green_pins_count);
+
+        // Paginate
+        totalpages = totalpages - 1;
+        page = page + 1;
+
+        $("#pages").text(totalpages);
+        if (totalpages == 0){
+            $('#load_more').hide();
+        }
+    });
+</script>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyCywSTmzjate17E7Ko6TiG9Jb9WG7jYTS8&language=en" async defer></script>
+
+
+

@@ -1,0 +1,140 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl datatable" width="100%">
+    <thead>
+        <tr>
+            <th>Sr No.</th>
+            <th>Patient ID</th>
+            <th>Patient name</th>
+            <th>Father/Husband name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>CNIC/Passport</th>
+            <th>Guardian's Relation</th>
+            <th>Patient contact</th>
+            <% if @current_user_is_admin %>
+                <th>Updated By</th>
+            <% else %>
+                <th>Relation contact</th>
+            <% end %>
+            <th>Entry Date</th>
+            <th>Hospital/Lab</th>
+            <% if @is_hospital_district_enable %>
+                <th>Hospital District</th>
+            <% end %>
+
+            <th>Address</th>
+            <th>District</th>
+            <th>Tehsil</th>
+            <th>UC</th>
+            <th>Residence House Tagged</th>
+            <th>Permanent address</th>
+            <th>Permanent district</th>
+            <th>Permanent tehsil</th>
+            <th>Permanent UC</th>
+            <th>Permanent House Tagged</th>
+            <th>Workplace address</th>
+            <th>Workplace district</th>
+            <th>Workplace tehsil</th>
+            <th>Workplace UC</th>
+            <th>Workplace Tagged</th>
+            <th>Date of onset</th>
+            <th>Fever last for</th>
+            <th>Fever</th>
+            <th>Previous dengue fever</th>
+            <th>Associated Symptoms</th>
+            <th>Provisional diagnosis</th>
+            <th>Confirmation Date</th>
+            <th>Other diagnosed fever</th>
+            <th>Patient status</th>
+            <th>Patient condition</th>
+            <th>Patient outcome</th>
+            <th>Reporting Date</th>
+            <% if !@is_hospital_user %>
+                <th>Entered By</th>
+            <% end %>
+            <th>Created By</th>
+            <th>Lab Name</th>
+            <% if request.format != 'xls' %>
+                <th>Action</th>
+            <% end %>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% @patients.each_with_index do |patient, i| %>
+            <tr style="<%= patient.is_released == true ? 'background-color: #E7FAFF;' : '' %>">
+                <td class="tbl-td-color"><%= i + 1 %></td>
+                <td class="tbl-td-color"><%= patient.id %></td>
+                <td class="tbl-td-color"><%= patient.patient_name %></td>
+                <td class="tbl-td-color"><%= patient.fh_name %></td>
+                <td class="tbl-td-color"><%= patient.age %></td>
+                <td class="tbl-td-color"><%= patient.gender %></td>
+                <td class="text-center">
+                    <% if patient.p_search_type == 'CNIC'%>
+                        <%= patient.cnic %>
+                    <% else %>
+                        <%= patient.passport %>
+                    <% end %>
+                </td>
+                <td class="tbl-td-color"><%= patient.cnic_relation %></td>
+                <td class="tbl-td-color"><%= patient.patient_contact %></td>
+                <% if @current_user_is_admin %>
+                    <td class="tbl-td-color"><%= patient.updated_by.try(:username) || patient.user.try(:username)  %> </td>
+                <% else %>
+                    <td class="tbl-td-color"><%= patient.relation_contact %></td>
+                <% end %>
+                <td class="tbl-td-color"><%= datetime patient.created_at %></td>
+                <td class="tbl-td-color"><%= patient.hospital %></td>
+                <% if @is_hospital_district_enable %>
+                    <% hospital_district = patient.hospital.present? ? patient.admitted_hospital.district.try(:district_name) : "NA" %>
+                    <td><%= hospital_district %></td>
+                <% end %>
+                <td class="tbl-td-color"><%= patient.address %></td>
+                <td class="tbl-td-color"><%= patient.district %></td>
+                <td class="tbl-td-color"><%= patient.tehsil %></td>
+                <td class="tbl-td-color"><%= patient.uc %></td>
+                <td class="tbl-td-color"><%= patient.residence_tagged %></td>
+                <td class="tbl-td-color"><%= patient.permanent_address %></td>
+                <td class="tbl-td-color"><%= patient.permanent_district %></td>
+                <td class="tbl-td-color"><%= patient.permanent_tehsil %></td>
+                <td class="tbl-td-color"><%= patient.permanent_uc %></td>
+                <td class="tbl-td-color"><%= patient.permanent_residence_tagged %></td>
+                <td class="tbl-td-color"><%= patient.workplace_address %></td>
+                <td class="tbl-td-color"><%= patient.workplace_district %></td>
+                <td class="tbl-td-color"><%= patient.workplace_tehsil %></td>
+                <td class="tbl-td-color"><%= patient.workplace_uc %></td>
+                <td class="tbl-td-color"><%= patient.workplace_tagged %></td>
+                <td class="tbl-td-color"><%= patient.date_of_onset %></td>
+                <td class="tbl-td-color"><%= patient.fever_last_till %></td>
+                <td class="tbl-td-color"><%= patient.fever %></td>
+                <td class="tbl-td-color"><%= patient.previous_dengue_fever %></td>
+                <td class="tbl-td-color"><%= patient.associated_symptom %></td>
+                <td class="tbl-td-color"><%= patient.provisional_diagnosis %></td>
+                <td class="tbl-td-color"><%= datetime patient.confirmation_date %></td>
+                <td class="tbl-td-color"><%= patient.other_diagnosed_fever %></td>
+                <td class="tbl-td-color"><%= patient.patient_status %></td>
+                <td class="tbl-td-color"><%= patient.patient_condition %></td>
+                <td class="tbl-td-color"><%= patient.patient_outcome %></td>
+                <td class="tbl-td-color"><%= patient.reporting_date? ? patient.reporting_date.strftime("on %m/%d/%Y at %I:%M%p") : nil %></td>
+                <% if !@is_hospital_user %>
+                    <td class="tbl-td-color"><%= patient.entered_by %></td>
+                <% end %>
+                
+                <td class="tbl-td-color"><%= patient.from_lab.try(:username) || patient.user.try(:username) %></td>
+                <td class="tbl-td-color"><%= patient.current_patient_lab %></td>
+                <% if request.format != 'xls' %>
+                    <td class="tbl-td-color">
+                        <% if can? :update, patient %>
+                            <% if patient.is_released == true %><p style="color: #6ca6cd;">Released</p>
+                            <% else %>
+                                <% if can? :release_patient, patient and patient.patient_status == "In Process" %><%= link_to "Release".html_safe, release_patient_path(patient_id: patient.id), class: 'edit', method: :get, data: { confirm: 'Are you sure you want to release this patient?' } %><br/><% end %>
+                                <%= link_to "Edit".html_safe, edit_patient_path(patient), class: 'edit', method: :get %>
+                            <% end %>
+                        <% end %>
+                        <% if can? :show, patient %><%= link_to "Details".html_safe, patient_path(patient), class: 'Patient Details', method: :get %> <br/><% end %>
+                        <% if can? :delete, patient %><%= link_to 'Delete', patient, method: :delete, data: { confirm: 'Are you sure?' } %><% end %>
+                    </td>
+                <% end %>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

@@ -1,0 +1,15 @@
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content">
+   	<div class="row">
+    	<div class="col-md-12">
+      	<h5 class="card-title p-custom1">Add New Slide Show</h5>
+      	<div class="card">
+	        <div class="card-body p-0 m-t-10">
+            <%= render :partial => 'slideshows/filters/filter', :locals => {f_url: new_slideshow_url} %>
+	        	<%= render 'form' %>
+	        </div>
+      	</div>
+     </div>
+  	</div>
+ 	</div>
+</div>

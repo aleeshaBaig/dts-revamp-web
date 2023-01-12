@@ -1,0 +1,50 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<body class="text-left">
+  <div class="app-admin-wrap layout-horizontal-bar clearfix">
+    <div class="main-content-wrap  d-flex flex-column">
+    <%= render :partial => 'dashboard/filters/hospital_compliance_filters.html.erb', :locals => {} %>
+      <div class="main-content"> 
+
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-body p-0">
+                  <h5 class="card-title p-custom1">
+                  Hospital Compliance Report
+                  <%= link_to 'Export to Excel', hospital_compliance_report_path(request.parameters.merge({:format => :xls})), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+                  </h5>
+                <div class="separator-breadcrumb border-top mb-3"></div>
+                  <div class="listing-tbl-area">
+                   <table id="p_table" class="table table-bordered table-hover listing-tbl">
+                        <thead>
+                          <tr>
+                            <th>Category</th>
+                            <th>Total Reporting Units</th>
+                            <th>Non-Compliant Hospitals</th>
+                          </tr>
+                         
+                        </thead>
+                        
+                        <% @result.each do |r| %>
+                         <tr>
+                            <td class="text-center"><%= r.category %></td>
+                            <td class="text-center"><%= r.total_units.to_i %></td>
+                            <td class="text-center"><a href="<%=dept_wise_compliance_report_path(request.parameters.merge({category: r.category}))%>"><%= (r.total_units.to_i - r.compliant_units.to_i) %></a></td>
+                         </tr>
+                        <% end %>
+                        
+                    </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

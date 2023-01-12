@@ -1,0 +1,17 @@
+<div class="main-content-wrap  d-flex flex-column">				
+  <div class="main-content"> 
+    <%= render :partial => "/reports/patient/filters/#{params[:action]}_filter" %>
+    <div class="row m-t-15">
+      <div class="col-md-12">
+        <div class="card ">
+          <h5 class="card-title p-custom1">Epidemiological Report
+            <%= link_to 'Export to Excel', epidemiological_reports_patient_index_path(format: :xls, province: params[:province], district: params[:district], hospital: params[:hospital], from: params[:from], to: params[:to]), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%></h5>
+
+          <div class="card-body p-0">
+            <%= render "/reports/patient/tables/#{params[:action]}_table" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

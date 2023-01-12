@@ -1,0 +1,44 @@
+<ul class="navbar-nav mr-auto" style="margin-left: 1%;">
+  <li class="nav-item active m-l-1">
+    <a class="nav-link" href="/home_lab_users">
+      <i class="nav-icon fa fa-dashboard mr-1"></i>Dashboard <span class="sr-only">(current)</span></a>
+  </li>
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      <i class="nav-icon fa fa-wheelchair mr-1"></i>Lab Patients
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <%# <a class="dropdown-item" href="/lab_patients/new">Create Patient</a> %>
+      <a class="dropdown-item" href="/patients/search_patient">Create a Patient</a>
+      <a class="dropdown-item" id="mark_as_patient" href="#">Mark as Zero Patient</a>
+      <a class="dropdown-item" href="/patients">Patients Listing</a>
+      
+      <%# <a class="dropdown-item" href="/lab_patients/new">Create Patient</a>
+      <a class="dropdown-item" id="mark_as_patient" href="#">Mark as Zero Patient</a>
+      <a class="dropdown-item" href="/lab_patients">Patients Listing</a> %>
+    </div>
+  </li>
+  <%=  render '/application/help' %>
+
+</ul>
+
+<script type="text/javascript">
+// << Mark as Patient >>
+$('#mark_as_patient').on('click', function(){
+  var change_confirm = confirm("Mark as zero patient?");
+  if(change_confirm){
+    $.ajax({
+      url: "/lab_patients/mark_lab_as_zero_patient",
+      type: "get",
+      success: function(data) {
+        if(data.error == '0'){
+          toastr.success(data.message, {timeOut: "50000"});
+        }else{
+          toastr.error(data.message, {timeOut: "50000"});
+        }
+      }
+    });
+  }
+});
+  
+</script>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+
+<style type="text/css">
+.customizer2 .handle2 {
+    position: absolute;
+    display: flex;
+    top: 300px;
+    left: 208px;
+    cursor: pointer;
+    padding: 10px 8px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: -3px 0 4px rgba(0,0,0,.06);
+    font-size: 15px;
+    transition: all .3s ease-in-out;
+    white-space: nowrap;
+    height: 43px;
+    transform: rotate(-90deg);
+}
+
+.customizer2 .handle2, .customizer2 .handle2:hover {
+    background: #135591;
+    color: #fff;
+    left: 12px;
+}
+
+.admin-icon{
+  margin-right: 16px;
+}
+  th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+
+</style>
+ 
+ </head>
+<body class="text-left">
+  <div class="app-admin-wrap layout-horizontal-bar clearfix">
+    <div class="main-content-wrap  d-flex flex-column">
+      <div class="main-content"> 
+
+        <%= render :partial => 'shared/hotspot_filters' , :locals => { } %>
+
+          <div class="row m-t-15">
+            <div class="col-md-12">
+              <div class="card ">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h5 class="card-title p-custom1">Hotspots</h5>
+                  </div>
+                  <div class="col-md-2 mt-1">
+                      <%= link_to 'Export to Excel', hotspots_path(format: :xls, :status => params[:status], :tag_id => params[:tag_id], :tehsil_id => params[:tehsil_id], :district_id => params[:district_id], :uc_id => params[:uc_id], :h_name => params[:h_name], pagination: "No"), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+                  </div>
+                  <div class="col-md-2 mt-1">
+                    <%= link_to 'Add Hotspot', new_hotspot_path, :class => 'btn btn-sm btn-warning btn-block', :title => "Add new hotspot"%>
+                  </div>
+                </div>
+               
+                            
+                            <div class="separator-breadcrumb border-top mb-3"></div>
+                            <div class="listing-tbl-area">
+                              <table class="table table-bordered table-hover listing-tbl">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Tag</th>
+                                    <th>Description</th>
+                                    <th>District</th>
+                                    <th>Tehsil</th>
+                                    <th>Uc</th>
+                                    <th>Status</th>
+                                    <% if current_user.admin? %>
+                                      <th>Updated By</th>
+                                      <th>Updated At</th>
+                                    <% end %>
+                                    <th colspan="3"></th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  <% @hotspots.each do |hotspot| %>
+                                  <tr>
+                                    <td class="tbl-td-color"><%= hotspot.hotspot_name %></td>
+                                    <td class="tbl-td-color2"><%= hotspot.address %></td>
+                                    <td class="tbl-td-color"><%= hotspot.tag %></td>
+                                    <td class="tbl-td-color"><%= hotspot.description %></td>
+                                    <td class="tbl-td-color"><%= hotspot.district %></td>
+                                    <td class="tbl-td-color2"><%= hotspot.tehsil %></td>
+                                    <td class="tbl-td-color2"><%= hotspot.uc %></td>
+                                    <td class="tbl-td-color"><%= hotspot.is_active ? "Active" : "Inactive" %></td>
+                                    <% if current_user.admin? %>
+                                      <td class="tbl-td-color2"><%= hotspot.updated_by ? hotspot.updated_by.username : "" %></td>
+                                      <td class="tbl-td-color2"><%= hotspot.updated_at.to_datetime.strftime("%m/%d/%Y at %I:%M%p") %></td>
+                                    <% end %>
+                                    <td class="tbl-td-color2"><%= link_to "Edit".html_safe, edit_hotspot_path(hotspot), class: 'edit' %> </td>
+                                  </tr>
+                                  <% end %>
+                                </tbody>
+                              </table>
+                            </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+
+            
+
+
+</div>
+
+
+
+    <div class="text-center">
+      <% if @hotspots.present? %> 
+              <%= will_paginate @hotspots, :class => 'apple_pagination'  %>
+              <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @hotspots.total_entries %></div> 
+             <% else %> 
+               <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+       <% end %>
+    </div>
+    </body>
+
+</html>
+
+
+

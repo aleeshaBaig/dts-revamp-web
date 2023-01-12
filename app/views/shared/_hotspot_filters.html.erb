@@ -1,0 +1,177 @@
+<style type="text/css">
+.inner
+{
+    display: inline-block;
+}
+</style>
+<div class="row p-custom">
+
+        <div class="col-md-2">
+          <div class="form-group">
+              <label>Name</label>
+            <input class="form-control" type="text" id="h_name" name="h_name" value='<%= (params[:h_name].present?)? "#{params[:h_name]}" : nil %>' />
+          </div>
+        </div>
+
+      	<div class="col-md-2">
+      	  <div class="form-group">
+            <label>Tags</label>
+            <%= select_tag :tag, options_for_select(hotspot_tags,{:selected => params[:tag_id]}), {class: 'form-control', :include_blank => "All"} %>
+          </div>
+        </div>
+      	
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Status</label>
+            <%= select_tag :status, options_for_select(hotspot_status_list,{:selected => params[:status]}), {class: 'form-control', :include_blank => "All"}%>
+          </div>
+        </div>
+
+        <% if !current_user.district_user? %>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label> District:</label>
+                    <%= select_tag :district, options_for_select(all_districts,{:selected => params[:district_id]}), {class: 'form-control', :include_blank => "All"}%>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label> Tehsil:</label>
+                  <%= select_tag :tehsil, options_for_select(tehsil_information(params[:district_id]),{:selected => params[:tehsil_id]}), {class: 'form-control', :include_blank => "All"}%>
+              </div>
+            </div>
+        <% else %>
+
+            <input type="hidden" name="district" id="district" value="<%= current_user.district_id %>">
+
+            <div class="col-md-2">
+              <div class="form-group">
+                <label> Tehsil:</label>
+                  <%= select_tag :tehsil, options_for_select(tehsil_information(current_user.district_id),{:selected => params[:tehsil_id]}), {class: 'form-control', :include_blank => "All"}%>
+              </div>
+            </div>
+        <% end %>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label> UCs:</label>
+                <%= select_tag :uc, options_for_select(ucs_information(params[:tehsil_id]),{:selected => params[:uc_id]}), {class: 'form-control', :include_blank => "All"}%>
+          </div>
+        </div>
+</div>
+<div class="row p-custom">
+        
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+          <button class="btn filter-btn col-md-12 mb-3" onclick="filter_patients()">Filter</button>
+        </div>
+        <div class="col-md-2">
+          <button class="btn filter-btn col-md-12 mb-3" onclick="resetData()">Reset</button>
+        </div>
+  
+</div>
+  
+
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+	function filter_patients(){
+  
+      window.location = "?" + "tag_id=" + $("#tag").val() + "&status=" + $("#status").val()  + "&district_id=" + $("#district").val() + "&tehsil_id=" + $("#tehsil").val() + "&uc_id=" + $("#uc").val() + "&h_name=" + $("#h_name").val();
+    
+};
+
+ $("#district").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#tehsil").removeAttr('disabled');
+        $("select#tehsil option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#tehsil");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#tehsil");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#tehsil");
+        }
+      },
+    });
+  });
+
+ $("#tehsil").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#uc").removeAttr('disabled');
+        $("select#uc option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#uc");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#uc");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#uc");
+        }
+      },
+    });
+  });
+
+ function resetData(){
+    $("#tag").val("");
+    $("#h_name").val("");
+    $("#status").prop('selectedIndex',0);
+
+    $('#district').prop('selectedIndex',0);
+    $('#tehsil').prop('selectedIndex',0);
+    $('#uc').prop('selectedIndex',0);
+
+};
+
+  function onlyNumerics(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode >= 48 && charCode <= 57) || (charCode == 189))
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+
+ </script>   

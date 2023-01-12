@@ -1,0 +1,45 @@
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content">
+   <div class="row">
+    <div class="col-md-12">
+      <% if @user.persisted? %>
+        <h5 class="card-title p-custom1">Edit User</h5>
+      <% else %>
+        <h5 class="card-title p-custom1">Add New User</h5>
+      <% end %>
+      <div class="card ">
+        <div class="card-body p-0 m-t-10">
+        	<div class="modal-body">
+        		<div class="row">
+        			<div class="col-md-6">
+        				<%= select_tag(:role, options_for_select(User::roles.map{|p| [p.first.try(:titleize), p.first]}, @user.try(:role)), :prompt => "-Role-", class: "form-control user_role") %>
+        			</div>
+        		</div>
+
+					  <div id="preview_role_managment">
+					  </div>
+					</div>
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  call_role_managment();
+  $('.user_role').on('change', function(){
+    call_role_managment();
+  })
+  function call_role_managment(){
+    $.ajax({
+      url: "/users/role_management",
+      method: 'post',
+      data: {role: $('#role').val(), user_id: '<%= @user.try(:id) %>'},
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+    });
+  }
+
+</script>

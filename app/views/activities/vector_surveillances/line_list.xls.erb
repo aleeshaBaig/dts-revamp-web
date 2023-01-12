@@ -1,0 +1,62 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+		<thead>
+			<tr>
+				<th>Sr #</th>
+        <!-- Basic information -->
+        <% if params[:activity_type] == 'indoor' %>
+          <th>Name of Family Head</th>
+        <% end %>
+        <th>Shop/House</th>
+        <th>Address</th>
+        <th>Container Tag(Objects)</th>
+                
+        <!-- District/Tehsil/Uc -->
+				<th>District</th>
+				<th>Town</th>
+				<th>UC</th>
+
+        <!-- Tags -->
+        <th>Tag</th>
+
+        <!-- Containers value -->
+        <th>Checked</th>
+        <th>Positive</th>
+
+        <!-- Mobile Version & Datetime -->
+				<th>Submitted by</th>
+				<th>Activity Date/Time</th>
+
+    	</tr>                    
+		</thead>
+		<tbody>
+			
+      <% count = ((params[:page] || 1).to_i - 1) * @per_page %>
+			<% @activities.each_with_index do |activity,i| %>
+				<tr>
+					<td class="text-center"><%= (count + i)+1 %></td>
+                    
+          <!-- Basic information -->
+          <% if params[:activity_type] == 'indoor' %>
+            <td><%= activity.surveillance_activity.try(:name) %></td>
+          <% end %>
+          <td><%= activity.surveillance_activity.try(:shop_or_house) %></td>
+          <td><%= activity.surveillance_activity.try(:address) %></td>
+					<td><%= activity.surveillance_tag_name %></td>
+          <!-- District/Tehsil/Uc -->
+					<td><%= activity.district_name %></td>
+					<td><%= activity.tehsil_name %></td>
+					<td><%= activity.uc_name %></td>
+
+          <!-- Tags -->
+          <td><%= activity.activity_type %></td>
+
+          <!-- Containers value -->
+          <td class="text-center"><%= activity.checked_val %></td>
+          <td class="text-center"><%= activity.positive_val %></td>
+          <!-- Mobile Version & Datetime -->
+          <td><%= activity.mobile_user.try(:username) %></td>
+					<td><%= activity.created_at.to_datetime.strftime("on %m/%d/%Y at %I:%M%p") %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>

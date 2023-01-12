@@ -1,0 +1,35 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+  <thead>
+    <tr>
+      <th>Sr#</th>
+      <th>District</th>
+      <th>Town</th>
+      <th>UC</th>
+
+      <th>Suspected</th>
+      <th>Probable</th>
+      <th>Confirmed</th>
+      <th>Non-Dengue</th>
+    </tr>                    
+  </thead>
+  <tbody>
+    <% if is_provisional_diagnosis_uc_wise_filters_active? %>
+      <% @ucs.each_with_index do |uc, index| %>
+          <tr>
+            <!-- Base Data -->
+            <td class="text-center"><%= index+1 %></td>
+            <td><%= uc.district.try(:district_name) %></td>
+            <td><%= uc.tehsil.try(:tehsil_name) %></td>
+            <td><%= uc.uc_name %></td>
+
+            <!-- display all informations -->
+            <td class="text-center"><%= @provisional_diagnosis_uc_wise[["Suspected", uc.district_id, uc.tehsil_id, uc.id]].to_i %></td>
+            <td class="text-center"><%= @provisional_diagnosis_uc_wise[["Probable", uc.district_id, uc.tehsil_id, uc.id]].to_i %></td>
+            <td class="text-center"><%= @provisional_diagnosis_uc_wise[["Confirmed", uc.district_id, uc.tehsil_id, uc.id]].to_i %></td>
+            <td class="text-center"><%= @provisional_diagnosis_uc_wise[["Non-Dengue", uc.district_id, uc.tehsil_id, uc.id]].to_i %></td>
+            
+          </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

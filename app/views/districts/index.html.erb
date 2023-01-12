@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+
+<style type="text/css">
+.customizer2 .handle2 {
+    position: absolute;
+    display: flex;
+    top: 300px;
+    left: 208px;
+    cursor: pointer;
+    padding: 10px 8px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: -3px 0 4px rgba(0,0,0,.06);
+    font-size: 15px;
+    transition: all .3s ease-in-out;
+    white-space: nowrap;
+    height: 43px;
+    transform: rotate(-90deg);
+}
+
+.customizer2 .handle2, .customizer2 .handle2:hover {
+    background: #135591;
+    color: #fff;
+    left: 12px;
+}
+
+.admin-icon{
+  margin-right: 16px;
+}
+
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+
+</style>
+ 
+ </head>
+<body class="text-left">
+  <div class="app-admin-wrap layout-horizontal-bar clearfix">
+    <div class="main-content-wrap  d-flex flex-column">
+      <%= render :partial => 'districts/filters/line_list_filters', :locals => {} %>
+      <div class="main-content"> 
+
+
+
+          <div class="row m-t-15">
+            <div class="col-md-12">
+              <div class="card ">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h5 class="card-title p-custom1">Districts</h5>
+                  </div>
+                  <div class="col-md-2 mt-1">
+                    <%= link_to 'Export to Excel', districts_path(format: :xls, pagination: "No", district_id: params[:district_id], province_id: params[:province_id], division_id: params[:division_id] ), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+                  </div>
+                  <div class="col-md-2 mt-1">
+                    <%= link_to 'Add District', new_district_path, :class => 'btn btn-sm btn-warning btn-block', :title => "Add new district"%>
+                  </div>
+                </div>
+                            <div class="separator-breadcrumb border-top mb-3"></div>
+                            <div class="listing-tbl-area">
+                              <table class="table table-bordered table-hover listing-tbl">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Province</th>
+                                    <th>Division</th>
+                                    <th colspan="3">Action</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  <% @districts.each do |district| %>
+                                  <tr>
+                                    <td class="tbl-td-color2"><%= district.district_name %></td>
+                                    <td class="tbl-td-color2"><%= district.province.try(:province_name) %></td>
+                                    <td class="tbl-td-color2"><%= district.division.try(:division_name) %></td>
+                                    <td class="tbl-td-color2"><%= link_to "Edit".html_safe, edit_district_path(district), class: 'edit' %> </td>
+                                  </tr>
+                                  <% end %>
+                                </tbody>
+                              </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            
+
+
+</div>
+
+
+
+    <div class="text-center">
+      <% if @districts.present? %> 
+              <%= will_paginate @districts, :class => 'apple_pagination'  %>
+              <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @districts.total_entries %></div> 
+             <% else %> 
+               <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+       <% end %>
+    </div>
+    </body>
+
+</html>
+
+

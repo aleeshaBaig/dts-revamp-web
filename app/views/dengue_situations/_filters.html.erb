@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-md-12">
+        <%= form_for dengue_situations_path, method: :get do |f| %>
+            <div class="row p-custom">
+                <% if !current_user.district_user? %>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label> District:</label>
+                        <%= select_tag :district_id, options_for_select(all_districts,{:selected => params[:district_id]}), {class: 'form-control', :include_blank => "All"}%>
+                      </div>
+                    </div>
+                <% end %>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                    <label>Date From</label>
+                        <input type="text" class="form-control date_from" name="datefrom" value='<%= (params[:datefrom].present?)? "#{params[:datefrom]}" : nil %>' readonly>
+                    </div>
+                </div>
+                            
+                <div class="col-md-2">
+                    <div class="form-group">
+                    <label>Date To</label>
+                    <input type="text" class="form-control date_to" name="dateto" value='<%= (params[:dateto].present?)? "#{params[:dateto]}" : nil %>' readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-custom">
+
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                </div>
+                
+            </div>
+        <% end %>
+    </div>
+
+</div>
+<script type="text/javascript">
+function resetData(){
+    $("select").val("");
+    $("input[type=text], input[type=date]").val("");
+};
+</script>

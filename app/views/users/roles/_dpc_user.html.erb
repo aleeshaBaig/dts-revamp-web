@@ -1,0 +1,11 @@
+<%= render partial: '/users/roles/default', locals: {f: f} %>
+<div class="col-md-3">
+  <div class="form-group">
+    <%= f.input :district_id, label: '* District', collection: districts_list, label_method: :district_name, prompt: "-Select-", input_html:{class: "form-control user_district"}%>
+  </div>
+</div>
+<div class="col-md-3">
+  <div class="form-group">
+    <%= f.input :hospital_id, as: :hidden, input_html:{value: Hospital.find_by_hospital_name('Home Treatment').id}%>
+  </div>
+</div>

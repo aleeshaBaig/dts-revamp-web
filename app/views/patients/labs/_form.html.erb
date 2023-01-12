@@ -1,0 +1,298 @@
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content">
+   <div class="row">
+    <div class="col-md-12">
+      <h5 class="card-title p-custom1">
+        Lab Patient
+      </h5>
+      <div class="card ">
+        <div class="card-body p-0 m-t-10">
+          <%= simple_form_for(patient, :html => { :onsubmit => "setFormSubmitting()" }, wrapper_mappings: {}) do |f| %>
+            <%= render partial: '/patients/labs/form_partials/demographics', locals: {f: f} %>
+            <hr/>
+            <%= render partial: '/patients/labs/form_partials/address', locals: {f: f} %>
+            <hr/>
+              <%= render partial: '/patients/labs/form_partials/clinical', locals: {f: f} %>
+            <hr/>
+            <%= render partial: '/patients/labs/form_partials/cbc_hct_lab', locals: {form: f} %>            
+            <div class="row p-custom">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <%= f.input :comments, label: 'Comments', as: :text, input_html:{class: "form-control not_probable"}%>
+                </div>
+              </div>
+            </div>
+            <div class="separator-breadcrumb border-top mb-3"></div>
+              <div class="row p-custom">
+                <div class="col-md-2 offset-md-5">
+                  <button type="submit" class="btn filter-btn col-md-12 mb-3" data-disable-with="Submitting...">Create Dengue Patient</button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+
+<script type="text/javascript">
+
+  /////////////////////////////////////////////////////////////// ON LOADING PAGE ....... 
+  $(document).ready(function($){
+    // On Page Loading
+   // On Page Loading
+    <% if @patient.p_search_type == 'CNIC' %>
+      $('.patient_cnic').show();
+      $('.patient_passport').hide();
+    <% else %>
+      $('.patient_cnic').hide();
+      $('.patient_passport').show();
+    <% end %>
+    $('.patient_search_type').on('change', function(){
+      if($(this).val() == 'CNIC'){
+        $('.patient_cnic').show();
+        $('.patient_passport').hide();
+      }else{
+        $('.patient_cnic').hide();
+        $('.patient_passport').show();
+      }
+    });
+
+    // $('.passport').on('keypress change', function(){
+    //   if( ($(this).val() != '') && ($(this).val().length > 9) ){
+    //     $(this).val("");
+    //     alert("Passport Length should be 9 characters");
+    //   }
+    // });
+  
+  $('.phone_contact').mask('00000000000', {clearIfNotMatch: true});
+    var prov_diagnosis = $('#patient_provisional_diagnosis').val();
+
+    if (prov_diagnosis == 'Confirmed')  {
+      $("#cbc_htc_sec")[0].style.display = "block";
+      $("#lab_diagnostic")[0].style.display = "block";
+      $("#patient_condition_div")[0].style.display = "block";
+      $("#patient_patient_condition").prop('required',true);
+      $("#r_ordering_date")[0].style.display = "none";
+      $("#r_receiving_date")[0].style.display = "none";
+    }
+    else if (prov_diagnosis == 'Probable') {
+      $("#cbc_htc_sec")[0].style.display = "block";
+      $("#lab_diagnostic")[0].style.display = "block";
+      $("#advised_test")[0].style.display = "block";
+    }
+    var age = $("#patient_age").val();
+    if (age == "0")
+    {
+      $("#age_months_div")[0].style.display = "block";
+      $("#patient_age_month").prop('required',true);
+    }
+    else
+    {
+      $("#age_months_div")[0].style.display = "none";
+      $("#patient_age_month").prop('required',false);
+      $("#patient_age_month").val("");
+    }
+
+    var ns1 = document.getElementById("patient_lab_result_attributes_ns1");
+    var pcr = document.getElementById("patient_lab_result_attributes_pcr");
+    var igg = document.getElementById("patient_lab_result_attributes_igg");
+    var igm = document.getElementById("patient_lab_result_attributes_igm");
+    var date_r = document.getElementById("patient_lab_result_attributes_report_date").value;
+    console.log(date_r);
+
+    if ( ns1.checked == true || pcr.checked == true || igg.checked == true || igm.checked == true ) {
+      $("#r_ordering_date")[0].style.display = "block";
+      $("#r_receiving_date")[0].style.display = "block";  
+    }
+    
+  });
+
+  $("#patient_hospital_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var hosp_name = optionSelected[0].innerHTML;
+    // console.log(hosp_name);
+    $("#patient_hospital").val(hosp_name);
+   });
+  $("#patient_district_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var dist_name = optionSelected[0].innerHTML;
+    $("#patient_district").val(dist_name);
+   });
+  $("#patient_tehsil_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var tehsil_name = optionSelected[0].innerHTML;
+    $("#patient_tehsil").val(tehsil_name);
+   });
+  $("#patient_uc_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var uc_name = optionSelected[0].innerHTML;
+    $("#patient_uc").val(uc_name);
+   });
+  $("#patient_permanent_district_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var dist_name = optionSelected[0].innerHTML;
+    $("#patient_permanent_district").val(dist_name);
+   });
+  $("#patient_permanent_tehsil_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var tehsil_name = optionSelected[0].innerHTML;
+    $("#patient_permanent_tehsil").val(tehsil_name);
+   });
+  $("#patient_permanent_uc_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var uc_name = optionSelected[0].innerHTML;
+    $("#patient_permanent_uc").val(uc_name);
+   });
+  $("#patient_workplace_district_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var dist_name = optionSelected[0].innerHTML;
+    $("#patient_workplace_district").val(dist_name);
+   });
+  $("#patient_workplace_tehsil_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var tehsil_name = optionSelected[0].innerHTML;
+    $("#patient_workplace_tehsil").val(tehsil_name);
+   });
+  $("#patient_workplace_uc_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var uc_name = optionSelected[0].innerHTML;
+    $("#patient_workplace_uc").val(uc_name);
+   });
+
+  // GET TEHSILS <PERMANENT>
+
+  // Check CNIC if Patient Exist already redirect on edit page Else Check on Lab Patient and retrieve data from lab auto
+  <% if false %>
+  // $("#patient_cnic, #patient_passport").change(function() {
+  //   formSubmitting = true;
+  //   if(this.value != ''){
+  //     $.ajax({
+  //       url:'/ajax/check_for_existing_patient?cnic='+this.value+"&select_type="+$('.patient_search_type:checked').val(),
+  //       dataType: 'json',
+  //       success: function(transport) {
+  //         // console.log(transport)
+  //         if(transport['error_form'] == 'Yes'){
+  //           alert("Patient's death has been declared");
+  //           window.location.href = "/patients/";
+  //         }else{
+  //           if(transport['patient_status'] == 'Lab'){
+  //             window.location.href = "/patients/" + transport['data'] + "/edit";
+  //           }else if(transport['edit_form'] == true){
+            
+  //             if(transport['patient_status'] == 'In Process'){
+  //               alert('This Patient Already Exists')
+  //               window.location.href = "/patients/new" ;
+  //             }else if(transport['r_flag'] == true){
+  //               window.location.href = "/patients/" + transport['data'] + "/edit?set_released_f=true";
+  //             }else{
+  //               window.location.href = "/patients/" + transport['data'] + "/edit";
+  //             }
+
+  //           }
+  //         }
+  //       },
+  //     });
+  //   }
+  // });
+  <% end %>
+
+  // on Change PD:
+  $("#patient_provisional_diagnosis").change(function() {
+    var p_outcome = $("#patient_patient_outcome").val();
+
+    if (this.value == "Non-Dengue"){
+      $("#other_fever_div")[0].style.display = "block";
+      $("#patient_other_diagnosed_fever").prop('required',true);
+      $("#cbc_htc_sec")[0].style.display = "none";
+      $("#advised_test")[0].style.display = "none";
+      $("#lab_diagnostic")[0].style.display = "none";
+      $("input[name='patient[warning_signs]']").prop('required',false);
+      $("#patient_lab_result_attributes_platelet_first_reading").prop('required',false);
+      $("#patient_lab_result_attributes_wbc_first_reading").prop('required',false);
+      $("#patient_lab_result_attributes_hct_first_reading").prop('required',false);
+      $("#patient_patient_condition").prop('required',false);
+      $("#patient_patient_outcome").prop('required',false);
+      $("#patient_patient_status").val("Closed");
+      $("#patient_patient_outcome").val("");
+    }else{
+      $("#other_fever_div")[0].style.display = "none";
+      $("#patient_other_diagnosed_fever").prop('required',false);
+      $("#patient_other_diagnosed_fever").val("");
+      if (p_outcome == "Death" || p_outcome == "Discharged" || p_outcome == "LAMA"){
+        $("#patient_patient_status").val("Closed");
+      }
+      else{
+        $("#patient_patient_status").val("In Process");
+      }
+      $("#patient_patient_outcome").prop('required',true);
+    }
+    if (this.value == "Confirmed"){
+      $("#patient_condition_div")[0].style.display = "block";
+      $("#patient_patient_condition").prop('required',true);
+      $("#advised_test")[0].style.display = "none";
+      $("#cbc_htc_sec")[0].style.display = "block";
+      $("#lab_diagnostic")[0].style.display = "block";
+      $("input[name='patient[warning_signs]']").prop('required',true);
+      $("#patient_lab_result_attributes_platelet_first_reading").prop('required',true);
+      $("#patient_lab_result_attributes_wbc_first_reading").prop('required',true);
+      $("#patient_lab_result_attributes_hct_first_reading").prop('required',true);
+      // $("#patient_lab_result_attributes_report_ordering_date").val("");
+      // $("#patient_lab_result_attributes_report_receiving_date").val("");
+      $("#r_ordering_date")[0].style.display = "none";
+      $("#r_receiving_date")[0].style.display = "none";
+    }else{
+      $("#patient_condition_div")[0].style.display = "none";
+      $("#patient_patient_condition").prop('required',false);
+      $("#patient_patient_condition").val("");
+    }
+    if (this.value == "Suspected"){
+      $("#cbc_htc_sec")[0].style.display = "block";
+      $("#lab_diagnostic")[0].style.display = "none";
+      $("#advised_test")[0].style.display = "none";
+      $("input[name='patient[warning_signs]']").prop('required',false);
+      $("#patient_lab_result_attributes_platelet_first_reading").prop('required',false);
+      $("#patient_lab_result_attributes_wbc_first_reading").prop('required',false);
+      $("#patient_lab_result_attributes_hct_first_reading").prop('required',false);
+    }
+    if (this.value == "Probable"){
+      $("#cbc_htc_sec")[0].style.display = "block";
+      $("#lab_diagnostic")[0].style.display = "block";
+      $("#advised_test")[0].style.display = "block";
+      $("input[name='patient[warning_signs]']").prop('required',true);
+      $("#patient_lab_result_attributes_platelet_first_reading").prop('required',true);
+      $("#patient_lab_result_attributes_wbc_first_reading").prop('required',true);
+      $("#patient_lab_result_attributes_hct_first_reading").prop('required',true);
+    }
+   });
+
+  // on Change Age
+  $("#patient_age").change(function() {
+    if (this.value == "0"){
+      $("#age_months_div")[0].style.display = "block";
+      $("#patient_age_month").prop('required',true);
+    }
+    else{
+      $("#age_months_div")[0].style.display = "none";
+      $("#patient_age_month").prop('required',false);
+      $("#patient_age_month").val("");
+    }
+  });
+  
+  // if you submit form without changes
+  var formSubmitting = false;
+  var setFormSubmitting = function() { formSubmitting = true; };
+  window.onload = function() {
+    window.addEventListener("beforeunload", function (e) {
+    if (formSubmitting) {return undefined;}
+      var confirmationMessage = 'It looks like you have been editing something. '
+                              + 'If you leave before saving, your changes will be lost.';
+      (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+      return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+    });
+  };
+</script>

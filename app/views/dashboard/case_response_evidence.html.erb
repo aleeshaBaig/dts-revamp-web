@@ -1,0 +1,530 @@
+<style type="text/css">
+.fa-2x {
+    margin: 0 auto;
+    float: none;
+    display: table;
+    color: #4ad1e5;
+}
+</style>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content"> 
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card ">
+          <div class="card-body p-0">
+            <%= render :partial => '/dashboard/filters/case_response_evidence' , :locals => { } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style type="text/css">
+  	.txt-center-stl{
+  		text-align: center;
+  		width: 100%;
+  	}
+
+  	.w100{
+  		width: 100% !important;
+  	}
+
+  	.tile-icon-stlying{
+  		padding: 19px 0px;
+  		margin: 0 20px 0 15px;
+  	}
+
+  	.card-icon-bg .card-body .content{
+  		width: 100% !important;	
+  	}
+  </style>
+
+  <div class="row m-t-15">
+    <div class="col-md-12">
+      <div class="card">
+      		<div class="row mt-4">
+                <!-- ICON BG -->
+                 <div class="col-lg col-md-6 col-sm-6">
+                    <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4 tile-bg1">
+                        <div class="card-body text-center card-custom-pad">
+                            <i class="fa fa-map-pin fa-2x text-white tile-icon-stlying"></i>
+                            <div class="content">
+                                <p class="text-22 line-height-1 mb-1 text-bold text-white txt-center-stl" id="pt_prob"></p>
+                                <p class="text-white text-12 font-weight-600 mb-0 popins-family text-center w100">Total IRS at Patient Place<br>(Probable)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6 col-sm-6">
+                    <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4 tile-bg2">
+                        <div class="card-body text-center card-custom-pad">
+                            <i class="fa fa-map-pin fa-2x text-white tile-icon-stlying"></i>
+                            <div class="content">
+                                <p class="text-22 line-height-1 mb-1 text-bold text-white txt-center-stl" id="pt_sus"></p>
+                                <p class="text-white text-12 font-weight-600 mb-0 popins-family text-center text-center w100">Total IRS at Patient Place<br>(Suspected) </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6 col-sm-6">
+                    <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4 tile-bg3">
+                        <div class="card-body text-center card-custom-pad">
+                            <i class="fa fa-home fa-2x text-white tile-icon-stlying"></i>
+                            <div class="content">
+                                <p class="text-22 line-height-1 mb-1 text-bold text-white txt-center-stl" id="pt_res"></p>
+                                <p class="text-white text-12 font-weight-600 mb-0 popins-family text-center w100">Total Patients Tagged<br>(Residence)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6 col-sm-6">
+                    <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4 tile-bg4">
+                        <div class="card-body text-center card-custom-pad">
+                            <i class="fa fa-building fa-2x text-white tile-icon-stlying"></i>
+                            <div class="content">
+                                <p class="text-22 line-height-1 mb-1 text-bold text-white txt-center-stl" id="pt_wp"></p>
+                                <p class="text-white text-12 font-weight-600 mb-0 popins-family text-center w100">Total Patients Tagged<br>(Workplace)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		<!-- Load More Button -->
+		<% if @numberofpages.to_i > 1 %>
+			<div class="row mt-12">
+				<div class="col text-center pb-2">
+					<button class="btn btn-lg btn-success" id="load_more"><i class="fa fa-sun-o"></i> Load More <span id="pages">(<%= @numberofpages %>)</span></button>
+				</div>
+			</div>
+		<% end %>
+
+        <div class="card-body p-0">
+        	<div id="map_canvas" style="min-height: 600px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+	<!-- Total Counts -->
+	<div class="row m-t-15 underline-border">
+		<div class="col-md-12 text-center mt-2 pb-2">
+			<button class="btn btn-primary btn-lg"><i class="fa fa-database"></i> Total Entries: <%= delimates_coma(@activities.total_entries) rescue 0%></button>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">	
+function initialize(){
+
+	var latlng = new google.maps.LatLng(31.538063,74.346199);
+	var zoom = 12;
+		
+	var settings ={
+		zoom: zoom,
+		center: latlng,
+		mapTypeControl: true,
+		mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+		navigationControl: true,
+		navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(document.getElementById("map_canvas"), settings);  
+
+	window.infowindow = new google.maps.InfoWindow();
+	var companyMarker, i;
+	window.markers = new Array();
+	window.workplace_count = 0;
+	window.residence_count = 0;
+	window.suspected_count = 0;
+	window.probable_count = 0;
+	
+	<% @activities.each do |activity| %>
+	
+		// ## IF TAG = PATIENT
+		<% if activity.tag_name == "Patient" %>
+			// ========================
+			// 30 meter Distance Circle
+			// ========================
+			<% prov_diag = "" %>
+			<% if activity.provisional_diagnosis.present? %>
+				<% prov_diag = activity.provisional_diagnosis.downcase %>
+			<% end %>
+
+			// ## PROVISIONAL DIGNOSIS = CONFIRMED
+			<% if prov_diag == "confirmed" %>
+			
+				var radius = 0.005;  // 0.005km
+				var pointsArray = "";
+				var diameter = radius * 2;
+				<% if ( (activity.latitude.present? and activity.longitude.present?) and (activity.latitude.to_s != "0.0" and activity.longitude.to_s !="0.0" ) ) %>
+					var startingPoint = new google.maps.LatLng("<%= activity.latitude %>", "<%= activity.longitude %>")   // Circle center
+					// pointsArray = getPointsArray(startingPoint, radius);
+					// var point1 = startingPoint.destinationPoint(90, startingPoint);
+					// var point2     = point1.destinationPoint(90, diameter);
+					// var point3     = point2.destinationPoint(90, diameter);						
+					// console.log(<%= activity.latitude %>, <%= activity.longitude %>);
+					// pointsArray = [point1, point2, point3]
+
+					for (var i = 0; i < 49; i++) {
+						new google.maps.Circle({
+							center: startingPoint,
+							radius: radius * 1000,       // Convert to meters
+							fillColor: '#FF0000',
+							fillOpacity: 0,
+							map: map,
+							strokeColor: '#FF0000',
+				strokeOpacity: 0.8,
+				strokeWeight: 2,
+							});
+					}
+			<% else %>
+				console.log("points not found", <%= activity.latitude %>, <%= activity.longitude %>);
+				<% end %>					
+			<% end %>
+		
+			// ## PROVISIONAL DIGNOSIS = NOT NIL
+			<% if prov_diag != "" %>
+			<% if prov_diag == "confirmed" %>
+				companyMarker = new google.maps.Marker({
+					position: new google.maps.LatLng("<%= activity.latitude %>", "<%= activity.longitude %>"),
+					map: map,
+					draggable: true,
+					icon: '/assets/map_pins/green-pin.png',
+					title: '<%= activity.id %>',
+					//zIndex: 10
+				});
+			<% elsif prov_diag == "suspected" %>
+				companyMarker = new google.maps.Marker({
+					position: new google.maps.LatLng("<%= activity.latitude %>", "<%= activity.longitude %>"),
+						map: map,
+						draggable: true,
+						icon: '/assets/map_pins/yellow-pin.png',
+						title: '<%= activity.id %>',
+						//zIndex: 10
+					});
+			<% elsif prov_diag == "probable" %>
+				companyMarker = new google.maps.Marker({
+					position: new google.maps.LatLng("<%= activity.latitude %>", "<%= activity.longitude %>"),
+						map: map,
+						draggable: true,
+						icon: '/assets/map_pins/blue-pin.png',
+						title: '<%= activity.id %>',
+						//zIndex: 10
+					});
+			<% else %>
+				companyMarker = new google.maps.Marker({
+						position: new google.maps.LatLng("<%= activity.latitude %>", "<%= activity.longitude %>"),
+						map: map,
+						draggable: true,
+						icon: '/assets/map_pins/mustard.png',
+						title: '<%= activity.id %>',
+						//zIndex: 10
+					});
+			<% end %>
+			<% else %>
+				companyMarker = new google.maps.Marker({
+					position: new google.maps.LatLng("<%= activity.latitude %>", "<%= activity.longitude %>"),
+					map: map,
+					draggable: true,
+					icon: '/assets/map_pins/mustard.png',
+					title: '<%= activity.id %>',
+					//zIndex: 10
+				});
+			<% end %>
+
+
+			// ## MARKER PLACE INITIALLY  
+			google.maps.event.addListener(companyMarker, 'click', (function(companyMarker, i) {
+				return function() {
+					$.ajax({
+						url: '/google_map_popup_data?activity_id=' + '<%= activity.id %>&activity_type=patient_activity' ,
+						dataType: 'html' ,
+						success: function(data){
+							infowindow.setContent(data);
+							infowindow.open(map, companyMarker);       
+						}
+					});
+				}
+			})(companyMarker, i));
+
+
+			// ## WORK PLACE AND RESIDENCE TAGS
+			<% if activity.patient_place == "workplace" and prov_diag == "confirmed" %>
+				workplace_count = workplace_count + 1;
+				var circle = new google.maps.Circle({
+					map: map,
+					radius: 500,    // metres
+					fillColor: '#4c8bff'
+				});
+			<% elsif prov_diag == "confirmed" %>
+				residence_count = residence_count + 1;
+				var circle = new google.maps.Circle({
+					map: map,
+					radius: 500,    // metres
+					fillColor: '#AA0000'
+				});
+			<% elsif prov_diag == "suspected" %>
+				suspected_count = suspected_count + 1;
+				var circle = new google.maps.Circle({
+					map: map,
+					radius: 500,    // metres
+					fillColor: '#e6f542'
+				});
+			<% elsif prov_diag == "probable" %>
+				var circle = new google.maps.Circle({
+					map: map,
+					radius: 500,    // metres
+					fillColor: '#f5b042'
+				});
+			<% else %>
+				var circle = new google.maps.Circle({
+					map: map,
+					radius: 500,    // metres
+					fillColor: '#d944d5'
+				});
+			<% end %>
+			circle.bindTo('center', companyMarker , 'position');
+			markers.push(companyMarker);
+
+		<% else %>
+			companyMarker = new google.maps.Marker({
+				position: new google.maps.LatLng("<%= activity.latitude %>", "<%= activity.longitude %>"),
+				map: map,
+				draggable: true,
+				icon: '/assets/map_pins/falsa.png',
+				title: '<%= activity.id %>',
+				//zIndex: 3
+			});
+			google.maps.event.addListener(companyMarker, 'click', (function(companyMarker, i) {
+				return function() {
+					$.ajax({
+						url: '/google_map_popup_data?activity_id=' + '<%= activity.id %>&activity_type=patient_activity' ,
+						dataType: 'html' ,
+						success: function(data){
+							infowindow.setContent(data);
+							infowindow.open(map, companyMarker);
+							
+						}
+					});
+				}
+			})(companyMarker, i));
+		<% end %>
+	
+	<% end %>
+
+		
+	
+	var mcOptions = {gridSize: 50, maxZoom: 13};
+	$("#pt_sus").text(suspected_count);
+	$("#pt_res").text(residence_count);
+	$("#pt_wp").text(workplace_count);
+	$("#pt_prob").text(probable_count);
+}
+
+	<!-- Load More -->
+    var page = 2;
+    var totalpages = "<%= @numberofpages %>";
+    
+    // Load More
+    $("#load_more").on('click', function(){
+        // Get Selected Filters Values
+        var department_id = $("#department").val();
+        var patient_id = $("#patient_id").val();
+		var provisional_diagnosis = $("#provisional_diagnosis").attr('selected', 'selected').val();
+        var from = $(".date_from").val();
+        var to = $(".date_to").val();
+		// Ajax Call
+        $.ajax({
+            url: '/case_response_evidence?department='+department_id+'&patient_id='+patient_id+'&provisional_diagnosis='+provisional_diagnosis+'&from='+from+'&to='+to+'&page='+page+'&totalpages='+totalpages+'&search=1',
+            dataType: 'json',
+            success: function(data){
+            
+                markers = []
+				var activity_id = "";
+                $.each(data["activities"], function(i){
+					var activity = data["activities"];
+					var activity_latitude = activity[i].latitude ? activity[i].latitude : "31.538063";
+					var activity_longitude = activity[i].latitude ? activity[i].longitude : "74.346199";
+					activity_id = activity[i].id ? activity[i].id.toString() : "N/A";
+					var patient_place = activity[i].patient_place ? activity[i].patient_place : "";
+					var prov_diag = "";
+					// ## IF TAG = PATIENT
+					if(activity[i].tag_name == "Patient"){
+						// ========================
+						// 30 meter Distance Circle
+						// ========================
+						
+						if(isEmpty(activity[i].provisional_diagnosis) == false ){
+							prov_diag = activity[i].provisional_diagnosis.toLowerCase();
+
+							// ## PROVISIONAL DIGNOSIS = CONFIRMED
+							if(prov_diag == "confirmed"){
+							
+								var radius = 0.005;  // 0.005km
+								var pointsArray = "";
+								var diameter = radius * 2;
+								if( (isEmpty(activity_latitude) == false && isEmpty(activity_longitude) == false ) && (parseFloat(activity_latitude) != "0.0" && parseFloat(activity_longitude) !="0.0") ){
+									var startingPoint = new google.maps.LatLng(activity_latitude, activity_longitude);
+									for (var i = 0; i < 49; i++) {
+										new google.maps.Circle({
+											center: startingPoint,
+											radius: radius * 1000,       // Convert to meters
+											fillColor: '#FF0000',
+											fillOpacity: 0,
+											map: map,
+											strokeColor: '#FF0000',
+											strokeOpacity: 0.8,
+											strokeWeight: 2,
+										});
+									}
+								}else{
+									console.log("points not found", activity_latitude, activity_longitude);
+								}
+							}
+
+							// ## PROVISIONAL DIGNOSIS = NOT NIL
+							if(isEmpty(prov_diag) == false){
+								if(prov_diag == "confirmed"){
+									companyMarker = new google.maps.Marker({
+										position: new google.maps.LatLng(activity_latitude, activity_longitude),
+										map: map,
+										draggable: true,
+										icon: '/assets/map_pins/green-pin.png',
+										title: activity_id,
+									});
+								}else if(prov_diag == "suspected"){
+									companyMarker = new google.maps.Marker({
+										position: new google.maps.LatLng(activity_latitude, activity_longitude),
+										map: map,
+										draggable: true,
+										icon: '/assets/map_pins/yellow-pin.png',
+										title: activity_id,
+									});
+								}else if(prov_diag == "probable"){
+									companyMarker = new google.maps.Marker({
+										position: new google.maps.LatLng(activity_latitude, activity_longitude),
+										map: map,
+										draggable: true,
+										icon: '/assets/map_pins/blue-pin.png',
+										title: activity_id,
+									});
+								}else{
+									companyMarker = new google.maps.Marker({
+										position: new google.maps.LatLng(activity_latitude, activity_longitude),
+										map: map,
+										draggable: true,
+										icon: '/assets/map_pins/mustard-pin.png',
+										title: activity_id,
+									});
+								}
+							}else{
+								companyMarker = new google.maps.Marker({
+									position: new google.maps.LatLng(activity_latitude, activity_longitude),
+									map: map,
+									draggable: true,
+									icon: '/assets/map_pins/mustard-pin.png',
+									title: activity_id,
+								});
+							};
+						
+							// ## MARKER PLACE INITIALLY  
+							google.maps.event.addListener(companyMarker, 'click', (function(companyMarker, i) {
+								return function() {
+									$.ajax({
+										url: '/google_map_popup_data?activity_id='+activity_id+'&activity_type=patient_activity',
+										dataType: 'html' ,
+										success: function(data){
+											infowindow.setContent(data);
+											infowindow.open(map, companyMarker);       
+										}
+									});
+								}
+							})(companyMarker, i));
+							
+							// ## WORK PLACE AND RESIDENCE TAGS
+							if(patient_place == "workplace" && prov_diag == "confirmed"){
+								workplace_count = workplace_count + 1;
+								var circle = new google.maps.Circle({
+									map: map,
+									radius: 500,    // metres
+									fillColor: '#4c8bff'
+								});
+							}else if(prov_diag == "confirmed"){
+								residence_count = residence_count + 1;
+								var circle = new google.maps.Circle({
+									map: map,
+									radius: 500,    // metres
+									fillColor: '#AA0000'
+								});
+							}else if(prov_diag == "suspected"){
+								suspected_count = suspected_count + 1;
+								var circle = new google.maps.Circle({
+									map: map,
+									radius: 500,    // metres
+									fillColor: '#e6f542'
+								});
+							}else if(prov_diag == "probable"){
+								var circle = new google.maps.Circle({
+									map: map,
+									radius: 500,    // metres
+									fillColor: '#f5b042'
+								});
+							}else{
+								var circle = new google.maps.Circle({
+									map: map,
+									radius: 500,    // metres
+									fillColor: '#d944d5'
+								});
+							}
+							circle.bindTo('center', companyMarker , 'position');
+							markers.push(companyMarker);
+						}
+					}else{
+						companyMarker = new google.maps.Marker({
+							position: new google.maps.LatLng(activity_latitude, activity_longitude),
+							map: map,
+							draggable: true,
+							icon: '/assets/map_pins/falsa.png',
+							title: activity_id,
+							//zIndex: 3
+						});
+						google.maps.event.addListener(companyMarker, 'click', (function(companyMarker, i) {
+							return function() {
+								$.ajax({
+									url: '/google_map_popup_data?activity_id='+activity_id+'&activity_type=patient_activity' ,
+									dataType: 'html' ,
+									success: function(data){
+										infowindow.setContent(data);
+										infowindow.open(map, companyMarker);       
+									}
+								});
+							}
+						})(companyMarker, i));
+					}
+                });
+            }
+        });
+
+
+
+		$("#pt_sus").text(parseInt(suspected_count));
+		$("#pt_res").text(parseInt(residence_count));
+		$("#pt_wp").text(parseInt(workplace_count));
+		$("#pt_prob").text(parseInt(probable_count));
+
+        // Paginate
+        totalpages = totalpages - 1;
+        page = page + 1;
+
+        $("#pages").text(totalpages);
+        if (totalpages == 0){
+            $('#load_more').hide();
+        }
+    });
+</script>
+// <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyCywSTmzjate17E7Ko6TiG9Jb9WG7jYTS8&language=en" async defer></script>

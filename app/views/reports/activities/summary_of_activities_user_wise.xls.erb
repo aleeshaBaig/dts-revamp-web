@@ -1,0 +1,45 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+    <thead>
+      <tr>
+        <th scope="col" abbr="Users">Users</th>
+        <% @tags_list.each do |tag| %>
+          <th scope="col" abbr="Tags"><%= tag[0] %></th>
+        <% end %>
+        <th scope="col" abbr="Total">Total</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @sum_total = 0 %>
+      <% @mobile_users.each_with_index do |mobile_user, i| %>
+        <% @total = 0 %>
+        <% if i.even? %>
+          <tr class="even">
+        <% else %>
+          <tr class="odd">
+        <% end %>
+        <td scope="row" abbr="Users"><b><%= mobile_user.username %></b></td>
+
+        <% @tags_list.each do |tag| %>
+          <td scope="row" abbr="Tags">
+            <% if ["Patient", "Patient Irs"].include? tag[0] %>
+                <%= @patient_activities_user_wise[[mobile_user.id, tag[1]]].to_i %>
+                <% @total = @total + @patient_activities_user_wise[[mobile_user.id, tag[1]]].to_i %>
+            <% else %>
+                <%= @activities_user_wise[[mobile_user.id, tag[1]]].to_i %>
+                <% @total = @total + @activities_user_wise[[mobile_user.id, tag[1]]].to_i %>
+            <% end %>
+          </td>
+        <% end %>
+        <% @sum_total = @sum_total + @total %>
+        <th scope="col" abbr="Total"><%= @total %></th>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th  colspan="<%= @tags_list.count + 1 %>" class="bg-primary text-white text-center"><b>Total</b></th>
+        <th class="bg-success text-white text-center"><b><%= @sum_total %></b></th>
+      </tr>
+    </tfoot>
+</table>

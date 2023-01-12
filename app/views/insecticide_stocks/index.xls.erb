@@ -1,0 +1,26 @@
+<table>
+  <thead>
+    <tr>
+      <th>District Name</th>
+      <th>Insecticide Name</th>
+      <th>Stock Received</th>
+      <th>Stock Dispensed</th>
+      <th>Stock In Hand</th>
+      <th>Last Updated By</th>
+      <th>Last Updated At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @insecticide_stocks.each do |record| %>
+      <tr>
+        <td><%= record.district.try(:district_name) %></td>
+        <td><%= record.insecticide_name %></td>
+        <td><%= record.stock_received %></td>
+        <td><%= record.stock_dispensed %></td>
+        <td><%= record.stock_received.to_i - record.stock_dispensed.to_i %></td>
+        <td><%= record.user.try(:username) %></td>
+        <td><%= record.updated_at.to_formatted_s(:long) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

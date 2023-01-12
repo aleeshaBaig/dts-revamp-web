@@ -1,0 +1,75 @@
+<div class="app-admin-wrap layout-horizontal-bar clearfix">
+  <div class="main-content-wrap  d-flex flex-column">
+    <div class="main-content"> 
+      <div class="row m-t-15">
+        <div class="col-md-12">
+          <div class="card ">
+            <div class="card-body p-0">
+              <h5 class="card-title p-custom1">
+                Diagnosis Change Log
+              </h5>
+              <%= render partial: "/patients/others/diagnosis_change_log", locals: {} %>
+              <div class="row">
+                <div class="col-md-12 mt-2 mb-2">
+                  <%= link_to 'Download', diagnosis_change_log_patients_path(request.parameters.merge({format: :csv})), :class => 'btn btn-success float-right filter-btn2', :title => "Diagnosis Change Log"%>
+                </div>
+              </div>
+              
+              <div class="separator-breadcrumb border-top mb-3"></div>
+              <div class="listing-tbl-area">
+                <div class="table-responsive mt-3">
+                  <table id="p_table" class="table table-bordered table-hover listing-tbl datatable" width="100%">
+                    <thead>
+                      <tr>
+                          <th>Sr No.</th>
+                          <th>Province</th>
+                          <th>District</th>
+                          <th>Hospital</th>
+                          <th>Facility Type</th>
+                          <th>Patient ID</th>
+                          <th>Patient Name</th>
+                          
+                          <th>Suspected</th>
+                          <th>Probable</th>
+                          <th>Confirmed</th>
+                          <th>Non-Dengue</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% @patient_data = 0 %>
+                        <% @patients.each_with_index do |patient, i| %>
+                            <tr>
+                                <td class="text-center"><%= i + 1 %></td>
+                                <td><%= patient.province %></td>
+                                <td><%= patient.district %></td>
+                                <td><%= patient.hospital %></td>
+                                <td class="text-center"><%= patient.facility_type %></td>
+                                <td class="text-center"><%= patient.patient_id %></td>
+                                <td><%= patient.patient_name %></td>
+                                
+                                <td class="text-center"><%= patient.suspected ||= '-' %></td>
+                                <td class="text-center"><%= patient.probable ||= '-'%></td>
+                                <td class="text-center"><%= patient.confirmed ||= '-'%></td>
+                                <td class="text-center"><%= patient.non_dengue ||= '-'%></td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="text-center">
+                <% if @patients.present? %> 
+                  <%= will_paginate @patients, :class => 'apple_pagination'  %>
+                  <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @patients.total_entries %></div> 
+                <% else %> 
+                  <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+                

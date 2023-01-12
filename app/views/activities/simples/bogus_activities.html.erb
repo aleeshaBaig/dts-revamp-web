@@ -1,0 +1,78 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<div class="main-content-wrap  d-flex flex-column">
+  <%= render :partial => 'activities/filters/simple_activities_filters', :locals => {} %>
+	<div class="main-content"> 
+		<div class="row m-t-15">
+  		<div class="col-md-12">
+    		<div class="card ">
+      		<div class="card-body p-0">
+            <h5 class="card-title p-custom1"> Bogus Activities </h5>
+<!-- ACTIVITY LIST -->
+<div class="separator-breadcrumb border-top mb-3"></div>
+<div class="listing-tbl-area">
+  <table id="p_table" class="table table-bordered table-hover listing-tbl">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tag</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Activity Date/Time</th>
+        <th>Submitted by</th>
+        <th>District</th>
+        <th>Town</th>
+        <th>UC</th>
+        <th>Bogus</th>
+        <th>Picture</th>
+        <th>Larvae Type</th>
+      </tr>                    
+    </thead>
+    <tbody>
+      <% @activities.each do |activity| %>
+        <tr>
+          <td><%= activity.id %></td>
+          <td><%= activity.tag_name %></td>
+          <td><%= activity.latitude %></td>
+          <td><%= activity.longitude %></td>
+          <td><%= activity.created_at.to_datetime.strftime("on %m/%d/%Y at %I:%M%p") %></td>
+          <td><%= activity.user.try(:username) %></td>
+          <td><%= activity.district_name %></td>
+          <td><%= activity.tehsil_name %></td>
+          <td><%= activity.uc_name %></td>
+          <% if activity.is_bogus? %>
+            <td>Marked Bogus</td>
+          <% else %>
+            <td> <button class="btn bogus-btn col-md-12 mb-3" onclick="window.location='/mark_act_bogus?activity_id=<%= activity.id %>'">Mark as Bogus</button></td>
+          <% end %>
+          <td class="text-center">
+						<% cache(activity.before_picture) do %>
+							<%= render partial: '/application/before_picture', locals: {activity: activity} %>
+						<% end %>
+						<% cache(activity.after_picture) do %>
+							<%= render partial: '/application/after_picture', locals: {activity: activity} %>
+						<% end %>
+					</td>
+          <td><%= activity.larva_type.try(:titleize) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+      <div class="text-center">
+            <% if @activities.present? %> 
+                  <%= will_paginate @activities, :class => 'apple_pagination'  %>
+                  <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @activities.total_entries %></div> 
+              <% else %> 
+                  <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+            <% end %>
+        </div>    	</div>
+                	</div>
+              	</div>
+            	</div>
+          	</div>
+          </div>

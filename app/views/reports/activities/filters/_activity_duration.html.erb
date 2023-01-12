@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-body p-0 m-t-10">
+                <%= form_for activity_duration_reports_activities_path, method: :get do |f| %>
+                    <div class="row p-custom">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="from" class="form-control" name="activity_date" value="<%= params[:activity_date] %>" required>
+                            </div>
+                        </div>                        
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>Tags</label>
+                            <%# <%= select_tag("tag_id", options_for_select(hotspot_tags,{:selected => params[:tag_id]}), {class: 'form-control', :multiple => true}) %>
+                            <% cache params[:tag_id] do %>
+                                <%= select_tag :tag_id, option_groups_from_collection_for_select(TagCategory.select("id, category_name").where("category_name NOT IN(?)", ["Patient", "Housekeeping", "Vector Surveillance"]), :tags, :category_name, :id, :tag_name, selected: params[:tag_id]), :include_blank => "Please select...", class: 'form-control', multiple: true %>
+                            <% end %>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="row p-custom">
+        
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn filter-btn col-md-12 m-t-23" onclick="filter_patients()">Filter</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                        </div>
+                      
+                    </div>
+               <% end %>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    function resetData(){
+        $("select").val("");
+        $("input, textarea").val("");
+    } 
+    // default 
+    function initialize(){}
+</script>

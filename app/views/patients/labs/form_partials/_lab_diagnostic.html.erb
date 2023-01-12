@@ -1,0 +1,50 @@
+<div class="row p-custom">
+	<div class="col">
+	  <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+	      Lab and Diagnostic Information
+	  </h6>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	      <label>NS1</label>
+		  <%= f.input :ns1, label: false, collection: lab_diagnostic_list, prompt: "-Select-", input_html:{class: "form-control", disabled: (f.object.ns1 == 'Positive' and @patient.provisional_diagnosis != 'Probable') ? true : false} %>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	      <label>PCR</label>
+		  <%= f.input :pcr, label: false, collection: lab_diagnostic_list, prompt: "-Select-", input_html:{class: "form-control", disabled: (f.object.pcr == 'Positive' and @patient.provisional_diagnosis != 'Probable') ? true : false} %>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	      <label>IGM</label>
+	      <%= f.input :igm, label: false, collection: lab_diagnostic_list, prompt: "-Select-", input_html:{class: "form-control", disabled: (f.object.igm == 'Positive' and @patient.provisional_diagnosis != 'Probable') ? true : false} %>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	      <label>IGG</label>
+	      <%= f.input :igg, label: false, collection: lab_diagnostic_list, prompt: "-Select-", input_html:{class: "form-control", disabled: (f.object.igg == 'Positive' and @patient.provisional_diagnosis != 'Probable') ? true : false} %>
+	  </div>
+	</div>
+
+
+</div>
+
+
+<script type="text/javascript">
+	$('.not_probable').on('change', function(){
+		var not_probable_value  = $(this).val();
+		var lab_patient_provisional_diagnosis = $('#patient_provisional_diagnosis').val();
+		if(lab_patient_provisional_diagnosis == 'Probable'){
+			if(not_probable_value == 'Positive'){
+				alert("Are you sure Provisional Diagnosis is Probable?");
+			}
+		}
+   });
+</script>

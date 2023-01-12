@@ -1,0 +1,82 @@
+<div class="col-md-12">
+<%= form_for diagnosis_change_log_patients_path, method: :get do |f| %>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="form-group">
+        <label>Patient Id</label>
+        <input class="form-control" type="text" id="patient_id" name="patient_id" Onkeypress="return onlyNumerics(event,this)" value='<%= (params[:patient_id].present?)? "#{params[:patient_id]}" : nil %>' />
+      </div>
+    </div>
+    
+    <div class="col-md-2">
+      <div class="form-group">
+        <label>Facility Type</label>
+        <%= select_tag :facility_type, options_for_select(facility_type,{:selected => params[:facility_type]}), {class: 'form-control', :include_blank => "All"}%>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <label>District:</label>
+        <%= select_tag :district, options_for_select(district_information(params[:province_id]||=1),{:selected => params[:district]}), {class: 'form-control', :include_blank => "All"}%>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <label>Hospitals/Labs</label>
+        <%= select_tag :hospital, options_for_select(user_wise_hospitals,{:selected => params[:hospital]}), {class: 'form-control', :include_blank => "All"}%>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+      <button class="btn filter-btn" onclick="filter_patients()">Filter</button>
+    </div>
+    <div class="col-md-2">
+      <button type="button" class="btn reset-btn" onclick="resetData()">Reset</button>
+    </div>
+  </div>
+<% end %>
+</div>
+<script>
+  function resetData(){
+    $('select, input').val("");
+  }
+  $("#district, #facility_type").change(function() {
+    var facility_type = document.getElementById("facility_type").value;
+    var district = document.getElementById("district").value;
+
+    $.ajax({
+      url:'/ajax/populate_hospital?district='+district+'&type='+facility_type,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#hospital").removeAttr('disabled');
+        $("select#hospital option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#hospital");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#hospital");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#hospital");
+        }
+      },
+    });
+  });
+ </script>   

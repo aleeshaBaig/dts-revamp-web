@@ -1,0 +1,292 @@
+<style type="text/css">
+.inner
+{
+    display: inline-block;
+}
+/* .d_none{
+  display: none;
+} */
+</style>
+<div class="row">
+
+  	    <div class="col-md-2">
+          <div class="form-group">
+            <label>CNIC</label>
+            <input class="form-control" type="text" id="cnic" name="cnic" value='<%= (params[:cnic].present?)? "#{params[:cnic]}" : nil %>' />
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Passport</label>
+            <input class="form-control" type="text" id="passport" name="passport" value='<%= (params[:passport].present?)? "#{params[:passport]}" : nil %>' maxlength="9" />
+          </div>
+        </div>
+	
+      	<div class="col-md-2">
+          <div class="form-group">
+            <label>Name</label>
+            <input class="form-control" type="text" id="p_name" name="p_name" value='<%= (params[:patient_name].present?)? "#{params[:patient_name]}" : nil %>' />
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>ID</label>
+            <input class="form-control" type="text" id="p_id" name="p_id" Onkeypress="return onlyNumerics(event,this)" value='<%= (params[:p_id].present?)? "#{params[:p_id]}" : nil %>' />
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Provisional Diagnosis</label>
+            <%= select_tag :prov_diagnosis, options_for_select(provisional_diagnosis_list_for_lab_patients,{:selected => params[:prov_diagnosis]}), {class: 'form-control', :include_blank => "All"} %>
+          </div>
+        </div>
+
+        <!-- Entry Date -->        
+        <div class="col-md-2 d_none entry_date">
+          <div class="form-group">
+            <label>Entry Date(From)</label>
+              <input type="datetime-local" class="form-control" id="datefrom" value='<%= (params[:datefrom].present?)? "#{params[:datefrom]}" : nil %>'>
+          </div>
+        </div>
+                  
+        <div class="col-md-2 d_none entry_date">
+          <div class="form-group">
+            <label>Entry Date(To)</label>
+            <input type="datetime-local" class="form-control" id="dateto" value='<%= (params[:dateto].present?)? "#{params[:dateto]}" : nil %>'>
+          </div>
+        </div>
+                
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label> District:</label>
+                <%= select_tag :district, options_for_select(all_districts,{:selected => params[:district_id]}), {class: 'form-control', :include_blank => "All"}%>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label> Tehsil:</label>
+                <%= select_tag :tehsil, options_for_select(tehsil_information(params[:district_id]),{:selected => params[:tehsil_id]}), {class: 'form-control', :include_blank => "All"}%>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label> UCs:</label>
+                <%= select_tag :uc, options_for_select(ucs_information(params[:tehsil_id]),{:selected => params[:uc_id]}), {class: 'form-control', :include_blank => "All"}%>
+          </div>
+        </div>  
+
+
+        <div class="col-md-2">  
+          <div class="form-group">
+            <label>Lab</label>
+            <%= select_tag :hospital, options_for_select(labs_list_new(current_user.district_id),{:selected => params[:hospital]}), {class: 'form-control', :include_blank => "All"}%>
+          </div>
+        </div>
+
+       
+</div>        
+<div class="row">
+        
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+          <button class="btn filter-btn" onclick="filter_patients()">Filter</button>
+        </div>
+        <div class="col-md-2">
+          <button class="btn reset-btn" onclick="resetData()">Reset</button>
+
+        </div>
+  
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+	function filter_patients(){
+      window.location = "?" + "passport=" + $("#passport").val() + "&cnic=" + $("#cnic").val() + "&patient_name=" + $("#p_name").val() + "&p_id=" + $("#p_id").val() + "&hospital_id=" + $("#hospital").val() + "&prov_diagnosis=" + $("#prov_diagnosis").val() + "&district_id=" + $("#district").val() + "&tehsil_id=" + $("#tehsil").val() + "&uc_id=" + $("#uc").val() + "&datefrom=" + $("#datefrom").val() + "&dateto=" + $("#dateto").val();
+  };
+
+<% if params[:prov_diagnosis] == 'Confirmed' %>
+    // $('.confirm_date').show();
+    // $('.entry_date').hide();
+    // $('#datefrom, #dateto').val("");
+<% else %>
+    // $('.entry_date').show();
+    // $('.confirm_date').hide();
+    // $('#confirm_datefrom, #confirm_dateto').val("");
+<% end %>
+// $('#prov_diagnosis').on('change', function(){
+//   var prov_diagnosis = $(this).val();
+//   if(prov_diagnosis == 'Confirmed'){
+
+//     $('.confirm_date').show();
+//     $('.entry_date').hide();
+//   }else{
+//     $('.entry_date').show();
+//     $('.confirm_date').hide();
+//   }
+// });
+ $("#district").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#tehsil").removeAttr('disabled');
+        $("select#tehsil option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#tehsil");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#tehsil");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#tehsil");
+        }
+      },
+    });
+  });
+
+
+ $("#district").change(function() {
+    var ft = document.getElementById("facility_type").value;
+    $.ajax({
+      url:'/ajax/populate_hospital?district='+this.value+'&type='+ft,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#hospital").removeAttr('disabled');
+        $("select#hospital option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#hospital");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#hospital");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#hospital");
+        }
+      },
+    });
+  });
+
+  $("#facility_type").change(function() {
+    var dist = document.getElementById("district").value;
+    $.ajax({
+      url:'/ajax/populate_hospital?type='+this.value+'&district='+dist,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#hospital").removeAttr('disabled');
+        $("select#hospital option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#hospital");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#hospital");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#hospital");
+        }
+      },
+    });
+  });
+
+ $("#tehsil").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#uc").removeAttr('disabled');
+        $("select#uc option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#uc");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#uc");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#uc");
+        }
+      },
+    });
+  });
+
+ function resetData(){
+    $("#cnic").val("");
+    $("#passport").val("");
+    $("#p_name").val("");
+    $("#p_id").val("");
+    $("#d_from").val("");
+    $("#d_to").val("");
+    $("#outcome").prop('selectedIndex',0);
+    $("#status").prop('selectedIndex',0);
+    $("#prov_diagnosis").prop('selectedIndex',0);
+    $('#district').prop('selectedIndex',0);
+    $('#tehsil').prop('selectedIndex',0);
+    $('#uc').prop('selectedIndex',0);
+    $('#hospital').prop('selectedIndex',0);
+    $("input[type=datetime-local]").val("");
+};
+
+  function onlyNumerics(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode >= 48 && charCode <= 57) || (charCode == 189))
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+
+  $("#d_from").change(function() {
+    var date_from = this.value
+    document.getElementById("d_to").setAttribute("min", date_from);
+  });
+ 
+ </script>   

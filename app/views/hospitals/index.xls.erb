@@ -1,0 +1,24 @@
+<table class="table table-bordered table-hover listing-tbl">
+  <thead>
+    <tr>
+      <th>Sr. #</th>
+      <th>Name</th>
+      <th>Province</th>
+      <th>District</th>
+      <th>Facility Type</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @hospitals.each_with_index do |hospital, index| %>
+      <tr>
+        <td align="center"><%= index + 1 %></td>
+        <td align="center"><%= hospital.hospital_name %></td>
+        <td align="center"><%= hospital.district.province.province_name %></td>
+        <td align="center"><%= hospital.district.district_name %></td>
+        <td align="center"><%= hospital.facility_type %></td>
+        <td align="center"><%= hospital.category %></td>                                    
+      </tr>
+    <% end %>
+  </tbody>
+</table>

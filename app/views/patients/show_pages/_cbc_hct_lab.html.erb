@@ -1,0 +1,226 @@
+<div id="cbc_htc_sec" style="display:block;">
+    <div class="row p-custom">
+        <div class="col">
+            <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">CBC and HCT Information</h6>
+        </div>
+    </div>
+</div>
+
+
+<div class="row p-custom">
+    <div class="col-2">
+        <div class="form-group">
+            <label>HCT First Reading % (mm3)</label>
+            <input type="text" class="form-control" value="<%= lab_result.hct_first_reading || 0  %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>HCT First Reading Date</label>
+            <input type="text" class="form-control" value="<%= date lab_result.hct_first_reading_date %>" readonly>
+        </div>
+    </div>
+
+
+    <div class="col-2">
+    <div class="form-group">
+            <label>WBC First Reading (mm3)</label>
+            <input type="text" class="form-control" value="<%= lab_result.wbc_first_reading %>" readonly>
+    </div>
+    </div>
+
+
+    <div class="col">
+        <div class="form-group">
+            <label>WBC First Reading Date</label>
+            <input type="text" class="form-control" value="<%= date lab_result.wbc_first_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col0">
+        <div class="form-group">
+            <label>Platelets First Reading (mm3)</label>
+            <input type="text" class="form-control" value="<%= lab_result.platelet_first_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>Platelets First Reading Date</label>
+            <input type="text" class="form-control" value="<%= date lab_result.platelet_first_reading_date %>" readonly>
+        </div>
+    </div>
+</div>
+
+<div class="row p-custom" >
+
+    <div class="col">
+        <div class="form-group">
+            <label>HCT Second Reading (mm3)</label>
+            <input type="text" class="form-control" value="<%= lab_result.hct_second_reading  %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>HCT Second Reading Date</label>
+            <input type="text" class="form-control" value="<%= date lab_result.hct_second_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>WBC Second Reading (mm3)</label>
+            <input type="text" class="form-control" value="<%= lab_result.wbc_second_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>WBC Second Reading Date</label>
+            <input type="text" class="form-control" value="<%= date lab_result.wbc_second_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>Platelets Second Reading</label>
+            <input type="text" class="form-control" value="<%= lab_result.platelet_second_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <div class="form-group">
+            <label>Platelets Second Reading Date</label>
+            <input type="text" class="form-control" value="<%= date lab_result.platelet_second_reading_date %>" readonly>
+        </div>
+    </div>
+</div>
+
+<div class="row p-custom" >
+    <div class="col">
+        <div class="form-group">
+            <label>HCT Third Reading</label>
+            <input type="text" class="form-control" value="<%= lab_result.hct_third_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>HCT Third Reading Date</label>
+            <input type="text" class="form-control" value="<%= date lab_result.hct_third_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+    <div class="form-group">
+        <label>WBC Third Reading (mm3)</label>
+        <input type="text" class="form-control" value="<%= lab_result.wbc_third_reading %>" readonly>
+    </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>WBC Third Reading Date</label>
+            <input type="text" class="form-control" value="<%= date lab_result.wbc_third_reading_date %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>Platelets Third Reading</label>
+            <input type="text" class="form-control" value="<%= lab_result.platelet_third_reading %>" readonly>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>Platelets Third Reading Date</label>
+            <input type="text" class="form-control" value="<%= date lab_result.platelet_third_reading_date %>" readonly>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <label>Presence of One or More Warning Signs </label>
+            <input type="text" class="form-control" value="<%= get_yesno lab_result.warning_signs %>" readonly>
+        </div>
+    </div>
+</div>
+
+<div id="lab_diagnostic">
+    <div class="row p-custom">
+        <div class="col">
+            <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">Lab and Diagnostic Information</h6>
+        </div>
+    </div>    
+
+    <div class="row p-custom">
+        <div class="col">
+            <div class="form-group">
+                <label>Advised Test</label><br/>
+                <input type="text" class="form-control" value="<%= lab_result.advised_test.try(:join, ', ').try(:upcase) %>" readonly>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label>NS1</label>
+                <input type="text" class="form-control" value="<%= lab_result.ns1 %>" readonly>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label>PCR</label>
+                <input type="text" class="form-control" value="<%= lab_result.pcr %>" readonly>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label>IGM</label>
+                <input type="text" class="form-control" value="<%= lab_result.igm %>" readonly>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label>IGG</label>
+                <input type="text" class="form-control" value="<%= lab_result.igg %>" readonly>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Diagnosis</label>
+                <input type="text" class="form-control" value="<%= lab_result.diagnosis %>" readonly>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label>Dengue Virus Type</label>
+                <input type="text" class="form-control" value="<%= lab_result.dengue_virus_type %>" readonly>
+            </div>
+        </div>
+
+
+
+        <div class="col">
+            <div class="form-group">
+                <label>Report Ordering Date</label>
+                <input type="text" class="form-control" value="<%= date lab_result.report_ordering_date %>" readonly>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                <label>Report Receiving Date</label>
+                <input type="text" class="form-control" value="<%= date lab_result.report_receiving_date %>" readonly>
+            </div>
+        </div>
+
+
+    </div>
+</div>

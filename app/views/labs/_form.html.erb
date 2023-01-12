@@ -1,0 +1,87 @@
+<style type="text/css">
+.inner
+{
+    display: inline-block;
+}
+</style>
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content">
+   <div class="row">
+    <div class="col-md-12">
+      <h5 class="card-title p-custom1">
+        <% if @lab.persisted? %>
+          Edit Lab
+        <% else %>
+
+          Add New Lab
+        <% end %>
+      </h5>
+
+      <div class="card ">
+        <div class="card-body p-0 m-t-10">
+
+          <%= form_with(model: lab, local: true) do |form| %>
+            <% if lab.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(lab.errors.count, "error") %> prohibited this lab from being saved:</h2>
+
+                <ul>
+                  <% lab.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+             <div class="row p-custom">
+
+
+              <div class="col">
+                <div class="form-group">
+                    <label>Lab Name</label>
+                    <%= form.text_field :lab_name, class: "form-control", maxlength: 30 %>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label>District</label>
+                    <%= form.select :district_id, options_for_select(all_districts,:selected => form.object.district_id), {:include_blank => "Select"},{class: "form-control"} %>
+                </div>
+              </div> 
+
+              <div class="col">
+                <div class="form-group">
+                  <label>Lab Type</label>
+                    <%= form.select :lab_type, options_for_select(lab_type,:selected => form.object.lab_type), {:include_blank => "Select"},{class: "form-control"} %>
+                </div>
+              </div>
+
+
+            </div>
+
+            <div class="separator-breadcrumb border-top mb-3"></div>
+              <div class="row p-custom1 float-right">
+               
+                  <div class="inner"><button type="submit" class="btn filter-btn col-md-12 mb-3 mr-5">Save</button></div>
+                
+                  <div class="inner"><a href="<%= request.referer %>" class="btn filter-btn col-md-12 mb-3 ml-3">Back</a></div>
+              
+              </div>
+
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+
+            
+
+ 
+            
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+

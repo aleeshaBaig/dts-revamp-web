@@ -1,0 +1,30 @@
+<table>
+  <thead>
+    <tr>
+      <th>Hospital Category</th>
+      <th>Facility Type</th>
+      <th>Hospital Name</th>
+      <th>PPE Name</th>
+      <th>Stock Received</th>
+      <th>Stock Dispensed</th>
+      <th>Stock In Hand</th>
+      <th>Last Updated By</th>
+      <th>Last Updated At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @ppe_stocks.each do |record| %>
+      <tr>
+        <td><%= record.hospital.try(:category) %></td>
+        <td><%= record.hospital.try(:facility_type) %></td>
+        <td><%= record.hospital.try(:hospital_name) %></td>
+        <td><%= record.ppe_name %></td>
+        <td><%= record.stock_received %></td>
+        <td><%= record.stock_dispensed %></td>
+        <td><%= record.stock_received.to_i - record.stock_dispensed.to_i %></td>
+        <td><%= record.user.try(:username) %></td>
+        <td><%= record.updated_at.to_formatted_s(:long) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

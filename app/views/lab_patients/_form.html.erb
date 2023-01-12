@@ -1,0 +1,367 @@
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content">
+   <div class="row">
+    <div class="col-md-12">
+      <h5 class="card-title p-custom1">
+        Add New Lab Patient
+      </h5>
+      <div class="card ">
+        <div class="card-body p-0 m-t-10">
+          <% if false %>
+          <div class="row p-custom">
+            <div class="col">
+              <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+                  Search Patient CNIC 
+              </h6>
+            </div>
+          </div>
+          <div class="row p-custom">
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="text" class="form-control cnic search_cnic_patient" name="search_cnic_patient" value="<%= params[:cnic] %>">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-block btn-success search_cnic">Search</button>
+            </div>
+          </div>
+          <% end %>
+          <%= simple_form_for(lab_patient, :html => { :onsubmit => "setFormSubmitting()" }, wrapper_mappings: {}) do |f| %>
+            <%= render partial: '/lab_patients/form_partials/demographics', locals: {f: f} %>
+            <hr/>
+            <%= render partial: '/lab_patients/form_partials/address', locals: {f: f} %>
+            <hr/>
+            <%= render partial: '/lab_patients/form_partials/clinical', locals: {f: f} %>
+            <hr/>
+            <%= render partial: '/lab_patients/form_partials/cbc_hct_lab', locals: {f: f} %>            
+            <hr/>
+            <%= render partial: '/lab_patients/form_partials/lab_diagnostic', locals: {f: f} %> 
+            <div class="row p-custom">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <%= f.input :comments, label: 'Comments', as: :text, input_html:{class: "form-control not_probable"}%>
+                </div>
+              </div>
+            </div>
+            <div class="separator-breadcrumb border-top mb-3"></div>
+              <div class="row p-custom">
+                <div class="col-md-2 offset-md-5">
+                  <button type="submit" class="btn filter-btn col-md-12 mb-3">Create Dengue Patient</button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('.search_cnic').on('click', function(){
+    var cnic = $('.search_cnic_patient').val()
+    window.location.href = '/lab_patients/new?cnic='+cnic;
+  })
+</script>
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<script type="text/javascript">
+  $("#patient_hospital_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var hosp_name = optionSelected[0].innerHTML;
+    // console.log(hosp_name);
+    $("#patient_hospital").val(hosp_name);
+   });
+  $("#lab_patient_district_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var dist_name = optionSelected[0].innerHTML;
+    $("#lab_patient_district").val(dist_name);
+   });
+  $("#lab_patient_tehsil_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var tehsil_name = optionSelected[0].innerHTML;
+    $("#lab_patient_tehsil").val(tehsil_name);
+   });
+  $("#lab_patient_uc_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var uc_name = optionSelected[0].innerHTML;
+    $("#lab_patient_uc").val(uc_name);
+   });
+  $("#lab_patient_perm_district_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var dist_name = optionSelected[0].innerHTML;
+    $("#lab_patient_perm_district").val(dist_name);
+   });
+  $("#lab_patient_perm_tehsil_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var tehsil_name = optionSelected[0].innerHTML;
+    $("#lab_patient_perm_tehsil").val(tehsil_name);
+   });
+  $("#lab_patient_perm_uc_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var uc_name = optionSelected[0].innerHTML;
+    $("#lab_patient_perm_uc").val(uc_name);
+   });
+  $("#lab_patient_workplc_district_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var dist_name = optionSelected[0].innerHTML;
+    $("#lab_patient_workplc_district").val(dist_name);
+   });
+  $("#lab_patient_workplc_tehsil_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var tehsil_name = optionSelected[0].innerHTML;
+    $("#lab_patient_workplc_tehsil").val(tehsil_name);
+   });
+  $("#lab_patient_workplc_uc_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var uc_name = optionSelected[0].innerHTML;
+    $("#lab_patient_workplc_uc").val(uc_name);
+   });
+
+  $("#lab_patient_district_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#lab_patient_tehsil_id").removeAttr('disabled');
+        $("select#lab_patient_tehsil_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#lab_patient_tehsil_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#lab_patient_tehsil_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#lab_patient_tehsil_id");
+        }
+      },
+    });
+  });
+
+  $("#lab_patient_perm_district_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#lab_patient_perm_tehsil_id").removeAttr('disabled');
+        $("select#lab_patient_perm_tehsil_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#lab_patient_perm_tehsil_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#lab_patient_perm_tehsil_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#lab_patient_perm_tehsil_id");
+        }
+      },
+    });
+  });
+
+    $("#lab_patient_workplc_district_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#lab_patient_workplc_tehsil_id").removeAttr('disabled');
+        $("select#lab_patient_workplc_tehsil_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#lab_patient_workplc_tehsil_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#lab_patient_workplc_tehsil_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#lab_patient_workplc_tehsil_id");
+        }
+      },
+    });
+  });
+  $("#lab_patient_tehsil_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#lab_patient_uc_id").removeAttr('disabled');
+        $("select#lab_patient_uc_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#lab_patient_uc_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#lab_patient_uc_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#lab_patient_uc_id");
+        }
+      },
+    });
+  });
+
+  $("#lab_patient_perm_tehsil_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#lab_patient_perm_uc_id").removeAttr('disabled');
+        $("select#lab_patient_perm_uc_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#lab_patient_perm_uc_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#lab_patient_perm_uc_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#lab_patient_perm_uc_id");
+        }
+      },
+    });
+  });
+  $("#lab_patient_workplc_tehsil_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#lab_patient_workplc_uc_id").removeAttr('disabled');
+        $("select#lab_patient_workplc_uc_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#lab_patient_workplc_uc_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#lab_patient_workplc_uc_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#lab_patient_workplc_uc_id");
+        }
+      },
+    });
+  });
+
+
+  // $("#lab_patient_cnic").change(function() {
+  //   // var cnic = $('.cnic').val();
+  //   // window.location.href = "/covid-19/new?cnic="+cnic;
+  //   $.ajax({
+  //     url:'/ajax/check_for_existing_patient?cnic='+this.value,
+  //     dataType: 'json',
+  //     success: function(transport) {
+  //       if (!transport)
+  //       {
+
+  //       }
+  //       else
+  //       {
+  //         window.location.href = "/patients/" + transport + "/edit";
+  //       }
+        
+        
+  //     },
+  //   });
+
+  // });
+
+
+
+$("#lab_patient_igg").change(function() {
+  
+    var ns1 = $("#lab_patient_ns_1").val();
+    var pcr = $("#lab_patient_pcr").val();
+    var igm = $("#lab_patient_igm").val();
+    var prov_d = $("#lab_patient_provisional_diagnosis").text();
+
+    if (prov_d == "Probable")
+    {
+      if (ns1 == "Positive" || pcr == "Positive" || igm == "Positive" || this.value == "Positive")
+      {
+        alert("Are you sure Provisional Diagnosis is Probable?");
+      }
+    }
+    else if (prov_d == "Confirmed")
+    {
+       if (ns1 != "Positive" && pcr != "Positive" && igm != "Positive" && this.value != "Positive")
+       {
+        alert("Are you sure Provisional Diagnosis is Confirmed?");
+       }
+    }
+  });
+  function limit(element)
+  {
+      var max_chars = 3;
+      var max_value = $(element).val();
+      var max_value = 150
+      if(element.value.length > max_chars){
+          element.value = element.value.substr(0, max_chars);
+      }
+      if($(element).val() > max_value){
+        console.log(max_value);
+        $(element).val("");
+      }
+  }
+
+  function maxLengthCheck(object)
+  {
+    if (object.value.length > object.maxLength)
+      object.value = object.value.slice(0, object.maxLength)
+  }
+
+
+  var formSubmitting = false;
+var setFormSubmitting = function() { formSubmitting = true; };
+
+window.onload = function() {
+    window.addEventListener("beforeunload", function (e) {
+        if (formSubmitting) {
+            return undefined;
+        }
+
+        var confirmationMessage = 'It looks like you have been editing something. '
+                                + 'If you leave before saving, your changes will be lost.';
+
+        (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+        return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+    });
+};
+  
+</script>

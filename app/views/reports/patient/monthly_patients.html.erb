@@ -1,0 +1,78 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<div class="main-content-wrap  d-flex flex-column">
+	<div class="main-content"> 
+
+		<%= render :partial => '/reports/patient/filters/monthly_p_filters' %>
+     <%= link_to 'Export to Excel', monthly_patients_reports_patient_index_path(format: :xls, :year => params[:year],:month => params[:month], :province => params[:province], :district => params[:district], :tehsil => params[:tehsil], :uc => params[:uc]), :class => 'btn btn-success float-right filter-btn2 mt-2', :title => "Export to Excel"%><br><br>
+    
+		<div class="row m-t-15">
+  		<div class="col-md-12">
+    		<div class="card">
+          <h5 class="card-title p-custom1">Monthly Patients</h5>
+      		<div class="card-body p-0">
+            <table id="p_table" class="table table-bordered table-hover listing-tbl">
+              <thead>
+                <tr>
+                  <th>Sr No </th>
+                  <th>Date </th>
+                  <th>Suspected </th>
+                  <th>Probable</th>
+                  <th>Confirmed</th>
+                  <th>Non-Dengue</th>
+                  <th>Total</th>
+                </tr>                    
+              </thead>
+              <tbody>
+                <% if are_monthly_patients_filters_active? %>
+                        <% total_suspected = 0 %>
+                        <% total_probable = 0 %>
+                        <% total_confirmed = 0 %>
+                        <% total_nondengue = 0 %>
+                        <% grandtotal = 0 %>
+                  <% @patient_dates.each_with_index do |date,i| %>
+                      <tr class="text-center">
+                        <% total = 0 %>
+                        <td><%= i+1 %></td>
+                        <!-- display all informations -->
+                        <td><%= date.strftime("%d-%m-%Y") %></td>
+                        
+                        <td><%= @patients[["Suspected", date]] || 0 %></td>
+                        <% total = total + @patients[["Suspected", date]].to_i || 0 %>
+                        <% total_suspected = total_suspected + @patients[["Suspected", date]].to_i || 0 %>
+                        
+                        <td><%= @patients[["Probable", date]] || 0 %></td>
+                        <% total = total + @patients[["Probable", date]].to_i || 0 %>
+                        <% total_probable = total_probable + @patients[["Probable", date]].to_i || 0 %>
+                        <td><%= @patients[["Confirmed", date]] || 0 %></td>
+                        <% total = total + @patients[["Confirmed", date]].to_i || 0 %>
+                        <% total_confirmed = total_confirmed + @patients[["Confirmed", date]].to_i || 0 %>
+                        <td><%= @patients[["Non-Dengue", date]] || 0 %></td>
+                        <% total = total + @patients[["Non-Dengue", date]].to_i || 0 %>
+                        <% total_nondengue = total_nondengue + @patients[["Non-Dengue", date]].to_i || 0 %>
+                        <td><%= total %></td>
+                        <% grandtotal = grandtotal + total %>
+                      </tr>
+                  <% end %>
+                  <tr class="text-center">
+                    <td></td>
+                    <td><b>Grand Total : </b></td>
+                    <td><b><%= total_suspected %></b></td>
+                    <td><b><%= total_probable %></b></td>
+                    <td><b><%= total_confirmed %></b></td>
+                    <td><b><%= total_nondengue %></b></td>
+                    <td><b><%= grandtotal %></b></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+        	</div>
+      	</div>
+    	</div>
+  	</div>
+	</div>
+</div>

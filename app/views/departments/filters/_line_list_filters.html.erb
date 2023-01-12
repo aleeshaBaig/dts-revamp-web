@@ -1,0 +1,52 @@
+<style type="text/css">
+.inner
+{
+    display: inline-block;
+}
+</style>
+<div class="row p-custom">
+  	
+     <div class="col-md-2">
+      	<div class="form-group">
+          <label>Department Name</label>
+          <%= select_tag :department_name, options_for_select(departments_list,{:selected => params[:department]}), {class: 'form-control', :include_blank => "All"} %>
+      	</div>
+     </div>
+
+     <div class="col-md-2">
+        <div class="form-group">
+          <label>Department Type</label>
+          <%= select_tag :department_type, options_for_select(["DCO", "Allied"],{:selected => params[:type]}), {class: 'form-control', :include_blank => "All"} %>
+        </div>
+     </div>
+                        
+      <div class="col-md-2">
+          <button class="btn filter-btn col-md-12 mb-3" onclick="filter_dept()">Filter</button>
+      </div>
+      <div class="col-md-2">
+        <button class="btn reset-btn" onclick="resetData()">Reset</button>
+      </div>
+        
+
+                      
+
+    </div>
+    
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+	function filter_dept(){
+  
+      window.location = "?" + "department=" + $("#department_name").val() + "&type=" + $("#department_type").val();
+    
+};
+
+
+ function resetData(){
+    $("#department_name").val("");
+    $("#department_type").val("");
+};
+
+ </script>   

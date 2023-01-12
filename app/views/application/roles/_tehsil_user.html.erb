@@ -1,0 +1,35 @@
+<ul class="navbar-nav mr-auto" style="margin-left: 1%;">
+  <li class="nav-item active m-l-1">
+    <a class="nav-link" href="<%= default_home_path %>">
+      <i class="nav-icon fa fa-dashboard mr-1"></i> Dashboard <span class="sr-only">(current)</span></a>
+  </li>
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      <i class="nav-icon fa fa-chart-line mr-1"></i>Activities</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="<%= summary_of_activities_town_wise_path %>">Town Wise Activities</a>
+        <a class="dropdown-item" href="<%= summary_of_activities_dept_wise_path %>">Department Wise Activities</a>
+        <a class="dropdown-item" href="<%= summary_of_activities_user_wise_reports_activities_path %>">User Wise Activities</a>
+      </div>
+  </li>
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      <i class="nav-icon fa fa-chart-line mr-1"></i>Activities</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="<%= line_list_activities_vector_surveillances_path %>">Vector Surveillance Activity List</a>
+      </div>
+    </a>
+  </li>
+
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      <i class="nav-icon fa fa-address-card mr-1"></i>User Reports</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="<%= user_wise_larva_report_path %>">User Wise Dormancy Report</a>
+      </div>
+    </a>
+  </li>
+
+  <%=  render '/application/help' %>
+</ul>
+

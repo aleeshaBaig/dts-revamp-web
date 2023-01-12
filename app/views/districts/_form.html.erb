@@ -1,0 +1,123 @@
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content">
+   <div class="row">
+    <div class="col-md-12">
+      <h5 class="card-title p-custom1">
+        <% if @district.persisted? %>
+          Edit District
+        <% else %>
+
+          Add New District
+        <% end %>
+      </h5>
+      <div class="card ">
+        <div class="card-body p-0 m-t-10">
+
+          <%= form_with(model: district, local: true) do |form| %>
+            <% if district.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(district.errors.count, "error") %> prohibited this district from being saved:</h2>
+
+                <ul>
+                  <% district.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            
+
+            <div class="row p-custom">
+
+
+              <div class="col">
+                <div class="form-group">
+                    <label>District Name</label>
+                    <%= form.text_field :district_name, class: "form-control", maxlength: 30, :required => true,:onkeypress => "return onlyAlphabets(event,this);" %>
+                </div>
+            </div>    
+
+              <div class="col">
+                <div class="form-group">
+                  <label>Province Name</label>
+                    <%= form.select :province_id, options_for_select(all_provinces, :selected => form.object.province_id), {:include_blank => "Select"},{class: "form-control", required: true} %>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-group">
+                  <label>Division Name</label>
+                    <%= form.select :division_id, options_for_select(province_wise_divisions(form.object.province_id), :selected => form.object.division_id ), {:include_blank => "Select"},{class: "form-control", required: true} %>
+                </div>
+              </div>
+        
+
+          </div>
+            
+
+            <div class="separator-breadcrumb border-top mb-3"></div>
+              <div class="row p-custom">
+                <div class="col-md-2 offset-md-5">
+                  <button type="submit" class="btn filter-btn col-md-12 mb-3">Save</button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+  $("#district_province_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_division?province_id='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#district_division_id").removeAttr('disabled');
+        $("select#district_division_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length > 0){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#district_division_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#district_division_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#district_division_id");
+        }
+      },
+    });
+  });
+
+
+  function onlyAlphabets(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 0 || charCode == 46 || charCode == 45 || charCode == 32)
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+
+</script>

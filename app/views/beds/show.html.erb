@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Total ward beds:</strong>
+  <%= @bed.total_ward_beds %>
+</p>
+
+<p>
+  <strong>Occupied ward beds:</strong>
+  <%= @bed.occupied_ward_beds %>
+</p>
+
+<p>
+  <strong>Total hdu beds:</strong>
+  <%= @bed.total_hdu_beds %>
+</p>
+
+<p>
+  <strong>Occupied hdu beds:</strong>
+  <%= @bed.occupied_hdu_beds %>
+</p>
+
+<p>
+  <strong>Hospital:</strong>
+  <%= @bed.hospital_id %>
+</p>
+
+<%= link_to 'Edit', edit_bed_path(@bed) %> |
+<%= link_to 'Back', beds_path %>

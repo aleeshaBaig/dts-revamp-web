@@ -1,0 +1,43 @@
+<%= render partial: '/users/roles/default', locals: {f: f} %>
+
+<div class="col-md-3">
+  <div class="form-group">
+    <%= f.input :district_id, label: '* District', collection: districts_list, label_method: :district_name, prompt: "-Select-", input_html:{class: "form-control user_district"}%>
+  </div>
+</div>
+
+<div class="col-md-3">
+  <div class="form-group">
+    <%#= f.input :lab_id, label: '* Lab', collection: hospital_labs(@user.district_id), prompt: "- Please Select District -", input_html:{class: "form-control user_lab_list", disabled: true}%>
+    <%= f.input :lab_id, label: '* Hospital', collection: hospital_labs(@user.district_id), label_method: :hospital_name, prompt: "-Select-", input_html:{class: "form-control user_lab_list"}%>
+  </div>
+</div>
+
+<script>
+$("#user_district_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_lab?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#user_lab_id").removeAttr('disabled');
+        $("select#user_lab_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#user_lab_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#user_lab_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#user_lab_id");
+        }
+      },
+    });
+  });
+</script>

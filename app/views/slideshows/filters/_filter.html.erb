@@ -1,0 +1,145 @@
+<div class="row">
+  <div class="col-md-12">
+
+    <%= form_for @slideshow, url: f_url, method: :get do |f| %>
+      <div class="row p-custom">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Activity Type</label>
+            <%= select_tag "activity_type", options_for_select(['simple', 'patient'].collect{|at| [at.titleize, at]}, :selected => params[:activity_type]), {class: 'form-control', onchange: "this.form.submit()"} %>
+          </div>
+        </div>
+        <% if params[:activity_type] == 'simple' %>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label>Tags</label>
+              <%= select_tag :act_tag, options_for_select(non_patient_tag_list,{:selected => params[:act_tag]}), {class: 'form-control', :include_blank => "All"} %>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label>Larvae Type</label>
+              <%= select_tag :larva_type, options_for_select(larvae_types,{:selected => params[:larva_type]}), {class: 'form-control', :include_blank => "All"} %>
+            </div>
+          </div>
+        <% else %>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label>Tags</label>
+              <%= select_tag :act_tag, options_for_select(patient_tag_list,{:selected => params[:act_tag]}), {class: 'form-control', :include_blank => "All"} %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>User Name</label>
+            <input type="text" name="mobile_username" class="form-control" value='<%= params[:mobile_username] %>'>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Department Name</label>
+            <%= select_tag :department, options_for_select(departments_list,{:selected => params[:department]}), {class: 'form-control', :include_blank => "All"} %>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>District</label>
+            <%= select_tag "district_id", options_for_select(all_districts, :selected => params[:district_id]), {class: 'form-control', :include_blank => "All", id: "district"} %>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label> Tehsil:</label>
+            <%= select_tag :tehsil_id, options_for_select(tehsil_information(params[:district_id]),{:selected => params[:tehsil_id]}), {class: 'form-control', :include_blank => "All", id: "tehsil"}%>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Date From</label>
+            <input type="datetime-local" name="datefrom" class="form-control" id="datefrom" value='<%= (params[:datefrom].present?)? "#{params[:datefrom]}" : nil %>'>
+          </div>
+        </div>
+                
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Date To</label>
+            <input type="datetime-local" name="dateto" class="form-control" id="dateto" value='<%= (params[:dateto].present?)? "#{params[:dateto]}" : nil %>'>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<hr/>
+
+<script type="text/javascript">
+  function initialize(){};
+  function resetData(){
+      $("select").val("");
+      $("select").prop('selectedIndex',0);
+      $("input, textarea").val("");
+  } 
+
+ $("#district").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#tehsil").removeAttr('disabled');
+        $("select#tehsil option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#tehsil");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#tehsil");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#tehsil");
+        }
+      },
+    });
+  });
+ $("select#tehsil").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#uc").removeAttr('disabled');
+        $("select#uc option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#uc");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#uc");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#uc");
+        }
+      },
+    });
+  });
+</script>

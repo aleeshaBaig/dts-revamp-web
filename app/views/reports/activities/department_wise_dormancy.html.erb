@@ -1,0 +1,60 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+
+<div class="main-content-wrap  d-flex flex-column">
+	<div class="main-content"> 
+	  <%= render :partial => '/reports/activities/filters/department_wise_dormancy' %>
+    <%= link_to 'Export to Excel', department_wise_dormancy_reports_activities_path(request.parameters.merge({format: :xls})), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%></br>
+		<div class="row m-t-15">
+  		<div class="col-md-12">
+    		<div class="card">
+          <h5 class="card-title p-custom1">Department Wise Dormancy Report</h5>
+      		<div class="card-body p-0">
+            <div class="col-md-12">
+              <div class="table-responsive mt-3">
+                <table id="p_table" class="table table-bordered table-hover listing-tbl datatable" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Sr No </th>
+                      <th>Department </th>
+                      <th>Total Users</th>
+                      <th>Total Dormancy Count</th>
+                      <th>Dormancy percentage</th>
+                    </tr>                    
+                  </thead>
+                  <tbody>
+                    <% if are_user_wise_larva_filters_active? %>
+                      <% @total_users.each_with_index do |dep_user,i| %>
+                          <tr class="text-center">
+                            <% total = 0 %>
+                            <td><%= i+1 %></td>
+                            <td><%= dep_user[0] %></td>
+                            <td><%= dep_user[1] %></td>
+                            <td><%= @activities["#{dep_user[0]}"].to_i %></td>
+                            <% tt = (dep_user[1].to_f) %>
+                            <% dor = @activities["#{dep_user[0]}"].to_f %>
+                            <td><%= ((dor/tt)*100).round(1) %>%</td>
+                          </tr>
+                      <% end %>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        	</div>
+      	</div>
+    	</div>
+  	</div>
+	</div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function($) {
+    $('#p_table').DataTable({"pageLength": 25, order: [[1, 'asc']],});
+});
+</script>
+<script type="text/javascript" charset="utf8" src="/assets/datatable_1.0.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/datatable_1.0.css">

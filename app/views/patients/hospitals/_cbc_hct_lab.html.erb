@@ -1,0 +1,307 @@
+<%= form.fields_for :lab_result do |f| %>
+<div id="cbc_htc_sec" style="display:block;">
+  <div class="row p-custom">
+    <div class="col">
+      <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+          CBC and HCT Information 
+          <% if @patient.persisted? %>
+            <a href="/patients/patient_test_history?patient_id=<%= @patient.id %>"><i class="fa fa-history"></i></a>
+        <% end %>
+      </h6>
+    </div>
+  </div>    
+
+
+<%# if is_disabled_confirmed_pd?(form) %>
+    <!-- <div class="row p-custom disabledbutton"> -->
+<%# else %>
+<%# end %>
+
+    <!-- CBC FIRST TEST -->
+    <div class="row p-custom cbc-test-row">
+        <div class="col-2">
+            <div class="form-group">
+                <label>HCT First Reading % (mm3)</label>
+                <%= f.text_field :hct_first_reading, class: "form-control", :maxlength => 5, :onkeypress => "return onlyNumerics(event,this);" %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>HCT First Reading Date</label>
+                <%= f.date_field :hct_first_reading_date, class: "form-control", max: Date.today %>
+            </div>
+        </div>
+
+
+        <div class="col-2">
+        <div class="form-group">
+            <label>WBC First Reading (mm3)</label>
+            <%= f.number_field :wbc_first_reading, class: "form-control", :max => 9999999, :maxLength => 6, :oninput => "maxLengthCheck(this)", step: :any, :value => (number_with_precision(f.object.wbc_first_reading, :precision => 3)) %>
+        </div>
+        </div>
+
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>WBC First Reading Date</label>
+                <%= f.date_field :wbc_first_reading_date, class: "form-control", max: Date.today %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Platelets First Reading (mm3)</label>
+                <%= f.text_field :platelet_first_reading, class: "form-control", :maxlength => 7,:onkeypress => "return onlyNumerics(event,this);" %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Platelets First Reading Date</label>
+                <%= f.date_field :platelet_first_reading_date, class: "form-control", max: Date.today %>
+            </div>
+        </div>
+        
+        <div class="col-2">
+            <div class="form-group">
+                <label>First Report Order Date</label>
+                <%= f.datetime_field :cbc_report_order_date_first, class: "form-control" %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>First Report Receiving Date</label>
+                <%= f.datetime_field :cbc_report_receiving_date_first, class: "form-control" %>
+            </div>
+        </div>
+    </div>
+
+    <!-- CBC Second TEST -->
+    <div class="row p-custom cbc-test-row">
+        <div class="col-2">
+            <div class="form-group">
+                <label>HCT Second Reading</label>
+                <%= f.text_field :hct_second_reading, class: "form-control", :maxlength => 5,:onkeypress => "return onlyNumerics(event,this);"  %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>HCT Second Reading Date</label>
+                <%= f.date_field :hct_second_reading_date, class: "form-control" , max: Date.today%>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>WBC Second Reading (mm3)</label>
+                <%= f.number_field :wbc_second_reading, class: "form-control", :max => 9999999, :maxLength => 6, :oninput => "maxLengthCheck(this)", step: :any , :value => (number_with_precision(f.object.wbc_second_reading, :precision => 3)) %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>WBC Second Reading Date</label>
+                <%= f.date_field :wbc_second_reading_date, class: "form-control", max: Date.today %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Platelets Second Reading</label>
+                <%= f.text_field :platelet_second_reading, class: "form-control", :maxlength => 7,:onkeypress => "return onlyNumerics(event,this);" %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Platelets Second Reading Date</label>
+                <%= f.date_field :platelet_second_reading_date, class: "form-control", max: Date.today %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Second Report Order Date</label>
+                <%= f.datetime_field :cbc_report_order_date_second, class: "form-control" %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Second Report Receiving Date</label>
+                <%= f.datetime_field :cbc_report_receiving_date_second, class: "form-control" %>
+            </div>
+        </div>        
+    </div>
+
+    <!-- CBC Third TEST -->
+    <div class="row p-custom cbc-test-row">
+        <div class="col">
+            <div class="form-group">
+                <label>HCT Third Reading</label>
+                <%= f.text_field :hct_third_reading, class: "form-control",  :maxlength => 5,:onkeypress => "return onlyNumerics(event,this);" %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>HCT Third Reading Date</label>
+                <%= f.date_field :hct_third_reading_date, class: "form-control", max: Date.today %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>WBC Third Reading (mm3)</label>
+                <%= f.number_field :wbc_third_reading, class: "form-control", :max => 9999999, :maxLength => 6, :oninput => "maxLengthCheck(this)", step: :any , :value => (number_with_precision(f.object.wbc_third_reading, :precision => 3)) %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>WBC Third Reading Date</label>
+                <%= f.date_field :wbc_third_reading_date, class: "form-control", max: Date.today %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Platelets Third Reading</label>
+                <%= f.text_field :platelet_third_reading, class: "form-control" , :maxlength => 7,:onkeypress => "return onlyNumerics(event,this);"%>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Platelets Third Reading Date</label>
+                <%= f.date_field :platelet_third_reading_date, class: "form-control", max: Date.today %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Third Report Order Date </label>
+                <%= f.datetime_field :cbc_report_order_date_third, class: "form-control" %>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="form-group">
+                <label>Third Report Receiving Date</label>
+                <%= f.datetime_field :cbc_report_receiving_date_third, class: "form-control" %>
+            </div>
+        </div>
+
+    </div>
+
+<% if f.object.warning_signs.present? and is_disabled_confirmed_dpc_user?(form) %>
+    <div class="row p-custom disabledbutton">
+<% else %>
+    <div class="row p-custom" >
+<% end %>
+    <div class="col">
+      <div class="form-group">
+          <label>Presence of One or More Warning Signs *</label>
+          <div class="radio-btn-area">
+            <div class="form-check-inline">
+              <label class="form-check-label">
+                Yes <%= f.radio_button :warning_signs, true, class: "form-check-input" %>
+              </label>
+            </div>
+            <div class="form-check-inline">
+              <label class="form-check-label">
+                No <%= f.radio_button :warning_signs, false, class: "form-check-input" %>
+              </label>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+<div id="lab_diagnostic" style="display: none;">
+  <%= render partial: '/patients/hospitals/lab_diagnostic', locals: {f: f, pd: form.object.provisional_diagnosis, form: form} %> 
+</div>
+</div>
+<% end %>
+<script>
+  function onlyNumerics(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode >= 48 && charCode <= 57))
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+
+  $("#patient_lab_result_attributes_warning_signs_true").change(function() {
+  var prov_diag = $('#patient_provisional_diagnosis').val();
+  var platelet = $('#patient_lab_result_attributes_platelet_first_reading').val();
+  var wbc = $('#patient_lab_result_attributes_wbc_first_reading').val();
+    if ((platelet <= 99999) && (prov_diag == "Suspected") && (this.value == 'true') && (wbc < 4000))
+    {
+        alert("Are you sure Provisional Diagnosis is Suspected?");
+    }
+   });
+
+  $("#patient_lab_result_attributes_igg").change(function() {
+  var prov_diag = $('#patient_provisional_diagnosis').val();
+  var igm = $('#patient_lab_result_attributes_igm').val();
+  var ns1 = $('#patient_lab_result_attributes_ns1').val();
+  var pcr = $('#patient_lab_result_attributes_pcr').val();
+    if ((prov_diag == "Probable") && ((igm == "Positive") || (this.value == "Positive") || (ns1 == "Positive") || (pcr == "Positive")))
+    {
+        alert("Are you sure Provisional Diagnosis is Probable?");
+    }
+   });
+
+  $("#patient_lab_result_attributes_igg").change(function() {
+  var prov_diag = $('#patient_provisional_diagnosis').val();
+  var igm = $('#patient_lab_result_attributes_igm').val();
+  var ns1 = $('#patient_lab_result_attributes_ns1').val();
+  var pcr = $('#patient_lab_result_attributes_pcr').val();
+    if ((prov_diag == "Confirmed") && ((igm != "Positive") && (this.value != "Positive") && (ns1 != "Positive") && (pcr != "Positive")))
+    {
+        alert("Are you sure Provisional Diagnosis is Confirmed?");
+    }
+   });
+
+
+   $("#patient_lab_result_attributes_hct_first_reading_date").change(function() {
+    var first_date = this.value
+    document.getElementById("patient_lab_result_attributes_hct_second_reading_date").setAttribute("min", first_date);
+    document.getElementById("patient_lab_result_attributes_hct_third_reading_date").setAttribute("min", first_date);
+  });
+
+   $("#patient_lab_result_attributes_wbc_first_reading_date").change(function() {
+    var first_date = this.value
+    document.getElementById("patient_lab_result_attributes_wbc_second_reading_date").setAttribute("min", first_date);
+    document.getElementById("patient_lab_result_attributes_wbc_third_reading_date").setAttribute("min", first_date);
+  });
+
+   $("#patient_lab_result_attributes_platelet_first_reading_date").change(function() {
+    var first_date = this.value
+    document.getElementById("patient_lab_result_attributes_platelet_second_reading_date").setAttribute("min", first_date);
+    document.getElementById("patient_lab_result_attributes_platelet_third_reading_date").setAttribute("min", first_date);
+  });
+
+function maxLengthCheck(object)
+  {
+    if (object.value.length > object.maxLength)
+      object.value = object.value.slice(0, object.maxLength)
+  }
+
+</script>
+

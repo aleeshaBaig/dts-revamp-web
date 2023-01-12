@@ -1,0 +1,154 @@
+
+<div class="row p-custom">
+  <div class="col">
+    <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+        Patient Demographics
+    </h6>
+  </div>
+</div>
+
+<!-- Row 1 -->
+<div class="row p-custom">
+
+  <div class="col">
+    <div class="form-group">
+        <div class="radio-btn-area">
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              CNIC <%= f.radio_button :p_search_type, 'CNIC', class: "form-check-input patient_search_type"%>
+            </label>
+          </div>
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              Passport <%= f.radio_button :p_search_type, 'Passport', class: "form-check-input patient_search_type"%>
+            </label>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="form-group">
+        <div class="patient_cnic">
+            <%= f.input :cnic, label: "Patient CNIC", input_html:{class: "form-control cnic"}%>
+        </div>
+        <div class="patient_passport">
+            <%= f.input :passport, label: "Patient Passport", input_html:{class: "form-control passport", maxLength: 9}%>
+        </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="form-group">
+      <% if current_user.lab_user? %>
+        <label>Lab</label>
+        <input type="text" class="form-control" value="<%= current_user.lab.try(:hospital_name) %>" readonly>
+      <% else %>
+        <%= f.select :hospital_id, options_for_select(Lab.order("lab_name asc"), :selected => f.object.hospital_id), {:include_blank => "Select"},{class: "form-control"} %>
+      <% end %>
+    </div>
+    <%= (f.hidden_field :hospital_id, value: current_user.lab.try(:id)) if current_user.lab_user? or !f.object.persisted? %>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <%= f.input :patient_name, label: 'Patient Name', input_html:{class: "form-control", :onkeypress => "return onlyAlphabets(event,this);", :maxlength => 20, disabled: is_lab_pv_disabled?}%>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <%= f.input :fh_name, label: 'Father  / Husband Name', input_html:{class: "form-control", :onkeypress => "return onlyAlphabets(event,this);" , :maxlength => 20, disabled: is_lab_pv_disabled?}%>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <%= f.input :gender, collection: genders, include_blank: "-Select-", input_html:{class: "form-control", disabled: is_lab_pv_disabled?}%>
+      </div>
+  </div>
+</div>
+
+<!-- Row 2 -->
+<div class="row p-custom">
+  <div class="col">
+      <div class="form-group">
+          <%= f.input :patient_contact, label: 'Phone Number', input_html:{class: "form-control phone_contact", :minlength => 11, :maxlength => 11,:onkeypress => "return onlyNumerics(event,this);", disabled: is_lab_pv_disabled?}%>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <%= f.input :cnic_relation, label: "Guardian's Relation" ,collection: guardians_relations, include_blank: "-Select-", input_html:{class: "form-control", disabled: is_lab_pv_disabled?}%>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <%= f.input :relation_contact, label: "Guardian's Contact Number", input_html:{class: "form-control phone_contact", :minlength => 11, :maxlength => 11,:onkeypress => "return onlyNumerics(event,this);", disabled: is_lab_pv_disabled?}%>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group">
+          <%= f.input :age, input_html:{class: "form-control", disabled: is_lab_pv_disabled?}%>
+      </div>
+  </div>
+
+  <div class="col" style="display:<%= f.object.age == 0 ? 'block' : 'none' %>;" id="age_months_div">
+      <div class="form-group">
+          <%= f.input :age_month, label: 'Age in Months', input_html:{class: "form-control", :minlength => 1, :maxlength => 12 , disabled: is_lab_pv_disabled?}%>
+      </div>
+  </div> 
+</div>
+
+<!-- Script -->
+<script type="text/javascript">
+  $("#patient_age_month").on('keyup change', function(){
+      if(parseInt($(this).val()) > 12){
+          alert("Age Month not corrected");
+          $(this).val("");
+      }
+  })
+  function maxLengthCheck(object)
+  {
+    if (object.value.length > object.maxLength)
+      object.value = object.value.slice(0, object.maxLength)
+  }
+
+  function onlyAlphabets(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 0 || charCode == 46 || charCode == 45 || charCode == 32)
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+function onlyNumerics(e, t) {
+    try {
+        if (window.event) {
+            var charCode = window.event.keyCode;
+        }
+        else if (e) {
+            var charCode = e.which;
+        }
+        else { return true; }
+        if ((charCode >= 48 && charCode <= 57) || (charCode == 189))
+            return true;
+        else
+            return false;
+        }
+        catch (err) {
+            alert(err.Description);
+        }
+}
+</script>

@@ -1,0 +1,44 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+
+<div class="app-admin-wrap layout-horizontal-bar clearfix">
+  <div class="main-content-wrap  d-flex flex-column">
+    <div class="main-content"> 
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-body p-0">
+                <h5 class="card-title p-custom1">
+                  Bed occupancy Report
+                  <% if can? :create, Bed %>
+                    <div class="ml-auto pull-right">
+                      <%= link_to new_bed_path, class: 'btn btn-success' do %> <i class="fa fa-plus"></i> <span>Add New Bed</span> <% end %>
+                    </div>
+                  <% end %>
+                </h5>
+                <%= render '/beds/filters' %>
+                <div class="separator-breadcrumb border-top mb-3"></div>
+                <div class="listing-tbl-area">
+                  <%= link_to 'Export to Excel', beds_path(format: :xls, district_id: params[:district_id], facility_type: params[:facility_type], hospital_id: params[:hospital_id]), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+
+                  <div class="table-responsive mt-3">
+                    <%= render 'beds' %>
+                  </div>
+                  <div class="text-center">
+                    <% if @beds.present? %> 
+                      <%= will_paginate @beds, :class => 'apple_pagination'  %>
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @beds.total_entries %></div> 
+                    <% else %> 
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+                    <% end %>
+                  </div>
+             
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

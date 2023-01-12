@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DTS</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/assets/themes/lite-purple.min.css">
+    <link rel="stylesheet" href="/assets/font-awesome.css">
+    <link rel="stylesheet" href="/assets/vendor/perfect-scrollbar.css">
+    <link rel="stylesheet" href="/assets/toastr.css">
+    <link rel="stylesheet" href="/assets/spinner.css">
+    <script src="https://use.fontawesome.com/972cd49e22.js"></script>
+
+    <link rel="stylesheet" href="/assets/custom.css">
+
+    <style type="text/css">
+      .customizer2 .handle2 {
+          position: absolute;
+          display: flex;
+          top: 300px;
+          left: 208px;
+          cursor: pointer;
+          padding: 10px 8px;
+          border-top-right-radius: 4px;
+          border-bottom-right-radius: 4px;
+          box-shadow: -3px 0 4px rgba(0,0,0,.06);
+          font-size: 15px;
+          transition: all .3s ease-in-out;
+          white-space: nowrap;
+          height: 43px;
+          transform: rotate(-90deg);
+      }
+
+      .customizer2 .handle2, .customizer2 .handle2:hover {
+          background: #135591;
+          color: #fff;
+          left: 12px;
+      }
+
+      .admin-icon{
+        margin-right: 16px;
+      }
+    </style>
+
+    <%#= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application'%>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  </head>
+
+  <body class="text-left">
+    <!-- spinner ajax -->
+    <div class="loader"></div>
+
+    <div class="app-admin-wrap layout-horizontal-bar clearfix">
+      <%= render "/shared/navigation" %>
+      <%= yield %>
+    </div>
+    
+    <script src="/assets/common-bundle-script"></script>    
+    <script src="/assets/es5/dashboard.v1.script"></script>
+    
+    <script src="/assets/es5/script.min"></script>
+    <script src="/assets/es5/customizer.script.min"></script>
+    <script src="/assets/es5/customizer2.script.min"></script>
+
+    <script src="/assets/tooltip.script"></script>
+    
+    <script src="/assets/jquery_nested_form.js"></script>
+    <script src="/assets/district_tehsil_uc.js"></script>
+    <script src="/assets/markerclusterer.js"></script>
+    
+  </body>
+  
+  <%= render '/application/sidebar_navigate' %>
+  <%= render '/application/flash_messages' %>
+</html>

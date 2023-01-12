@@ -1,0 +1,25 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+    <thead>
+        <tr>
+        <th>District</th>
+        <th>Total Hotspots</th>
+        <th>Last Week Coverage(%)</th>
+        </tr>
+        
+    </thead>
+    
+    <% @districts.each do |d| %>
+        <tr>
+        <td class="text-center"><%= d[1] %></td>
+        <td class="text-center"><%= @total_hotspots[d[0]] || 0 %></td>
+        <% if @total_hotspots[d[0]].present? and @visited_hotspots[d[0]].present? %>
+            <% coverage_perc = ((@visited_hotspots[d[0]] || 0).to_f / (@total_hotspots[d[0]] || 0).to_f) * 100 %>
+        <% else %>
+            <% coverage_perc = 0 %>
+        <% end %>
+        <td class="text-center"><%= coverage_perc.round(4) %> % </td>
+        
+        </tr>
+    <% end %>
+    
+</table>

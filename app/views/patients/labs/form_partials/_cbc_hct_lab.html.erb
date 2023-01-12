@@ -1,0 +1,192 @@
+<%= form.fields_for :lab_result do |f| %>
+  <div class="row p-custom">
+    <div class="col">
+      <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+        CBC and HCT Information
+      </h6>
+    </div>
+  </div>
+  <div class="row p-custom">
+    <!-- HTC FIRST  -->
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :hct_first_reading, label: 'HCT First Reading % (mm3)', input_html:{class: "form-control", :maxLength => 5, :oninput => "maxLengthCheck(this)",:onkeypress => "return onlyNumerics(event,this);"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :hct_first_reading_date, as: :string, label: 'HCT First Reading Date', input_html:{class: "form-control disable_future_date"}%>
+      </div>
+    </div>
+
+    <!-- WBC FIRST  -->
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :wbc_first_reading, label: 'WBC First Reading (mm3)', input_html:{class: "form-control", :maxLength => 6, :oninput => "maxLengthCheck(this)"}%>
+      </div>            
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :wbc_first_reading_date, as: :string, label: 'WBC First Reading Date', input_html:{class: "form-control disable_future_date"}%>
+      </div>
+    </div>
+
+    <!-- Platelets FIRST  -->
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :platelet_first_reading, label: 'Platelets First Reading (mm3)', input_html:{class: "form-control", :maxLength => 6, :oninput => "maxLengthCheck(this)",:onkeypress => "return onlyNumerics(event,this);"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :platelet_first_reading_date, as: :string, label: 'Platelets First Reading Date', input_html:{class: "form-control disable_future_date"}%>
+      </div>
+    </div>
+    
+    <div class="col">
+        <div class="form-group">
+            <label>First Report Order Date</label>
+            <%= f.input :cbc_report_order_date_first, as: :datetime, html5: true, label: false, input_html:{class: "form-control"}%>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>First Report Receiving Date</label>
+            <%= f.input :cbc_report_receiving_date_first, as: :datetime, html5: true, label: false, input_html:{class: "form-control"}%>
+        </div>
+    </div>
+  </div>
+
+  <div class="row p-custom">
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :hct_second_reading, label: 'HCT Second Reading', input_html:{class: "form-control", :maxLength => 5, :oninput => "maxLengthCheck(this)",:onkeypress => "return onlyNumerics(event,this);"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :hct_second_reading_date, as: :string, label: 'HCT Second Reading Date', input_html:{class: "form-control disable_future_date"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :wbc_second_reading, label: 'WBC Second Reading (mm3)', input_html:{class: "form-control", :maxLength => 6, :oninput => "maxLengthCheck(this)"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :wbc_second_reading_date, as: :string, label: 'WBC Second Reading Date', input_html:{class: "form-control disable_future_date"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :platelet_second_reading, label: 'Platelets Second Reading', input_html:{class: "form-control", :maxLength => 6, :oninput => "maxLengthCheck(this)",:onkeypress => "return onlyNumerics(event,this);"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :platelet_second_reading_date, as: :string, label: 'Platelets Second Reading Date', input_html:{class: "form-control disable_future_date"}%>
+      </div>
+    </div>
+    
+    <div class="col">
+        <div class="form-group">
+            <label>Second Report Order Date</label>
+            <%= f.input :cbc_report_order_date_second, as: :datetime, html5: true, label: false, input_html:{class: "form-control"}%>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>Second Report Receiving Date</label>
+            <%= f.input :cbc_report_receiving_date_second, as: :datetime, html5: true, label: false, input_html:{class: "form-control"}%>
+        </div>
+    </div>
+  </div>
+
+  <div class="row p-custom">
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :hct_third_reading, label: 'HCT Third Reading', input_html:{class: "form-control", :maxLength => 5, :oninput => "maxLengthCheck(this)",:onkeypress => "return onlyNumerics(event,this);"}%>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :hct_third_reading_date, as: :string, label: 'HCT Third Reading Date', input_html:{class: "form-control disable_future_date"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :wbc_third_reading, label: 'WBC Third Reading (mm3)', input_html:{class: "form-control", :maxLength => 6, :oninput => "maxLengthCheck(this)"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :wbc_third_reading_date, as: :string, label: 'WBC Third Reading Date', input_html:{class: "form-control disable_future_date"}%>
+      </div>
+    </div>
+
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :platelet_third_reading, label: 'Platelets Third Reading', input_html:{class: "form-control", :maxLength => 6, :oninput => "maxLengthCheck(this)",:onkeypress => "return onlyNumerics(event,this);"}%>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="form-group">
+        <%= f.input :platelet_third_reading_date, as: :string, label: 'Platelets Third Reading Date', input_html:{class: "form-control disable_future_date"}%>
+      </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>Third Report Order Date</label>
+            <%= f.input :cbc_report_order_date_third, as: :datetime, html5: true, label: false, input_html:{class: "form-control"}%>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>Third Report Receiving Date</label>
+            <%= f.input :cbc_report_receiving_date_third, as: :datetime, html5: true, label: false, input_html:{class: "form-control"}%>
+        </div>
+    </div>
+  </div>
+
+  <hr/>
+  <%= render partial: '/patients/labs/form_partials/lab_diagnostic', locals: {f: f, pd: form.object.provisional_diagnosis, form: form} %> 
+  
+<% end %>
+<script>
+
+  function onlyNumerics(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode >= 48 && charCode <= 57))
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+</script>

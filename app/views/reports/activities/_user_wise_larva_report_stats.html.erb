@@ -1,0 +1,127 @@
+<style>
+.icon {
+  width: 3rem;
+  height: 3rem;
+}
+
+.icon i {
+  font-size: 2.25rem;
+}
+
+.icon-shape {
+  display: inline-flex;
+  padding: 12px;
+  text-align: center;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-shape i {
+  font-size: 1.25rem;
+}
+h5.text-white{
+  color: white!important;
+}
+</style>
+<div class="container-fluid">
+  <div class="row">
+    
+    <div class="col-xl-3 col-lg-6">
+      <div class="card card-stats mb-4 mb-xl-0 bg-success text-white">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <h5 class="card-title text-uppercase text-muted mb-0 text-white">Total Users</h5>
+              <span class="h2 font-weight-bold mb-0">
+                <% if @data_stats[:total_users] > 0 %>
+                  <a href="<%= user_wise_larva_report_path(request.parameters.merge({format: :html, line_listing: 'true', status: params[:status], title: 'Total Users', page: '1'})) %>"  class="text-white" target="_blank"><%= number_with_delimiter(@data_stats[:total_users], delimiter: ",") %></a>
+                <% else %>
+                  0
+                <% end %>
+              </span>
+            </div>
+            <div class="col-auto">
+              <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                <i class="fa fa-chart-bar"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-lg-6">
+      <div class="card card-stats mb-4 mb-xl-0 bg-info text-white">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <h5 class="card-title text-uppercase text-muted mb-0 text-white">Active Users</h5>
+              <span class="h2 font-weight-bold mb-0">
+                <% if @data_stats[:active] > 0 %>
+                  <a href="<%= user_wise_larva_report_path(request.parameters.merge({format: :html, line_listing: 'true', status: true, title: 'Active Users', page: '1'})) %>"  class="text-white" target="_blank"><%= number_with_delimiter(@data_stats[:active], delimiter: ",") %></a>
+                <% else %>
+                0
+                <% end %>
+              </span>
+            </div>
+            <div class="col-auto">
+              <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                <i class="fa fa-chart-bar"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-lg-6">
+      <div class="card card-stats mb-4 mb-xl-0  bg-warning text-white">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <h5 class="card-title text-uppercase text-muted mb-0 text-white">Inactive Users</h5>
+              <span class="h2 font-weight-bold mb-0">
+                <% if @data_stats[:inactive] > 0 %>
+                <a href="<%= user_wise_larva_report_path(request.parameters.merge({format: :html, line_listing: 'true', status: false, title: 'Inactive Users', page: '1'})) %>"  class="text-white" target="_blank"><%= number_with_delimiter(@data_stats[:inactive], delimiter: ",") %></a>
+                <% else %>
+                0
+                <% end %>
+              </span>
+            </div>
+            <div class="col-auto">
+              <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                <i class="fa fa-chart-bar"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-xl-3 col-lg-6">
+      <div class="card card-stats mb-4 mb-xl-0 bg-danger text-white">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <h5 class="card-title text-uppercase text-muted mb-0 text-white">Dormant Users</h5>
+              <span class="h2 font-weight-bold mb-0">
+                <% if @data_stats[:dormant] > 0 %>
+                  <a href="<%= user_wise_larva_report_path(request.parameters.merge({format: :html, line_listing: 'true', status: true, is_dormant: true, title: 'Dormant Users', page: '1'})) %>"  class="text-white" target="_blank"><%= number_with_delimiter(@data_stats[:dormant], delimiter: ",") %></a> 
+                <% else %>
+                0
+                <% end %>
+              </span>
+            </div>
+            <div class="col-auto">
+              <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                <i class="fa fa-chart-bar"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

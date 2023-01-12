@@ -1,0 +1,19 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+    <thead>
+        <tr>
+        <th>Category</th>
+        <th>Total Reporting Units</th>
+        <th>Non-Compliant Hospitals</th>
+        </tr>
+        
+    </thead>
+    
+    <% @result.each do |r| %>
+        <tr>
+        <td class="text-center"><%= r.category %></td>
+        <td class="text-center"><%= r.total_units.to_i %></td>
+        <td class="text-center"><%= (r.total_units.to_i - r.compliant_units.to_i) %></td>
+        </tr>
+    <% end %>
+    
+</table>

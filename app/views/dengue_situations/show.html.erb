@@ -1,0 +1,94 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Confirmed patient:</strong>
+  <%= @dengue_situation.confirmed_patient %>
+</p>
+
+<p>
+  <strong>Patient reported by lab:</strong>
+  <%= @dengue_situation.patient_reported_by_lab %>
+</p>
+
+<p>
+  <strong>Patient reported by hospital:</strong>
+  <%= @dengue_situation.patient_reported_by_hospital %>
+</p>
+
+<p>
+  <strong>Death:</strong>
+  <%= @dengue_situation.death %>
+</p>
+
+<p>
+  <strong>Admissions:</strong>
+  <%= @dengue_situation.admissions %>
+</p>
+
+<p>
+  <strong>Case reponse:</strong>
+  <%= @dengue_situation.case_reponse %>
+</p>
+
+<p>
+  <strong>Indoor positive larvae:</strong>
+  <%= @dengue_situation.indoor_positive_larvae %>
+</p>
+
+<p>
+  <strong>Outdoor positive larvae:</strong>
+  <%= @dengue_situation.outdoor_positive_larvae %>
+</p>
+
+<p>
+  <strong>Hotspots coverage:</strong>
+  <%= @dengue_situation.hotspots_coverage %>
+</p>
+
+<p>
+  <strong>Dormant users:</strong>
+  <%= @dengue_situation.dormant_users %>
+</p>
+
+<p>
+  <strong>Firs:</strong>
+  <%= @dengue_situation.firs %>
+</p>
+
+<p>
+  <strong>Notices served:</strong>
+  <%= @dengue_situation.notices_served %>
+</p>
+
+<p>
+  <strong>Premises sealed:</strong>
+  <%= @dengue_situation.premises_sealed %>
+</p>
+
+<p>
+  <strong>Arrests:</strong>
+  <%= @dengue_situation.arrests %>
+</p>
+
+<p>
+  <strong>Fines imposed:</strong>
+  <%= @dengue_situation.fines_imposed %>
+</p>
+
+<p>
+  <strong>Dvrs total:</strong>
+  <%= @dengue_situation.dvrs_total %>
+</p>
+
+<p>
+  <strong>Dvrs resolved:</strong>
+  <%= @dengue_situation.dvrs_resolved %>
+</p>
+
+<p>
+  <strong>Dvrs pending:</strong>
+  <%= @dengue_situation.dvrs_pending %>
+</p>
+
+<%= link_to 'Edit', edit_dengue_situation_path(@dengue_situation) %> |
+<%= link_to 'Back', dengue_situations_path %>

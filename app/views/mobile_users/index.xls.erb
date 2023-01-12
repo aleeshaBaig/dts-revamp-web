@@ -1,0 +1,27 @@
+<table class="table table-bordered table-hover listing-tbl">
+  <thead>
+    <tr>
+      <th>Sr No#</th>
+      <th>Username</th>
+      <th>District</th>
+      <th>Tehsil</th>
+      <th>Department</th>
+      <th>Categories Tags</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @mobile_users.each_with_index do |mobile_user, i| %>
+    <tr>
+      <td><%= i+1 %></td>
+      <td class="tbl-td-color2"><%= mobile_user.username %></td>
+      <td class="tbl-td-color2"><%= mobile_user.district %></td>
+      <td class="tbl-td-color2"><%= mobile_user.tehsils.map(&:tehsil_name).join(',') %></td>
+      <td class="tbl-td-color2"><%= mobile_user.department.try(:department_name) %></td>
+      <td class="tbl-td-color2"><%= mobile_user.tag_categories.map(&:category_name).join(',') %></td>     
+      <td class="tbl-td-color2"><%= mobile_user.role %></td>     
+    </tr>
+    <% end %>
+  </tbody>
+</table>

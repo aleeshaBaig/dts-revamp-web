@@ -1,0 +1,76 @@
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content">
+    <div class="row">
+      <div class="col-md-12">
+        <h5 class="card-title p-custom1">
+          <% if @insecticide_stock.persisted? %>
+            Edit Insecticide Stock
+          <% else %>
+            Add New Insecticide Stock
+          <% end %>
+        </h5>
+        <div class="card ">
+          <div class="card-body p-0 m-t-10">
+            <%= form_with(model: insecticide_stock, local: true) do |form| %>
+              <% if insecticide_stock.errors.any? %>
+                <div class="row p-custom">
+                  <div id="error_explanation">
+                    <div class="col">
+                      <h2><%= pluralize(insecticide_stock.errors.count, "error") %> prohibited this insecticide_stock from being saved:</h2>
+                      <ul>
+                        <% insecticide_stock.errors.full_messages.each do |message| %>
+                          <li style="color: red;"><%= message %></li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+
+              <div class="row p-custom">
+                <div class="col">
+                  <div class="form-group">
+                    <label>Insecticide Name</label>
+                    <%= form.select :insecticide_name, options_for_select(insecticide_names, selected: form.object.insecticide_name), { include_blank: "Select Insecticide" }, { class: "form-control", required: true } %>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class="form-group">
+                    <label>Stock Received</label>
+                    <%= form.number_field :stock_received, min: 0, class: "form-control", :required => true %>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class="form-group">
+                    <label>Stock Dispensed</label>
+                    <%= form.number_field :stock_dispensed, min: 0, class: "form-control", :required => true %>
+                  </div>
+                </div>
+
+                <% if ["new", "create"].include? params[:action] %>
+                  <%= form.hidden_field :district_id, value: current_user.district_id %>
+                <% elsif ["edit", "update"].include? params[:action] %>
+                  <%= form.hidden_field :district_id, value: form.object.district_id %>
+                <% end %>
+
+                <%= form.hidden_field :user_id, value: current_user.id %>
+              </div>
+
+              <div class="separator-breadcrumb border-top mb-3"></div>
+
+              <div class="row p-custom">
+                <div class="col-md-2 offset-md-5">
+                  <button type="submit" class="btn filter-btn col-md-12 mb-3">Save</button>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

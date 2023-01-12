@@ -1,0 +1,99 @@
+<style type="text/css">
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<div class="main-content-wrap  d-flex flex-column">
+  <%= render :partial => 'shared/users_filters', :locals => {} %>
+  <div class="row m-t-15">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="row">
+          <div class="col-md-8">
+            <h5 class="card-title p-custom1">Web Users</h5>
+          </div>
+          <div class="col-md-2 mt-1">
+            <%= link_to 'Export to Excel', users_path(request.parameters.merge({format: :xls})), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%> 
+          </div>
+          <div class="col-md-2 mt-1">
+            <%= link_to 'Add User', new_user_path, :class => 'btn btn-sm btn-warning btn-block', :title => "Export to Excel"%>
+          </div>
+        </div>
+        <div class="separator-breadcrumb border-top mb-3"></div>
+        <div class="listing-tbl-area table-responsive">
+          <table class="table table-bordered table-hover listing-tbl">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Role</th>
+                <th>Last Sign In</th>
+                <th>Sign In Count</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @users.each do |user| %>
+                <tr>
+                  <td class="tbl-td-color2"><%= user.username %></td>
+                  <td class="tbl-td-color2"><%= user.email %></td>
+                  <td class="tbl-td-color2"><%= user.department.try(:department_name) %></td>
+                  <td class="tbl-td-color2 text-center"><%= user.role.titleize %></td>
+                  <td class="tbl-td-color2 text-center"><%= user.current_sign_in_at.present? ? user.current_sign_in_at.to_datetime.strftime("%m/%d/%Y at %I:%M%p") : '--' %></td>
+                  <td class="tbl-td-color2 text-center"><%= user.sign_in_count %></td>
+                  <td class="tbl-td-color2">
+                    <a href="#" data-toggle="modal" data-user_id="<%= user.id %>" class="change_password"><i class="fa fa-lock mr-2"></i>Change Password<a/> <br>
+                    <%= link_to "<i class='fa fa-edit mr-1'></i>Edit".html_safe, edit_user_path(user), class: 'edit' %><br> 
+                    <%= link_to "<i class='fa fa-trash mr-1'></i>Delete".html_safe, user, method: :delete, data: { confirm: 'Are you sure you want to delete this user?' } %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="separator-breadcrumb border-top mb-3"></div>
+        <div class="text-center">
+          <% if @users.present? %> 
+            <%= will_paginate @users, :class => 'apple_pagination'  %>
+            <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @users.total_entries %></div> 
+           <% else %> 
+             <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="change_password_form">
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('.change_password').on('click', function(){
+    var user_id = $(this).data('user_id');
+    $('#changePassword').modal('show');
+    $.ajax({
+      url: "/users/change_password",
+      method: 'post',
+      data: {user_id: user_id},
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+    });
+  })
+
+
+</script>

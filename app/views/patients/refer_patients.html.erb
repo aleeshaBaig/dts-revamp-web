@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+
+<style type="text/css">
+.customizer2 .handle2 {
+    position: absolute;
+    display: flex;
+    top: 300px;
+    left: 208px;
+    cursor: pointer;
+    padding: 10px 8px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: -3px 0 4px rgba(0,0,0,.06);
+    font-size: 15px;
+    transition: all .3s ease-in-out;
+    white-space: nowrap;
+    height: 43px;
+    transform: rotate(-90deg);
+}
+
+.customizer2 .handle2, .customizer2 .handle2:hover {
+    background: #135591;
+    color: #fff;
+    left: 12px;
+}
+
+.admin-icon{
+  margin-right: 16px;
+}
+
+</style>
+ 
+ </head>
+<body class="text-left">
+  <div class="app-admin-wrap layout-horizontal-bar clearfix">
+    <div class="main-content-wrap  d-flex flex-column">
+      <div class="main-content"> 
+
+        
+          <div class="row m-t-15">
+            <div class="col-md-12">
+              <div class="card ">
+                <div class="card-body p-0">
+                            <h5 class="card-title p-custom1">
+                                Refer Patient
+                               <!--  <button class="btn btn-success float-right filter-btn2" formaction="<#%patients_path(request.parameters.merge({:format => :xls}))%>">Export to Excel</button> -->
+                               
+                            </h5>
+
+                            <%= render :partial => 'shared/refer_filter' , :locals => { } %>
+
+                            <%= form_for @patient do |form| %>
+                            <div class="row p-custom">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Patient Name</label>
+                                        <%= form.text_field :patient_name, class: "form-control", readonly: true %>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>CNIC</label>
+                                        <%= form.text_field :cnic, class: "form-control", readonly: true %>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Current Hospital </label>
+                                        <%= form.select :hospital, options_for_select(user_wise_hospitals) ,{class: "form-control"}, {:disabled => true} %>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Refer To (Hospital) </label>
+                                        <%= form.select :referred_to_id, options_for_select(user_wise_hospitals), {:include_blank => "Select Hospital"} ,{class: "form-control"} %>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="separator-breadcrumb border-top mb-3"></div>
+                                <div class="row p-custom">
+                                    <div class="col-md-2 offset-md-5">
+                                        <button type="submit" class="btn filter-btn col-md-12 mb-3">Save</button>
+                                    </div>
+                                </div>
+                            <% end %>
+                            </div>
+                            
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            
+
+
+</div>
+
+
+
+    <div class="text-center">
+      <% if @patients.present? %> 
+              <%= will_paginate @patients, :class => 'apple_pagination'  %>
+              <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @patients.total_entries %></div> 
+             <% else %> 
+               <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+       <% end %>
+    </div>
+    </body>
+
+</html>
+
+

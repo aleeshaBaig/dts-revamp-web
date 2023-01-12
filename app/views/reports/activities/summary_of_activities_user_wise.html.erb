@@ -1,0 +1,91 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<body class="text-left">
+  <div class="app-admin-wrap layout-horizontal-bar clearfix">
+    <div class="main-content-wrap  d-flex flex-column">
+      <div class="main-content"> 
+
+        <%= render :partial => '/reports/activities/filters/summary_of_activities_user_wise' %>
+        
+        
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-body p-0">
+                <h5 class="card-title p-custom1">
+                  Summary of Activities User Wise
+                <%= link_to 'Export to Excel', summary_of_activities_user_wise_reports_activities_path(format: :xls, :datefrom => params[:datefrom], :dateto => params[:dateto], :department => params[:department], :district_id => params[:district_id], :tehsil_ids => params[:tehsil_ids], :username => params[:username], :download_excel => true, :status => params[:status], tehsil_ids: params[:tehsil_ids]), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+                </h5>
+                <div class="separator-breadcrumb border-top mb-3"></div>
+                  <div class="listing-tbl-area">
+                    <table id="p_table" class="table table-bordered table-hover listing-tbl">
+                        <thead>
+                          <tr>
+                            <th scope="col" abbr="Users" rowspan="2">Users</th>
+                            <% @tags_list.each do |tag| %>
+                              <th scope="col" abbr="Tags"><%= tag[0] %></th>
+                            <% end %>
+                            <th scope="col" abbr="Total">Total</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <% @sum_total = 0 %>
+                          <% @mobile_users.each_with_index do |mobile_user, i| %>
+                            <% @total = 0 %>
+                            <% if i.even? %>
+                              <tr class="even">
+                            <% else %>
+                              <tr class="odd">
+                            <% end %>
+                            <td scope="row" abbr="Users"><b><%= mobile_user.username %></b></td>
+
+                            <% @tags_list.each do |tag| %>
+                              <td scope="row" abbr="Tags">
+                                <% if ["Patient", "Patient Irs"].include? tag[0] %>
+                                  <a href="<%=line_list_activities_patients_path(user_id: mobile_user.id, tag_id: tag[1], datefrom: params[:datefrom], dateto: params[:dateto], district_id: params[:district_id], tehsil_ids: params[:tehsil_ids], department_id: params[:department_id] ) %>" target="_blank">
+                                    <%= @patient_activities_user_wise[[mobile_user.id, tag[1]]].to_i %>
+                                    <% @total = @total + @patient_activities_user_wise[[mobile_user.id, tag[1]]].to_i %>
+                                  </a>
+                                <% else %>
+                                  <a href="<%=line_list_activities_simples_path(user_id: mobile_user.id, tag_id: tag[1], datefrom: params[:datefrom], dateto: params[:dateto], district_id: params[:district_id], tehsil_ids: params[:tehsil_ids], department_id: params[:department_id] ) %>" target="_blank">
+                                    <%= @activities_user_wise[[mobile_user.id, tag[1]]].to_i %>
+                                    <% @total = @total + @activities_user_wise[[mobile_user.id, tag[1]]].to_i %>
+                                  </a>
+                                <% end %>
+                              </td>
+                            <% end %>
+                            <% @sum_total = @sum_total + @total %>
+                            <th scope="col" abbr="Total"><%= @total %></th>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th  colspan="<%= @tags_list.count + 1 %>" class="bg-primary text-white text-center"><b>Total</b></th>
+                            <th class="bg-success text-white text-center"><b><%= @sum_total %></b></th>
+                          </tr>
+                        </tfoot>
+                    </table>
+                  </div>
+                <div class="text-center">
+                <% if @mobile_users.present? %> 
+                  <%= will_paginate @mobile_users, :class => 'apple_pagination'  %>
+                  <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @mobile_users.total_entries %></div> 
+                 <% else %> 
+                   <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+                 <% end %>
+              </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

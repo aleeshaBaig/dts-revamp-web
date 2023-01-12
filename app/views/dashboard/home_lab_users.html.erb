@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>DENGUE | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/styles/css/themes/lite-purple.min.css">
+    <link rel="stylesheet" href="assets/styles/vendor/perfect-scrollbar.css">
+
+   <!--  <script src="https://use.fontawesome.com/972cd49e22.js"></script> -->
+    <link rel="stylesheet" href="assets/styles/css/custom.css">
+
+    <script src="https://use.fontawesome.com/62507a4c7e.js"></script>
+
+<style type="text/css">
+
+.listing-tbl thead tr th{
+  white-space: nowrap;
+}
+
+.customizer2 .handle2 {
+    position: absolute;
+    display: flex;
+    top: 300px;
+    left: 208px;
+    cursor: pointer;
+    padding: 10px 8px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: -3px 0 4px rgba(0,0,0,.06);
+    font-size: 15px;
+    transition: all .3s ease-in-out;
+    white-space: nowrap;
+    height: 43px;
+    transform: rotate(-90deg);
+}
+
+.customizer2 .handle2, .customizer2 .handle2:hover {
+    background: #135591;
+    color: #fff;
+    left: 12px;
+}
+
+.admin-icon{
+  margin-right: 16px;
+}
+
+.counter-txt{
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+.mb-5px{
+  margin-bottom: 5px;
+}
+
+.text-center {
+    align-self: center;
+}
+</style>
+ 
+ </head>
+
+<body class="text-left">
+    
+  <!-- ============ Compact Layout start ============= -->
+        
+    <div class="app-admin-wrap layout-horizontal-bar clearfix">
+      <div class="main-content-wrap  d-flex flex-column">
+        <div class="main-content mb-3">
+            <%= render :partial => 'shared/dashboard_filters', :locals => {} %>
+
+            <div class="row m-t-15">
+                <div class="col-md-12">
+                    <div class="card ">
+                        <div class="card-body p-0">
+                          <h5 class="card-title p-custom1">
+                               Monthly Lab Patients
+                          </h5>
+
+                          <div class="separator-breadcrumb border-top mb-3"></div>
+
+                          <div id="bar-chart" style="width: 100%; display: block; height: 450px;"></div>
+                          
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-4">
+                    <div class="card ">
+                        <div class="card-body p-0">
+                          
+                          <h5 class="card-title p-custom1">
+                                Test Report Status
+                          </h5>
+
+                          <div class="separator-breadcrumb border-top mb-3"></div>
+
+                          <div id="line-chart" style="width: 100%; display: block; height: 450px;"></div>
+                          
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+</div>
+
+            
+        </div>
+        <!-- ============ Body content End ============= -->
+    </div>
+        
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $("#hide").click(function(){
+          $(".legends-list").hide();
+          $("#hide").hide();
+          $("#show").show();
+        });
+        $("#show").click(function(){
+          $(".legends-list").show();
+          $("#hide").show();
+          $("#show").hide();
+        });
+      });
+    </script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+    <script type="text/javascript">
+      Highcharts.chart('bar-chart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [
+                    'Jan',
+                    'Feb',
+                    'Mar',
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec'
+                ],
+                crosshair: true
+            },
+            credits: {
+                enabled: false
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ''
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Total Confirmed Patients',
+                data: <%= @confirmed %>
+
+            }, {
+                name: 'Total Probable patients',
+                data: <%= @probable %>
+
+            }]
+        });
+    </script>
+
+    <script type="text/javascript">
+      
+      Highcharts.chart('line-chart', {
+          chart: {
+              type: 'line'
+          },
+          title: {
+              text: ''
+          },
+          subtitle: {
+              text: ''
+          },
+          xAxis: {
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          },
+          yAxis: {
+              title: {
+                  text: ''
+              }
+          },
+          credits: {
+              enabled: false
+          },
+          plotOptions: {
+              line: {
+                  dataLabels: {
+                      enabled: true
+                  },
+                  enableMouseTracking: false
+              }
+          },
+          series: [{
+              name: 'Total Igg Positive Patients',
+              data: <%= @igg %>
+          }, {
+              name: 'Total NS1 Positive Patients',
+              data: <%= @ns_1 %>
+          }, {
+              name: 'Total Igm Positive Patients',
+              data: <%= @igm %>
+          }]
+      });
+    </script>
+
+    
+
+    
+
+    <script src="assets/js/common-bundle-script.js"></script>    
+    <script src="assets/js/es5/dashboard.v1.script.js"></script>
+    
+    <script src="assets/js/es5/script.min.js"></script>
+    <script src="assets/js/es5/customizer.script.min.js"></script>
+    <script src="assets/js/es5/customizer2.script.min.js"></script>
+
+    <script src="assets/js/tooltip.script.js"></script>
+    
+
+
+    </body>
+
+</html>

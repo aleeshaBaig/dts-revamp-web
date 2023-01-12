@@ -1,0 +1,2 @@
+module GpDengueUsersHelper
+end

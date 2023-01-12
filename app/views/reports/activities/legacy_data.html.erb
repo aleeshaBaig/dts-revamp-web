@@ -1,0 +1,104 @@
+<style type="text/css">
+.customizer2 .handle2 {
+    position: absolute;
+    display: flex;
+    top: 300px;
+    left: 208px;
+    cursor: pointer;
+    padding: 10px 8px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: -3px 0 4px rgba(0,0,0,.06);
+    font-size: 15px;
+    transition: all .3s ease-in-out;
+    white-space: nowrap;
+    height: 43px;
+    transform: rotate(-90deg);
+}
+
+.customizer2 .handle2, .customizer2 .handle2:hover {
+    background: #135591;
+    color: #fff;
+    left: 12px;
+}
+
+.admin-icon{
+  margin-right: 16px;
+}
+
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+
+</style>
+ <script>
+ $(".loader").show();
+  document.onreadystatechange = function () {
+  var state = document.readyState
+  console.log("-----------------------------------", state)
+  if (state == 'interactive') {
+     $(".loader").show();
+  } else if (state == 'complete') {
+      setTimeout(function(){
+        $(".loader").hide();
+      },50);
+  }
+}
+ </script> 
+
+<body class="text-left">
+  <div class="app-admin-wrap layout-horizontal-bar clearfix">
+    <div class="main-content-wrap  d-flex flex-column">
+      <div class="main-content"> 
+        <%= render :partial => '/reports/activities/filters/legacy_data', :locals => {} %>
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body p-0">
+                <h5 class="card-title p-custom1">District & Department Wise Activities Count</h5>
+                <div class="pb-4">
+                    <%= link_to 'Export to Excel',legacy_data_reports_activities_path(format: :xls, pagination: "No", district_id: params[:district_id], department_id: params[:department_id], from: params[:from], to: params[:to]), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+                </div>
+                  <div class="separator-breadcrumb border-top mb-3"></div>
+                    <div class="listing-tbl-area table-responsive">
+                      <div style="color: red; text-align: center;" id="flash_message"><% if flash[:message].present? %> <span><%= flash[:message] %></span><% end %></div>
+                      <table class="table table-bordered table-hover listing-tbl">
+                        <thead>
+                          <tr>
+                            <th class="text-center">Sr#</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">District</th>
+                            <th class="text-center">Department</th>
+                            <th class="text-center">Activities Count</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% @total_act = 0%>
+                          <% @legacy_activities.each_with_index do |legacy_activity,i| %>
+                              <tr class="<%=  i.even? ? 'even' : 'odd' %>">
+                                  <td class="text-center"><%= i+1 %></td>
+                                  <td class="text-center"><%= legacy_activity[0] %></td>
+                                  <td class="text-center"><%= legacy_activity[1] %></td>
+                                  <td class="text-center"><%= legacy_activity[2] %></td>
+                                  <td class="text-center"><%= delimates_coma(legacy_activity[3]) %></td>
+                                  <% @total_act = legacy_activity[3] + @total_act %>
+                              </tr>
+                          <% end %>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th colspan="4" class="text-right">Total Activities</th>
+                            <th class="text-center"><%= delimates_coma(@total_act) %></th> 
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </body>

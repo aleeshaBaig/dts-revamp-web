@@ -1,0 +1,2 @@
+class TestLog < ApplicationRecord
+end

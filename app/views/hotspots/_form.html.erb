@@ -1,0 +1,250 @@
+<div class="main-content-wrap  d-flex flex-column">
+  <div class="main-content">
+   <div class="row">
+    <div class="col-md-12">
+      <h5 class="card-title p-custom1">
+        <% if @hotspot.persisted? %>
+          Edit Hotspot
+        <% else %>
+
+          Add New Hotspot
+        <% end %>
+      </h5>
+      <div class="card ">
+        <div class="card-body p-0 m-t-10">
+
+          <%= form_with(model: hotspot, local: true) do |form| %>
+            <% if hotspot.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(hotspot.errors.count, "error") %> prohibited this hotspot from being saved:</h2>
+
+                <ul>
+                  <% hotspot.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            
+
+            <div class="row p-custom">
+   
+              <div class="col">
+                <div class="form-group">
+                    <label>Name*</label>
+                    <%= form.text_field :hotspot_name, class: "form-control", maxlength: 100,:onkeypress => "return onlyAlphabets(event,this);", :required => true %>
+                </div>
+              </div> 
+
+              <div class="col">
+                <div class="form-group">
+                  <label>District*</label>
+                    <%= form.select :district_id, options_for_select(user_wise_districts,:selected => form.object.district_id), { :include_blank => "Select" },{class: "form-control" , :required => true} %>
+                </div>
+              </div>
+
+              <%= form.hidden_field :district %>
+
+              <div class="col">
+                <div class="form-group">
+                  <label>Tehsil*</label>
+                    <%= form.select :tehsil_id, options_for_select(district_wise_tehsils(form.object.district_id),:selected => form.object.tehsil_id), {:include_blank => "Select"},{class: "form-control" , :required => true} %>
+                </div>
+              </div>
+
+              <%= form.hidden_field :tehsil %>
+
+              <div class="col">
+                <div class="form-group">
+                  <label>UC*</label>
+                    <%= form.select :uc_id, options_for_select(tehsil_wise_ucs(form.object.district_id,form.object.tehsil_id),:selected => form.object.uc_id), {:include_blank => "Select"},{class: "form-control" , :required => true} %>
+                </div>
+              </div>
+
+              <%= form.hidden_field :uc %>
+
+            </div>
+
+            <div class="row p-custom">
+
+               <div class="col">
+                <div class="form-group">
+                    <label>Address</label>
+                    <%= form.text_field :address, class: "form-control", maxlength: 50 %>
+                </div>
+              </div>  
+
+              <div class="col">
+                <div class="form-group">
+                  <label>Tag*</label>
+                    <%= form.select :tag_id, options_for_select(hotspot_tags,:selected => form.object.tag_id), { :include_blank => "Select" },{class: "form-control" , :required => true} %>
+                </div>
+              </div>
+
+              <%= form.hidden_field :tag %>
+
+              <% if @hotspot.persisted? %>
+                <%= form.hidden_field :hotspot_updated_by, value: current_user.id %>
+              <% end %>
+
+    
+              <div class="col">
+                <div class="form-group">
+                    <label>Description</label>
+                    <%= form.text_field :description, class: "form-control", maxlength: 50 %>
+                </div>
+              </div>   
+
+              <div class="col">
+                <div class="form-group">
+                  <label>Status</label>
+                    <%= form.select :is_active, [["Active",true],["Inactive",false]], {:include_blank => "Select"},{class: "form-control"} %>
+                </div>
+              </div>
+        </div>
+
+          </div>
+            
+
+            <div class="separator-breadcrumb border-top mb-3"></div>
+              <div class="row p-custom">
+                <div class="col-md-2 offset-md-5">
+                  <button type="submit" class="btn filter-btn col-md-12 mb-3">Save</button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+
+  $("#hotspot_tag_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var tag_name = optionSelected[0].innerHTML;
+    // console.log(hosp_name);
+    $("#hotspot_tag").val(tag_name);
+   });
+
+   $("#hotspot_district_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var district_name = optionSelected[0].innerHTML;
+    // console.log(hosp_name);
+    $("#hotspot_district").val(district_name);
+   });
+
+   $("#hotspot_tehsil_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var tehsil_name = optionSelected[0].innerHTML;
+    // console.log(hosp_name);
+    $("#hotspot_tehsil").val(tehsil_name);
+   });
+
+   $("#hotspot_uc_id").change(function() {
+    var optionSelected = $("option:selected", this);
+    var uc_name = optionSelected[0].innerHTML;
+    // console.log(hosp_name);
+    $("#hotspot_uc").val(uc_name);
+   });
+
+
+  $("#hotspot_district_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#hotspot_tehsil_id").removeAttr('disabled');
+        $("select#hotspot_tehsil_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#hotspot_tehsil_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#hotspot_tehsil_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#hotspot_tehsil_id");
+        }
+      },
+    });
+  });
+
+
+  $("#hotspot_tehsil_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#hotspot_uc_id").removeAttr('disabled');
+        $("select#hotspot_uc_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#hotspot_uc_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#hotspot_uc_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#hotspot_uc_id");
+        }
+      },
+    });
+  });
+
+
+
+  function onlyAlphabets(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8 || charCode == 0 || charCode == 46 || charCode == 45 || charCode == 32)
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+  function onlyNumerics(e, t) {
+      try {
+          if (window.event) {
+              var charCode = window.event.keyCode;
+          }
+          else if (e) {
+              var charCode = e.which;
+          }
+          else { return true; }
+          if ((charCode >= 48 && charCode <= 57))
+              return true;
+          else
+              return false;
+      }
+      catch (err) {
+          alert(err.Description);
+      }
+  }
+
+</script>

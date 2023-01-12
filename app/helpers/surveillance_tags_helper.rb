@@ -1,0 +1,2 @@
+module SurveillanceTagsHelper
+end

@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card ">
+      <div class="card-body p-0 m-t-10">
+        <%= form_for hospitals_path, method: :get do |f| %>
+          <div class="row p-custom">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label>District</label>
+                <%= select_tag :district_id, options_for_select(all_districts,{:selected => params[:district_id]}), {class: 'form-control', :include_blank => "All"} %>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+            </div>
+
+            <div class="col-md-2">
+            </div>
+
+            <div class="col-md-2">
+            </div>
+
+            <div class="col-md-2">
+              <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+            </div>
+
+            <div class="col-md-2">
+              <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+            </div>
+          </div>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+  function resetData(){
+    $("#district_id").prop('selectedIndex',0);
+    window.location.href = '/insecticide_stocks';
+  };
+</script>

@@ -1,0 +1,69 @@
+<table class="table table-bordered table-hover listing-tbl">
+                                <thead>
+                                  <tr>
+                                    <th>Patient ID</th>
+                                    <th>Patient name</th>
+                                    <th>Father/Husband name</th>
+                                    <th>Age</th>
+                                    <th>Age month</th>
+                                    <th>Gender</th>
+                                    <th>CNIC/Guardian's CNIC</th>
+                                    <th>Guardian's Relation</th>
+                                    <th>Patient contact</th>
+                                    <th>Relation contact</th>
+                                    <th>Address</th>
+                                    <th>District</th>
+                                    <th>Tehsil</th>
+                                    <th>Uc</th>
+                                    <th>Date of onset</th>
+                                    <th>Fever last till</th>
+                                    <th>Fever</th>
+                                    <th>Previous dengue fever</th>
+                                    <th>Associated symptom</th>
+                                    <th>Provisional diagnosis</th>
+                                    <th>Other diagnosed fever</th>
+                                    <th>Patient status</th>
+                                    <th>Patient outcome</th>
+                                    <th>Patient condition</th>
+                                    <th>Hospital</th>
+                                    <th>Created at</th>
+                                    <th>Created by</th>
+                                    
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  <% @patients.each do |patient| %>
+                                  <tr>
+                                    <td class="tbl-td-color"><%= patient.id %></td>
+                                    <td class="tbl-td-color"><%= patient.patient_name %></td>
+                                    <td class="tbl-td-color2"><%= patient.fh_name %></td>
+                                    <td class="tbl-td-color"><%= patient.age %></td>
+                                    <td class="tbl-td-color"><%= patient.age_month %></td>
+                                    <td class="tbl-td-color"><%= patient.gender %></td>
+                                    <td class="tbl-td-color2"><%= patient.cnic %></td>
+                                    <td class="tbl-td-color2"><%= patient.cnic_relation %></td>
+                                    <td class="tbl-td-color"><%= patient.patient_contact %></td>
+                                    <td class="tbl-td-color2"><%= patient.relation_contact %></td>
+                                    <td class="tbl-td-color"><%= patient.address %></td>
+                                    <td class="tbl-td-color"><%= patient.district %></td>
+                                    <td class="tbl-td-color2"><%= patient.tehsil %></td>
+                                    <td class="tbl-td-color"><%= patient.uc %></td>
+                                    <td class="tbl-td-color"><%= patient.date_of_onset %></td>
+                                    <td class="tbl-td-color"><%= patient.fever_last_till %></td>
+                                    <td class="tbl-td-color"><%= patient.fever %></td>
+                                    <td class="tbl-td-color2"><%= patient.previous_dengue_fever %></td>
+                                    <td class="tbl-td-color2"><%= patient.associated_symptom %></td>
+                                    <td class="tbl-td-color"><%= patient.provisional_diagnosis %></td>
+                                    <td class="tbl-td-color2"><%= patient.other_diagnosed_fever %></td>
+                                    <td class="tbl-td-color"><%= patient.patient_status %></td>
+                                    <td class="tbl-td-color"><%= patient.patient_outcome %></td>
+                                    <td class="tbl-td-color"><%= patient.patient_condition %></td>
+                                    <td class="tbl-td-color2"><%= patient.hospital %></td>
+                                    <td class="tbl-td-color"><%= patient.created_at.strftime("%d/%m/%Y") %></td>
+                                    <td class="tbl-td-color2"><%= patient.username %></td>
+                                    
+                                  </tr>
+                                  <% end %>
+                                </tbody>
+                              </table>

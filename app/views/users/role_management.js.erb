@@ -1,0 +1,5 @@
+<% if @user.present? %>
+$('#preview_role_managment').html("<%= j render(partial: 'role_management', locals: { user: @user }) %>");
+<% else %>
+$('#preview_role_managment').html("");
+<% end %>

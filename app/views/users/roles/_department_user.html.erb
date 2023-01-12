@@ -1,0 +1,14 @@
+<%= render partial: '/users/roles/default', locals: {f: f} %>
+
+
+<div class="col-md-3">
+  <div class="form-group">
+    <%= f.input :department_id, label: '* Department', collection: allied_departments, prompt: "-Select-", input_html:{class: "form-control"}%>
+  </div>
+</div>
+
+<div class="col-md-3">
+  <div class="form-group">
+    <%= f.input :hotspot_status, label: 'Manage Hotspot', collection: status_list, prompt: "-Select-", input_html:{class: "form-control" , value:f.object.hotspot_status}%>
+  </div>
+</div>

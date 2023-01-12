@@ -1,0 +1,95 @@
+<style>
+ .mainDiv {
+    background-color: #323232;
+    margin: 0 auto;
+    padding: 25px;
+    width: 100%;
+  }
+  
+  .mainDiv h1{
+    color: #FFFFFF;
+    font-family: arial;
+    font-size: 22px;
+  }
+  
+  .mainDiv li {
+      color: #FFFFFF;
+      float: left;
+      font-family: arial;
+      font-size: 14px;
+      list-style: none outside none;
+      margin: 0 0 5px;
+      width: 32%;
+    }
+    
+  .mainDiv strong{
+    color: #A6C55C;
+    float: left;
+    font-family: arial;
+    font-size: 14px;
+    list-style: none outside none;
+    margin: 0 10px 0 0;
+  }
+  .mainDiv img{
+    background-color: #999999;
+    border: 2px solid #888888;
+    margin: 0 5px 0 0;
+    padding: 2px;
+  }
+  .activity{
+    float:none!important;
+  }
+  .page-break {
+    display:block;
+    clear:both;
+    page-break-after:always;
+  }
+</style>
+<% if params[:page] == "1" %>
+  <% i = 0 %>
+<% else %>
+  <% i = 50 * (params[:page].to_i - 1) %>
+<% end %>
+<% @slideshow_activities.each_with_index do |slide, i| %>
+<div class = "mainDiv" >
+<br/><br/>
+  <h1>Slide No: <%= i + 1 %></h1>
+      <li><strong>Department: </strong><span><%= params[:department] %></span></li>
+      <li><strong>Name: </strong><span><%= params[:user_name] %></span></li>
+      <li><strong>Entry Date/Time: </strong><span><%= slide.updated_at.strftime("%d-%m-%Y %I:%M %P") %></span></li>
+      <li><strong>Activity: </strong><span><%= slide.tag_name %></span></li>
+      <li class="activity"><strong>Description: </strong><span style=”word-break: keep-all;font-size:10px;”><%= slide.comment %></span></li>
+      <br/>
+      <% if slide.before_picture.present? or slide.after_picture.present? %>
+              <% if slide.before_picture.present? and slide.after_picture.present? %>
+                  <div>
+                    <img width="320" height="320" src="<%= nfs_picture_url(picture_url: "#{slide.before_picture}") %>" alt="Before Picture unavailable" />
+                    <img width="320" height="320" src="<%= nfs_picture_url(picture_url: "#{slide.after_picture}") %>" alt="After Picture unavailable" />
+                    <img src = "http://maps.googleapis.com/maps/api/staticmap?center=<%= slide.latitude %>,<%= slide.longitude %>&zoom=15&size=320x320&maptype=roadmap&markers=color:red%7Clabel:%7C<%= slide.latitude %>,<%= slide.longitude %>&key=AIzaSyCR2HdC0Oxe1oEAGffvEfOHa0kilJZnyM0&sensor=false"/>
+                  </div>
+              <% else %>
+                  <% if slide.before_picture.present? %>
+                      <div>
+                        <img width="320" height="320" src="<%= nfs_picture_url(picture_url: "#{slide.before_picture}") %>" alt="Before Picture unavailable" />
+                        <img src = "http://maps.googleapis.com/maps/api/staticmap?center=<%= slide.latitude %>,<%= slide.longitude %>&zoom=15&size=320x320&maptype=roadmap&markers=color:red%7Clabel:%7C<%= slide.latitude %>,<%= slide.longitude %>&key=AIzaSyCR2HdC0Oxe1oEAGffvEfOHa0kilJZnyM0&sensor=false"/>
+                      </div>
+                  <% elsif slide.after_picture.present? %>
+                      <div>
+                        <img width="320" height="320" src="<%= nfs_picture_url(picture_url: "#{slide.after_picture}") %>" alt="After Picture unavailable" />
+                        <img src = "http://maps.googleapis.com/maps/api/staticmap?center=<%= slide.latitude %>,<%= slide.longitude %>&zoom=15&size=320x320&maptype=roadmap&markers=color:red%7Clabel:%7C<%= slide.latitude %>,<%= slide.longitude %>&key=AIzaSyCR2HdC0Oxe1oEAGffvEfOHa0kilJZnyM0&sensor=false"/>
+                      </div>
+                  <% end %>
+              <% end %> 
+      <% else %>
+              <div>
+                <img width="320" height="320" src="/assets/after-action-picture.jpg" alt="no image available" />
+                <img src = "http://maps.googleapis.com/maps/api/staticmap?center=<%= slide.latitude %>,<%= slide.longitude %>&zoom=15&size=320x320&maptype=roadmap&markers=color:red%7Clabel:%7C<%= slide.latitude %>,<%= slide.longitude %>&key=AIzaSyCR2HdC0Oxe1oEAGffvEfOHa0kilJZnyM0&sensor=false"/>
+              </div>
+      <% end %>
+      <br/><br/><br/><br/>
+  </div>
+  <% if @slideshow_activities.count != i+1 %>
+    <div class="page-break"></div>
+  <% end %>
+  <% i = i + 1 %>
+<% end %>

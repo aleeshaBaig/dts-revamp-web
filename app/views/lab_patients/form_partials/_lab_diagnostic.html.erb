@@ -1,0 +1,44 @@
+<div class="row p-custom">
+	<div class="col">
+	  <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+	      Lab and Diagnostic Information
+	  </h6>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	    <%= f.input :ns_1, label: 'NS1', collection: lab_diagnostic_list, include_blank: "-Select-", input_html:{class: "form-control not_probable"}%>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	    <%= f.input :pcr, label: 'PCR', collection: lab_diagnostic_list, include_blank: "-Select-", input_html:{class: "form-control not_probable"}%>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	    <%= f.input :igm, label: 'IGM', collection: lab_diagnostic_list, include_blank: "-Select-", input_html:{class: "form-control not_probable"}%>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	  	<%= f.input :igg, label: 'IGG', collection: lab_diagnostic_list, include_blank: "-Select-", input_html:{class: "form-control not_probable"}%>
+	  </div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$('.not_probable').on('change', function(){
+		var not_probable_value  = $(this).val();
+		var lab_patient_provisional_diagnosis = $('#lab_patient_provisional_diagnosis').val();
+		if(lab_patient_provisional_diagnosis == 'Probable'){
+			if(not_probable_value == 'Positive'){
+				alert("Are you sure Provisional Diagnosis is Probable?");
+			}
+		}
+   });
+</script>

@@ -1,0 +1,6 @@
+<%= render partial: '/users/roles/default', locals: {f: f} %>
+<div class="col-md-3">
+  <div class="form-group">
+    <%= f.input :hospital_id, as: :hidden, input_html:{value: Hospital.find_by_hospital_name('Home Treatment').id}%>
+  </div>
+</div>

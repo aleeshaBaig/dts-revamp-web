@@ -1,0 +1,77 @@
+<table class="table table-bordered table-hover listing-tbl">
+                                <thead>
+                                  <tr>
+                                    <th>Patient ID</th>
+                                    <th>Lab Name</th>
+                                    <th>Patient name</th>
+                                    <th>Father/Husband name</th>
+                                    <th>Age</th>
+                                    <th>Age in months</th>
+                                    <th>Gender</th>
+                              
+                                    <th>CNIC</th>
+                                    <th>CNIC Type</th>
+                                    <th>Patient contact</th>
+                                   <!--  <th>Reporting Date</th> -->
+                                    <th>Entry Date</th>
+                                    <th>Relation contact</th>
+                                    <th>Address</th>
+                                    <th>District</th>
+                                    <th>Tehsil</th>
+                                    <th>Uc</th>
+                                    <th>Permanent Address</th>
+                                    <th>Permanent District</th>
+                                    <th>Permanent Tehsil</th>
+                                    <th>Permanent UC</th>
+                                    <th>Workplace Address</th>
+                                    <th>Workplace District</th>
+                                    <th>Workplace Tehsil</th>
+                                    <th>Workplace UC</th>
+                    
+                                    <th>Provisional diagnosis</th>
+                                    <th>Confirmation date</th>
+                                    <th>Reporting Date</th>
+                                    <th>Comments</th>
+                                   
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  <% @lab_patients.each do |patient| %>
+                                  <tr>
+                                    <td class="tbl-td-color"><%= patient.id %></td>
+                                    <td class="tbl-td-color"><%= patient.lab.try(:lab_name) %></td>
+                                    <td class="tbl-td-color"><%= patient.p_name %></td>
+                                    <td class="tbl-td-color2"><%= patient.fh_name %></td>
+                                    <td class="tbl-td-color"><%= patient.age %></td>
+                                    <td class="tbl-td-color"><%= patient.month %></td>
+                                    <td class="tbl-td-color"><%= patient.gender %></td>
+                                
+                                    <td class="tbl-td-color2"><%= patient.cnic %></td>
+                                    <td class="tbl-td-color2"><%= patient.cnic_type %></td>
+                                    <td class="tbl-td-color"><%= patient.contact_no %></td>
+                                    <!-- <td class="tbl-td-color"><%#= patient.reporting_date? ? patient.reporting_date.strftime("%d/%m/%Y") : nil %></td> -->
+                                    <td class="tbl-td-color"><%= patient.created_at.strftime("%d/%m/%Y") %></td>
+                                    <td class="tbl-td-color2"><%= patient.other_contact_no %></td>
+                                    <td class="tbl-td-color"><%= patient.address %></td>
+                                    <td class="tbl-td-color"><%= patient.district %></td>
+                                    <td class="tbl-td-color2"><%= patient.tehsil %></td>
+                                    <td class="tbl-td-color"><%= patient.uc %></td>
+                                    <td class="tbl-td-color"><%= patient.perm_address %></td>
+                                    <td class="tbl-td-color2"><%= patient.perm_district %></td>
+                                    <td class="tbl-td-color2"><%= patient.perm_tehsil %></td>
+                                    <td class="tbl-td-color"><%= patient.perm_uc %></td>
+                                    <td class="tbl-td-color"><%= patient.workplc_address %></td>
+                                    <td class="tbl-td-color"><%= patient.workplc_district %></td>
+                                    <td class="tbl-td-color2"><%= patient.workplc_tehsil %></td>
+                                    <td class="tbl-td-color"><%= patient.workplc_uc %></td>
+                                  
+                                    <td class="tbl-td-color"><%= patient.provisional_diagnosis %></td>
+                                    <td class="tbl-td-color"><%= date patient.confirmation_date %></td>
+                                    <td class="tbl-td-color"><%= date patient.reporting_date %></td>
+                                    <td class="tbl-td-color"><%= patient.comments %></td>
+          
+                                  </tr>
+                                  <% end %>
+                                </tbody>
+                              </table>

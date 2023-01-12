@@ -1,0 +1,7 @@
+<% if current_user.lab_user? %>
+    <%= render '/patients/labs/form', patient: @patient %>
+<% elsif current_user.dpc_user? %>
+    <%= render '/patients/dpc/form', patient: @patient %>
+<% else %>
+    <%= render 'form', patient: @patient %>
+<% end %>

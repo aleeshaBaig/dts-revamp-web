@@ -1,0 +1,109 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<body class="text-left">
+  <div class="app-admin-wrap layout-horizontal-bar clearfix">
+    <div class="main-content-wrap  d-flex flex-column">
+      <div class="main-content"> 
+
+        <%= render :partial => '/reports/activities/filters/summary_town_wise_filters' %>
+        
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-body p-0">
+                  <h5 class="card-title p-custom1">
+                  District Wise Activities
+                  <%= link_to 'Export to Excel', summary_of_activities_district_wise_path(format: :xls, :d_from => params[:d_from], :d_to => params[:d_to], :department => params[:department] , :district => params[:district]), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+                  </h5>
+                <div class="separator-breadcrumb border-top mb-3"></div>
+                  <div class="listing-tbl-area">
+                    <% if params[:is_filtered].present? %>
+                      <table id="p_table" class="table table-bordered table-hover listing-tbl">
+                        <thead>
+                          <tr>
+                            <th scope="col" abbr="Tags" rowspan="2">District</th>
+                            <th scope="col" abbr="Tags" rowspan="2">Department</th>
+                            <% @tags.each do |tag| %>
+                              <% if tag[2] == 3 or tag[2] == 1 %> 
+                                <th scope="col" abbr="Iactivity" colspan="4"><%= tag[1] %>
+                              <% else %>
+                                <th scope="col" abbr="Iactivity"><%= tag[1] %></th>
+                              <% end %>
+                            <% end %>
+                            <th scope="col" abbr="Iactivity">Total Positive</th>
+                            <th scope="col" abbr="Iactivity">Total Negative</th>
+                            <th scope="col" abbr="Iactivity">Total Repeat</th>
+                            <th scope="col" abbr="Iactivity">Total</th>
+                          </tr>
+                          <tr>
+                            <% @tags.each do |tag| %>
+                              <% if tag[2] == 3 or tag[2] == 1 %> 
+                                <th scope="col" abbr="Iactivity" style="font-style:italic">All</th>
+                                <th scope="col" abbr="Iactivity" style="font-style:italic">Positive</th>
+                                <th scope="col" abbr="Iactivity" style="font-style:italic">Negative</th>
+                                <th scope="col" abbr="Iactivity" style="font-style:italic">Repeat</th>
+                              <% else %>
+                                <th></th>
+                              <% end %>   
+                            <% end %> 
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                          </tr>  
+                        </thead>
+                    
+                        <% @district1.each do |dis| %>
+                          <% @departments1.each_with_index do |dep, i| %>
+                            <% if i.even? %>
+                              <tr class="even">
+                            <% else %>
+                              <tr class="odd">
+                            <% end %>
+                            <% total = 0 %>
+                              <td scope="row" abbr="Name"><%= dis[1] %></td>
+                              <td scope="row" abbr="Name"><%= dep[1] %></td>
+                            <% row_total = 0 %>
+                            <% positive_total = 0 %>
+                            <% negative_total = 0 %>
+                            <% repeat_total = 0 %>
+                            <% @tags.each do |t| %>
+                              <td scope="row" abbr="Name"><span title="Department: <%= dep[1] %>"><%= (@results[[dis[0], dep[0], t[0], nil]] || 0) + (@results[[dis[0], dep[0], t[0], "positive"]] || 0) + (@results[[dis[0], dep[0], t[0], "negative"]] || 0) + (@results[[dis[0], dep[0], t[0], "repeat"]] || 0) %></span></td>
+
+                              <% row_total = row_total + ((@results[[dis[0], dep[0], t[0], nil]] || 0) + (@results[[dis[0], dep[0], t[0], "positive"]] || 0) + (@results[[dis[0], dep[0], t[0], "negative"]] || 0) + (@results[[dis[0], dep[0], t[0], "repeat"]] || 0))%>
+
+                              <% if t[2] == 3 or t[2] == 1 %>
+                                <td scope="row" abbr="Name" style="font-style:italic"><span title="Department: <%= dep[1] %>"><%= @results[[dis[0], dep[0], t[0], "positive"]] || 0 %></span></td>
+                                <% positive_total = positive_total + (@results[[dis[0], dep[0], t[0], "positive"]] || 0)%>
+                                <td scope="row" abbr="Name" style="font-style:italic"><span title="Department: <%= dep[1] %>"><%= @results[[dis[0], dep[0], t[0], "negative"]] || 0 %></span></td>
+                                <% negative_total = negative_total + (@results[[dis[0], dep[0], t[0], "negative"]] || 0)%>
+                                <td scope="row" abbr="Name" style="font-style:italic"><span title="Department: <%= dep[1] %>"><%= @results[[dis[0], dep[0], t[0], "repeat"]] || 0 %></span></td>
+                                <% repeat_total = repeat_total + (@results[[dis[0], dep[0], t[0], "repeat"]] || 0)%>
+                              <% end %>
+                            <% end %>
+                      
+                            <td scope="row" abbr="Name"><span title="Department: <%= dep[1] %>"><%= positive_total || 0 %></span></td>
+                            <td scope="row" abbr="Name"><span title="Department: <%= dep[1] %>"><%= negative_total || 0 %></span></td>
+                            <td scope="row" abbr="Name"><span title="Department: <%= dep[1] %>"><%= repeat_total || 0 %></span></td>
+                            <td scope="row" abbr="Name"><span title="Department: <%= dep[1] %>"><%= row_total || 0 %></span></td>
+                            
+                          </tr>
+                        <% end %> 
+                      <% end %>
+                    </table>
+                  <% else %>
+                    <h5 class="text-center"><b>Please select any filter</b></h5>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

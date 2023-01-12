@@ -1,0 +1,51 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl datatable" width="100%">
+    <thead>
+    <tr>
+        <th>Sr No </th>
+        <th>District</th>
+
+        <th>Less Than 1 Minute</th>
+        <th>1-2 Minute</th>
+        <th>2-5 Minute</th>
+        <th>5-10 Minute</th>
+        <th>10-15 Minute</th>
+        <th>15-20 Minute</th>
+        <th>More Than 20 Minute</th>
+    </tr>                    
+    </thead>
+    <tbody>
+        <% t1 = 0; t2 = 0; t3 = 0; t4 = 0; t5 = 0; t6 = 0; t7 = 0 %>
+        <% @data.each_with_index do |data,i| %>
+            <% t1 += data.less_than_one_minute %>
+            <% t2 += data.one_to_two_minute %>
+            <% t3 += data.two_to_five_minute %>
+            <% t4 += data.five_to_ten_minute %>
+            <% t5 += data.ten_to_fifteen_minute %>
+            <% t6 += data.fifteen_to_twenty_minute %>
+            <% t7 += data.more_than_twenty_minute %>
+
+            <tr class="text-center">
+            <% total = 0 %>
+            <td><%= i+1 %></td>
+            <td><%= data.district_name %></td>
+            <td class="t1"><%= data.less_than_one_minute %></td>
+            <td class="t2"><%= data.one_to_two_minute %></td>
+            <td class="t3"><%= data.two_to_five_minute %></td>
+            <td class="t4"><%= data.five_to_ten_minute %></td>
+            <td class="t5"><%= data.ten_to_fifteen_minute %></td>
+            <td class="t6"><%= data.fifteen_to_twenty_minute %></td>
+            <td class="t7"><%= data.more_than_twenty_minute %></td>
+            </tr>
+        <% end %>
+        <tr>
+            <th class="text-center" colspan="2">Grand Total</th>
+            <th class="text-center t1s"><%= t1 %></th>
+            <th class="text-center t2s"><%= t2 %></th>
+            <th class="text-center t3s"><%= t3 %></th>
+            <th class="text-center t4s"><%= t4 %></th>
+            <th class="text-center t5s"><%= t5 %></th>
+            <th class="text-center t6s"><%= t6 %></th>
+            <th class="text-center t7s"><%= t7 %></th>
+        </tr>
+    </tbody>
+</table>

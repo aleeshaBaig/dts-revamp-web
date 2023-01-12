@@ -1,0 +1,130 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-body p-0 m-t-10">
+                <%= form_for hotspot_visit_summary_list_reports_activities_path, method: :get do |f| %>
+                    <div class="row p-custom">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>District</label>
+                                    <%= select_tag "hotspot_district_id", options_for_select(all_districts, :selected => params[:hotspot_district_id]), {class: 'form-control tehsil_user_district', :include_blank => "-Select-"} %>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Town</label>
+                                    <%= select_tag "hotspot_tehsil_id", options_for_select(tehsil_information(params[:hotspot_district_id]), :selected => params[:hotspot_tehsil_id]), {class: 'form-control user_tehsil district_not_select', :include_blank => "-Select-"} %>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                <label>Date From</label>
+                                <input type="text" class="form-control date_from" id="hotspot_from" value='<%= (params[:hotspot_from].present?)? "#{params[:hotspot_from]}" : nil %>'>
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                <label>Date To</label>
+                                <input type="text" class="form-control date_to" id="hotspot_to" value='<%= (params[:hotspot_to].present?)? "#{params[:hotspot_to]}" : nil %>'>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="row p-custom">
+        
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                        </div>
+                        
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+$(".tehsil_user_district").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        console.log(transport);
+        // Clear all options from sub category select 
+        $("select.user_tehsil").removeAttr('disabled');
+        $("select.user_tehsil option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select.user_tehsil");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select.user_tehsil");
+          });
+          $('.district_not_select').attr('disabled', false);
+          $('#from').attr('disabled', false);
+          $('#to').attr('disabled', false);
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select.user_tehsil");
+        }
+      },
+    });
+  });
+
+  $("#from").change(function() {
+    var date_from = this.value
+    document.getElementById("to").setAttribute("min", date_from);
+  });
+
+ $(".user_tehsil").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#uc").removeAttr('disabled');
+        $("select#uc option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#uc");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#uc");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#uc");
+        }
+      },
+    });
+  });
+    function resetData(){
+        $("select").val("");
+        $("input[type=text]").val("");
+        $("#hotspot_from").val("");
+        $("#hotspot_to").val("");
+    } 
+ // default 
+ function initialize(){}
+</script>

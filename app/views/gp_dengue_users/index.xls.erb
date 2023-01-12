@@ -1,0 +1,34 @@
+<table class="table table-bordered table-hover listing-tbl datatable" width="100%">
+    <thead>
+        <tr>
+        <th>Sr No.</th>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Contact No#</th>
+        <th>Clinic Name</th>
+        <th>PMDC No#</th>
+        <th>District</th>
+        <th>Tehsil</th>
+        <th>Uc</th>
+        <th>Address</th>
+        <th>Date/Time</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% @gp_dengue_users.each_with_index do |gp_dengue_user, index| %>
+        <tr>
+        <td class="text-center"><%= index + 1 %></td>
+        <td class="text-center"><%= gp_dengue_user.email %></td>
+        <td class="text-center"><%= gp_dengue_user.name %></td>
+        <td class="text-center"><%= gp_dengue_user.contact_no %></td>
+        <td class="text-center"><%= gp_dengue_user.clinic_name %></td>
+        <td class="text-center"><%= gp_dengue_user.pmdc_number %></td>
+        <td class="text-center"><%= gp_dengue_user.district_name %></td>
+        <td class="text-center"><%= gp_dengue_user.tehsil_name %></td>
+        <td class="text-center"><%= gp_dengue_user.uc_name %></td>
+        <td class="text-center"><%= gp_dengue_user.address %></td>
+        <td class="text-center"><%= gp_dengue_user.created_at.to_datetime.strftime("on %m/%d/%Y at %I:%M%p") %></td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>

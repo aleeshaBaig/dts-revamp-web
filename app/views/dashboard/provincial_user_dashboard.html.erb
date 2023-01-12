@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>DENGUE | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/assets/themes/lite-purple.min.css">
+    <link rel="stylesheet" href="/assets/vendor/perfect-scrollbar.css">
+
+   <!--  <script src="https://use.fontawesome.com/972cd49e22.js"></script> -->
+    <link rel="stylesheet" href="/assets/custom.css">
+
+    <script src="https://use.fontawesome.com/62507a4c7e.js"></script>
+
+<style type="text/css">
+
+.listing-tbl thead tr th{
+  white-space: nowrap;
+}
+
+.customizer2 .handle2 {
+    position: absolute;
+    display: flex;
+    top: 300px;
+    left: 208px;
+    cursor: pointer;
+    padding: 10px 8px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: -3px 0 4px rgba(0,0,0,.06);
+    font-size: 15px;
+    transition: all .3s ease-in-out;
+    white-space: nowrap;
+    height: 43px;
+    transform: rotate(-90deg);
+}
+
+.customizer2 .handle2, .customizer2 .handle2:hover {
+    background: #135591;
+    color: #fff;
+    left: 12px;
+}
+
+.admin-icon{
+  margin-right: 16px;
+}
+
+.counter-txt{
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+.mb-5px{
+  margin-bottom: 5px;
+}
+
+.card-icon-bg .card-body .content {
+    max-width: 100% !important;
+}
+
+.text-center {
+    align-self: center;
+}
+
+</style>
+ 
+</head>
+
+<body class="text-left">
+    
+  <!-- ============ Compact Layout start ============= -->
+        
+    <div class="app-admin-wrap layout-horizontal-bar clearfix">
+        <div class="main-content-wrap  d-flex flex-column">
+            <div class="main-content mb-3">
+                
+                <%= render :partial => 'dashboard/filters/provincial_dashboard_filter', :locals => {} %>
+                <div class="row mt-4">
+                    <!-- ICON BG -->
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Add-User"></i> -->
+                                <div class="content">
+                                    <p class="text-muted mt-2 text-17 mb-5px">Confirmed Patients</p>
+                                    <p class="text-primary text-26 line-height-1 mb-2 counter-txt">
+                                        <a class="text-primary text-26 line-height-1 mb-2 counter-txt" href = "<%=district_wise_confirmed_cases_path(request.parameters)%>">
+                                            <%= ((@confirmed_patient_count["Admitted"] || 0) + (@confirmed_patient_count["Death"] || 0)  + (@confirmed_patient_count["Discharged"] || 0) + (@confirmed_patient_count["LAMA"] || 0) + (@confirmed_patient_count["Outpatient"] || 0)) %>
+                                        </a>
+                                    </p>
+                                    <p class="text-primary text-14 line-height-1 mb-2 counter-txt">Last 24 hours: <%= ((@confirmed_patient_count_24["Admitted"] || 0) + (@confirmed_patient_count_24["Death"] || 0)  + (@confirmed_patient_count_24["Discharged"] || 0) + (@confirmed_patient_count_24["LAMA"] || 0) + (@confirmed_patient_count_24["Outpatient"] || 0)) %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Financial"></i> -->
+                                <div class="content">
+                                    <p class="text-muted mt-2 text-17 mb-5px">Recovered Patients</p>
+                                    <p class="text-primary text-26 line-height-1 mb-2 counter-txt"><%= @confirmed_patient_count["Discharged"] || 0 %></p>
+                                    <p class="text-primary text-14 line-height-1 mb-2 counter-txt">Last 24 hours: <%= @confirmed_patient_count_24["Discharged"] || 0 %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Checkout-Basket"></i> -->
+                                <div class="content">
+                                    <p class="text-muted mt-2 text-17 mb-5px">Total Deaths</p>
+                                    <p class="text-primary text-26 line-height-1 mb-2 counter-txt"><%= @confirmed_patient_count["Death"] || 0 %></p>
+                                    <p class="text-primary text-14 line-height-1 mb-2 counter-txt">Last 24 hours: <%= @confirmed_patient_count_24["Death"] || 0 %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+                <h5 class="card-title p-custom1 text-center">
+                    Admitted Patients Details
+                </h5>
+                <div class="row mt-4">
+                    
+                    <!-- ICON BG -->
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Add-User"></i> -->
+                                <div class="content">
+                                    <p class="text-muted mt-2 text-17 mb-5px">Total Admitted: <%= @admitted_suspected_total + @admitted_confirmed_total + @admitted_probable_total %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">SHC&ME Department: <%= (@admitted_details[["Suspected", "SHC&MED"]] || 0) + (@admitted_details[["Probable", "SHC&MED"]] || 0) + (@admitted_details[["Confirmed", "SHC&MED"]] || 0) %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">P&SHC Department: <%= (@admitted_details[["Suspected", "P&SHD"]] || 0) + (@admitted_details[["Probable", "P&SHD"]] || 0) + (@admitted_details[["Confirmed", "P&SHD"]] || 0) %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">PHCC (Private) Department: <%= (@admitted_details[["Suspected", "Private"]] || 0) + (@admitted_details[["Probable", "Private"]] || 0) + (@admitted_details[["Confirmed", "Private"]] || 0) %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Financial"></i> -->
+                                <div class="content">
+                                    <p class="text-muted mt-2 text-17 mb-5px">Suspected Patients: <%= @admitted_suspected_total %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">SHC&ME Department: <%= @admitted_details[["Suspected", "SHC&MED"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">P&SHC Department: <%= @admitted_details[["Suspected", "P&SHD"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">PHCC (Private) Department: <%= @admitted_details[["Suspected", "Private"]] || 0 %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Checkout-Basket"></i> -->
+                                <div class="content">
+                                    <p class="text-muted mt-2 text-17 mb-5px">Probable Patients: <%= @admitted_probable_total %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">SHC&ME Department: <%= @admitted_details[["Probable", "SHC&MED"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">P&SHC Department: <%= @admitted_details[["Probable", "P&SHD"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">PHCC (Private) Department: <%= @admitted_details[["Probable", "Private"]] || 0 %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Checkout-Basket"></i> -->
+                                <div class="content">
+                                    <p class="text-muted mt-2 text-17 mb-5px">Confirmed Patients: <%= @admitted_confirmed_total %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">SHC&ME Department: <%= @admitted_details[["Confirmed", "SHC&MED"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">P&SHC Department: <%= @admitted_details[["Confirmed", "P&SHD"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">PHCC (Private) Department: <%= @admitted_details[["Confirmed", "Private"]] || 0 %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                
+                <div class="row mt-4">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <h5 class="card-title p-custom1 text-center">
+                            Deaths and Recovery
+                        </h5>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <h5 class="card-title p-custom1 text-center">
+                            Bed Occupancy Status
+                        </h5>
+                    </div>
+                    <!-- ICON BG -->
+                </div>
+
+
+                
+                <div class="row mt-4">
+                <%# Death and Recovery Counts %>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Financial"></i> -->
+                                <div class="content">
+                                    <p class="text-muted mt-2 text-17 mb-5px">Total Deaths: <%= (@death_recovery_details[["Death", "SHC&MED"]] || 0) + (@death_recovery_details[["Death", "P&SHD"]] || 0) + (@death_recovery_details[["Death", "Private"]] || 0) %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">SHC&ME Department: <%= @death_recovery_details[["Death", "SHC&MED"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">P&SHC Department: <%= @death_recovery_details[["Death", "P&SHD"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">PHCC (Private) Department: <%= @death_recovery_details[["Death", "Private"]] || 0 %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Financial"></i> -->
+                                <div class="content">
+                                    <p class="text-muted mt-2 text-17 mb-5px">Total Recovered: <%= (@death_recovery_details[["Discharged", "SHC&MED"]] || 0) + (@death_recovery_details[["Discharged", "P&SHD"]] || 0) + (@death_recovery_details[["Discharged", "Private"]] || 0) %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">SHC&ME Department: <%= @death_recovery_details[["Discharged", "SHC&MED"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">P&SHC Department: <%= @death_recovery_details[["Discharged", "P&SHD"]] || 0 %></p>
+                                    <p class="text-primary text-13 line-height-1 mb-1">PHCC (Private) Department: <%= @death_recovery_details[["Discharged", "Private"]] || 0 %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%# Bed Occupancy Counts %>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Add-User"></i> -->
+                                <div class="content">
+                                    <%total_allocated = (@beds_result["SHC&MED"][0] || 0) + (@beds_result["P&SHD"][0] || 0) + (@beds_result["Private"][0] || 0) %>
+                                    <%total_occupied = (@beds_result["SHC&MED"][1] || 0) + (@beds_result["P&SHD"][1] || 0) + (@beds_result["Private"][1] || 0) %>
+                                    
+                                    <p class="text-muted mt-1 text-13 mb-5px">Dengue Beds: (Allocated:<%= total_allocated %> Occupied: <%= total_occupied %> Vacant: <%= total_allocated - total_occupied %>)</p>
+                                    <p class="text-primary text-11 line-height-1 mb-1">SHC&ME: (Allocated:<%= @beds_result["SHC&MED"][0] || 0 %> Occupied: <%= @beds_result["SHC&MED"][1] || 0 %> Vacant: <%= (@beds_result["SHC&MED"][0] || 0) - (@beds_result["SHC&MED"][1] || 0) %>)</p>
+                                    <p class="text-primary text-11 line-height-1 mb-1">P&SHC: (Allocated:<%= @beds_result["P&SHD"][0] || 0 %> Occupied: <%= @beds_result["P&SHD"][1] || 0 %> Vacant: <%= (@beds_result["P&SHD"][0] || 0) - (@beds_result["P&SHD"][1] || 0) %>)</p>
+                                    <p class="text-primary text-11 line-height-1 mb-1">PHCC(Private): (Allocated:<%= @beds_result["Private"][0] || 0 %> Occupied: <%= @beds_result["Private"][1] || 0 %> Vacant: <%= (@beds_result["Private"][0] || 0) - (@beds_result["Private"][1] || 0) %>)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <!-- <i class="i-Financial"></i> -->
+                                <div class="content">
+                                    <%total_allocated = (@beds_result["SHC&MED"][2] || 0) + (@beds_result["P&SHD"][2] || 0) + (@beds_result["Private"][2] || 0) %>
+                                    <%total_occupied = (@beds_result["SHC&MED"][3] || 0) + (@beds_result["P&SHD"][3] || 0) + (@beds_result["Private"][3] || 0) %>
+                                    
+                                    <p class="text-muted mt-1 text-13 mb-5px">HDU Beds: (Allocated:<%= total_allocated %> Occupied: <%= total_occupied %> Vacant: <%= total_allocated - total_occupied %>)</p>
+                                    <p class="text-primary text-11 line-height-1 mb-1">SHC&ME: (Allocated:<%= @beds_result["SHC&MED"][2] || 0 %> Occupied: <%= @beds_result["SHC&MED"][3] || 0 %> Vacant: <%= (@beds_result["SHC&MED"][2] || 0) - (@beds_result["SHC&MED"][3] || 0) %>)</p>
+                                    <p class="text-primary text-11 line-height-1 mb-1">P&SHC: (Allocated:<%= @beds_result["P&SHD"][2] || 0 %> Occupied: <%= @beds_result["P&SHD"][3] || 0 %> Vacant: <%= (@beds_result["P&SHD"][2] || 0) - (@beds_result["P&SHD"][3] || 0) %>)</p>
+                                    <p class="text-primary text-11 line-height-1 mb-1">PHCC(Private): (Allocated:<%= @beds_result["Private"][2] || 0 %> Occupied: <%= @beds_result["Private"][3] || 0 %> Vacant: <%= (@beds_result["Private"][2] || 0) - (@beds_result["Private"][3] || 0) %>)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+                <div class="row m-t-15">
+                    <div class="col-md-12">
+                        <div class="card ">
+                            <div class="card-body p-0">
+                            <%# <h5 class="card-title p-custom1">
+                                    Admitted Patients vs Discharged Patients
+                            </h5> %>
+
+                            <div class="separator-breadcrumb border-top mb-3"></div>
+
+                            <div id="admitted_discharged_chart" style="width: 100%; display: block; height: 450px;"></div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                    <%# <div class="col-md-6 mt-4"> %>
+                        <div class="card ">
+                            <div class="card-body p-0">
+                            
+                            <%# <h5 class="card-title p-custom1">
+                                    Patient Admission Status
+                            </h5> %>
+
+                            <div class="separator-breadcrumb border-top mb-3"></div>
+
+                            <div id="provisional_diagnosis_chart" style="width: 100%; display: block; height: 450px;"></div>
+                            
+                            </div>
+                        </div>
+                    </div>
+
+                    <%# <div class="col-md-6 mt-4">
+                        <div class="card ">
+                            <div class="card-body p-0">
+                            
+                            <h5 class="card-title p-custom1">
+                                    Patient Outcome
+                            </h5>
+
+                            <div class="separator-breadcrumb border-top mb-3"></div>
+
+                            <div id="donut-chart" style="width: 100%; display: block; height: 450px;"></div>
+                            
+                            </div>
+                        </div>
+                    </div> %>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $("#hide").click(function(){
+          $(".legends-list").hide();
+          $("#hide").hide();
+          $("#show").show();
+        });
+        $("#show").click(function(){
+          $(".legends-list").show();
+          $("#hide").show();
+          $("#show").hide();
+        });
+      });
+    </script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+      
+    <script>
+        Highcharts.chart('admitted_discharged_chart', {
+
+            title: {
+                text: 'Admitted Patients Vs Discharged Patients'
+            },
+
+            // subtitle: {
+            //     text: 'Source: thesolarfoundation.com'
+            // },
+
+            yAxis: {
+                title: {
+                    text: 'Number of Patients'
+                }
+            },
+
+            xAxis: {
+                categories: <%= @date_array %>
+            },
+
+            legend: {
+                layout: 'vertical',
+                align: 'center',
+                verticalAlign: 'bottom'
+            },
+
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+
+            series: [{
+                name: 'Admitted',
+                data: <%= @admitted_data %>
+            }, {
+                name: 'Discharged',
+                data: <%= @discharged_data %>
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 2000
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'vertical',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        });
+    </script>
+    
+    <script>
+    Highcharts.chart('provisional_diagnosis_chart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Provisional Diagnosis'
+            },
+            xAxis: {
+                categories: <%= @date_array1 %>,
+                crosshair: true
+            },
+            credits: {
+                enabled: false
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ''
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Suspected',
+                data: <%= @suspected_data %>
+
+            }, {
+                name: 'Probable',
+                data: <%= @probable_data %>
+
+            }, {
+                name: 'Confirmed',
+                data: <%= @confirmed_data %>
+
+            }]
+        });
+    </script>
+
+    
+<%# 
+    <script src="/assets/common-bundle-script.js"></script>    
+    <script src="/assets/es5/dashboard.v1.script.js"></script>
+    
+    <script src="/assets/es5/script.min.js"></script>
+    <script src="/assets/es5/customizer.script.min.js"></script>
+    <script src="/assets/es5/customizer2.script.min.js"></script>
+
+    <script src="/assets/tooltip.script.js"></script> %>
+    
+
+
+    </body>
+
+</html>

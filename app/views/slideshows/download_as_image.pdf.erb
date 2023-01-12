@@ -1,0 +1,84 @@
+<style>
+ .mainDiv {
+    background-color: #323232;
+    margin: 0 auto;
+    padding: 25px;
+    width: 100%;
+  }
+  
+  .mainDiv h1{
+    color: #FFFFFF;
+    font-family: arial;
+    font-size: 22px;
+  }
+  
+  .mainDiv li {
+      color: #FFFFFF;
+      float: left;
+      font-family: arial;
+      font-size: 14px;
+      list-style: none outside none;
+      margin: 0 0 5px;
+      width: 32%;
+    }
+    
+  .mainDiv strong{
+    color: #A6C55C;
+    float: left;
+    font-family: arial;
+    font-size: 14px;
+    list-style: none outside none;
+    margin: 0 10px 0 0;
+  }
+  .mainDiv img{
+    background-color: #999999;
+    border: 2px solid #888888;
+    margin: 0 5px 0 0;
+    padding: 2px;
+  }
+  .activity{
+    float:none!important;
+  }
+  .page-break {
+    display:block;
+    clear:both;
+    page-break-after:always;
+  }
+</style>
+<% if params[:page] == "1" %>
+  <% i = 0 %>
+<% else %>
+  <% i = 50 * (params[:page].to_i - 1) %>
+<% end %>
+<% @slideshow_activities.each_with_index do |slide, i| %>
+<div class = "mainDiv" >
+<br/>
+  
+      <% if slide.before_picture.present? and slide.after_picture.present? %>
+        <strong>Before Picture</strong>
+        <div><img width="960" height="570" src="<%= nfs_picture_url(picture_url: "#{slide.before_picture}") %>" alt="no image #{slide.before_picture}" /></div>
+        <br/>
+        <div class="page-break"></div>
+        <br/>
+        <strong>After Picture</strong>
+        <div><img width="960" height="570" src="<%= nfs_picture_url(picture_url: "#{slide.after_picture}") %>" alt="no image #{slide.after_picture}" /></div>
+        <br/>
+      <% else %>
+        <% if slide.before_picture.present? %>
+          <strong>Before Picture</strong>
+          <div><img width="960" height="570" src="<%= nfs_picture_url(picture_url: "#{slide.before_picture}") %>" alt="no image available" /></div>
+          <br/>
+        <% elsif slide.after_picture.present? %>
+          <strong>After Picture</strong>
+          <div><img width="960" height="570" src="<%= nfs_picture_url(picture_url: "#{slide.after_picture}") %>" alt="no image available" /></div>
+          <br/>
+        <% end %>
+      <% end %> 
+      
+      <br/>
+  </div>
+  <% if @slideshow_activities.count != i+1 %>
+    <div class="page-break"></div>
+  <% end %>
+  <% i = i + 1 %>
+<% end %>

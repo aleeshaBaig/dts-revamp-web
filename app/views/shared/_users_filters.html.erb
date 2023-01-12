@@ -1,0 +1,53 @@
+<style type="text/css">
+.inner
+{
+    display: inline-block;
+}
+</style>
+
+<%= form_for users_path, method: :get do |f| %>
+  <div class="row p-custom">  	
+    <div class="col-md-2">
+        <div class="form-group">
+          <label>Role</label>
+          <%= select_tag :role, options_for_select(User::roles.map{|p| [p.first.try(:titleize), p.first]},{:selected => params[:role]}), {class: 'form-control', :include_blank => "All"} %>
+        </div>
+    </div>      
+
+    <div class="col-md-2">
+        <div class="form-group">
+          <label>Username</label>
+          <input class="form-control" type="text" id="username" name="username" value='<%= (params[:username].present?)? "#{params[:username]}" : nil %>' />
+        </div>
+    </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <label>Department Name</label>
+        <%= select_tag :department, options_for_select(departments_list,{:selected => params[:department]}), {class: 'form-control', :include_blank => "All"} %>
+      </div>
+    </div>
+  </div>
+  <div class="row p-custom">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+      <button class="btn filter-btn col-md-12 mb-3" onclick="filter_users()">Filter</button>
+    </div>
+    <div class="col-md-2">
+      <button class="btn filter-btn col-md-12 mb-3" onclick="javascript: resetData();">Reset</button>
+    </div>
+  </div>       
+<% end %>
+
+<script>
+function resetData(){
+   $("select").val("");
+   $("input[type=text], input[type=date], input[type=datetime-local]").val("");
+};
+</script>

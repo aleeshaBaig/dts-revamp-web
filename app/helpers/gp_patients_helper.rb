@@ -1,0 +1,2 @@
+module GpPatientsHelper
+end

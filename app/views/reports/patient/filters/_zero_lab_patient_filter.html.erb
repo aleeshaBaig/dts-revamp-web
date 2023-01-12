@@ -1,0 +1,125 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-body p-0 m-t-10">
+                <%= form_for zero_patient_reports_patient_index_path, method: :get do |f| %>
+                    <div class="row p-custom">                        
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Province</label>
+                                <%= select_tag "province", options_for_select(all_provinces, :selected => params[:province]), {class: 'form-control dropdown_select2', :include_blank => "-Select-"} %>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>District</label>
+                                <%= select_tag "district", options_for_select(district_information(params[:province]), :selected => params[:district]), {class: 'form-control user_lab dropdown_select2', :include_blank => "-Select-"} %>
+                            </div>
+                        </div>
+
+                         <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Lab Name</label>
+                               <%= select_tag "lab", options_for_select(@labs.map.each{|hospital| [hospital.hospital_name, hospital.id]}, :selected => params[:lab]), {class: 'form-control user_hospital_list dropdown_select2', :include_blank => "-Select-"} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Date From</label>
+                                <input type="date" id="from" class="form-control" name="from" value="<%= params[:from] %>">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Date To</label>
+                                <input type="date" id="to" class="form-control" name="to" value="<%= params[:to] %>">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row p-custom">
+                        
+                        <div class="col-md-2">
+                            <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                        </div>
+
+                    </div>
+
+               <% end %>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+  $("#from").change(function() {
+    var date_from = this.value
+    document.getElementById("to").setAttribute("min", date_from);
+  });
+
+  function resetData() {
+    window.location.href = "<%= zero_lab_patient_reports_patient_index_path %>";
+  };
+
+  $("#province").change(function() {
+    $.ajax({
+      url:'/ajax/populate_province_district?province_id='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+
+        // Clear all options from District Dropdown
+        $("select#district").removeAttr('disabled');
+        $("select#district option").remove();
+
+        // Fill sub category select
+        if (transport.length >= 1) {
+          var row = "<option value=\"" + "" + "\">" + "-Select-" + "</option>";
+          $(row).appendTo("select#district");
+          //// Fill sub category select
+          $.each(transport, function(i) {
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#district");
+          });
+        } else {
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#district");
+        }
+      },
+    });
+  });
+
+  $("#district").change(function() {
+    $.ajax({
+      url:'/ajax/populate_lab?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select
+        $("select#lab").removeAttr('disabled');
+        $("select#lab option").remove();
+
+        // Fill sub category select
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#lab");
+          //// Fill sub category select
+          $.each(transport, function(i) {
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#lab");
+          });
+        } else {
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#lab");
+        }
+      },
+    });
+  });
+</script>

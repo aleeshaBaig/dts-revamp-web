@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-body p-0 m-t-10">
+
+                    <div class="row p-custom">
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label>Date From</label>
+                            <input type="datetime-local" class="form-control" id="d_from" value='<%= (params[:datefrom].present?)? "#{params[:datefrom]}" : nil %>'>
+                          </div>
+                        </div>
+                  
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label>Date To</label>
+                            <input type="datetime-local" class="form-control" id="d_to" value='<%= (params[:dateto].present?)? "#{params[:dateto]}" : nil %>'>
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label>Department Name</label>
+                            <%= select_tag("multi_department", options_for_select(all_departments,{:selected => params[:multi_department]}), {class: 'form-control', :multiple => true}) %> 
+                          </div>
+                        </div>
+                    </div>
+
+
+                   <div class="row p-custom">
+        
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn filter-btn col-md-12 m-t-23" onclick="filter_patients()">Filter</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                        </div>
+                      
+                    </div>
+
+              
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    function filter_patients(){
+  
+      window.location = "?" + "multi_department=" + $("#multi_department").val() + "&datefrom=" + $("#d_from").val() + "&dateto=" + $("#d_to").val();
+    
+};
+function resetData(){
+    $("#multi_department").val("");
+    $("#d_from").val("");
+    $("#d_to").val("");
+}
+</script>

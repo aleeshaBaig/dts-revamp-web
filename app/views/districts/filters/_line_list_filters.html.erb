@@ -1,0 +1,126 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-body p-0 m-t-10">
+                <!-- <h5 class="card-title m-0 p-custom2">Filter Records</h5>
+                <div class="separator-breadcrumb border-top mb-3"></div> -->
+                <%= form_for hospitals_path, method: :get do |f| %>
+                    <div class="row p-custom">
+                        
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Province</label>
+                                <%= select_tag "province_id", options_for_select(all_provinces, :selected => params[:province_id]), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Division</label>
+                                <%= select_tag "division_id", options_for_select(all_divisions, :selected => params[:division_id]), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>District Name</label>
+                                <%= select_tag "district_id", options_for_select(all_districts, :selected => params[:district_id]), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+
+                       
+
+
+                        
+
+                    </div>
+
+                    <div class="row p-custom">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                          <div class="col-md-2">
+                            <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                        </div>
+
+                      
+
+                    </div>
+
+               <% end %>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+  $("#province_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_division?province_id='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#division_id").removeAttr('disabled');
+        $("select#division_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length > 0){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#division_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#division_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#division_id");
+        }
+      },
+    });
+  });
+
+  $("#division_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_district?division_id='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#district_id").removeAttr('disabled');
+        $("select#district_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length > 0){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#district_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#district_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#district_id");
+        }
+      },
+    });
+  });
+
+   function resetData(){
+    $("#district_id").prop('selectedIndex',0);;
+    $("#province_id").prop('selectedIndex',0);;
+    $("#division_id").prop('selectedIndex',0);;
+};
+</script>

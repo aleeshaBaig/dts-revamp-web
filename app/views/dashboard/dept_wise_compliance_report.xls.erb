@@ -1,0 +1,19 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+    <thead>
+        <tr>
+        <th>Category</th>
+        <th>Facility Type</th>
+        <th>Hospital</th>
+        </tr>
+        
+    </thead>
+    
+    <% @result.each do |r| %>
+        <tr>
+        <td class="text-center"><%= r.category %></td>
+        <td class="text-center"><%= r.facility_type %></td>
+        <td class="text-center"><%= r.hospital_name %></td>
+        </tr>
+    <% end %>
+    
+</table>

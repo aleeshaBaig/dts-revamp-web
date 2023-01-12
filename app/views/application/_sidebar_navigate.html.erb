@@ -1,0 +1,66 @@
+<style>
+.p-admin-panel {
+  padding : 0px 0px 0px 0px !important;
+}
+</style>
+<% if can? :admin_panel, :all %>
+<div class="customizer2">
+  <div class="handle2" (click)="isOpen = !isOpen" data-toggle="tooltip" data-placement="right" title="Admin Panel">
+    <i class="nav-icon fa fa-bookmark admin-icon"></i>Admin Panel
+  </div>
+  <div class="customizer-body2" data-perfect-scrollbar data-suppress-scroll-x="true">
+    <div class="accordion" id="accordionCustomizer2">
+      <div class="card">
+        <style type="text/css">
+          .tooltip{ z-index: 100152 !important; }
+        </style>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingThree" data-parent="#accordionCustomizer2">
+          <div class="card-body admin-panel-body p-admin-panel">
+            <div class="menu-icon-grid">
+              <a href="<%= districts_url %>" data-toggle="tooltip" data-placement="right" title="Districts"><i class="fa fa-building"></i><!--   District List -->
+              </a>
+              <!-- <a href="<%#= new_district_url %>" data-toggle="tooltip" data-placement="right" title="Add New District"><i class="fa fa-building"></i>   Add New District
+              </a> -->
+              <a href="<%= tehsils_url %>" data-toggle="tooltip" data-placement="right" title="Towns"><i class="fa fa-road"></i> 
+                <!-- Town List  -->
+              </a>
+             <!--  <a href="<%= new_tehsil_url %>" data-toggle="tooltip" data-placement="right" title="Add New Town"><i class="fa fa-road"></i>   Add Town 
+              </a> -->
+              <a href="<%= departments_url %>" data-toggle="tooltip" data-placement="right" title="Deparments"><i class="fa fa-address-card"></i> 
+                <!-- Town List  -->
+              </a>
+              <!-- <a href="<%= new_department_url %>" data-toggle="tooltip" data-placement="right" title="Add New Department"><i class="fa fa-plus"></i><!--    Add Town 
+              </a> -->
+              <a href="<%= hotspots_url %>" data-toggle="tooltip" data-placement="right" title="Hotspots"><i class="fa fa-map-marker"></i> <!-- Hotspot List -->
+              </a>
+            <!--   <a href="<%= new_hotspot_url %>" data-toggle="tooltip" data-placement="right" title="Add New Hotspot"><i class="fa fa-hand-spock"></i> 
+               Add New Hotspot  
+              </a> -->
+              <a href="<%= hospitals_url %>" data-toggle="tooltip" data-placement="right" title="Hospitals"><i class="fa fa-hospital"></i>
+                <!-- Hospital List -->
+              </a>
+              <!-- <a href="<%= new_hospital_url %>" data-toggle="tooltip" data-placement="right" title="Add New Hospital"><i class="fa fa-plus-square"></i> 
+              </a> -->
+              <% if can? :read, User %>
+                <a href="<%= users_url %>" data-toggle="tooltip" data-placement="right" title="Users"><i class="fa fa-user"></i>   <!-- User List -->
+                </a>
+              <% end %>
+              <a href="<%= mobile_users_url %>" data-toggle="tooltip" data-placement="right" title="Mobile Users"><i class="fa fa-user-circle"></i> <!-- Hotspot List -->
+              </a>
+              <% if can? :read, GpDengueUser %>
+                <a href="<%= gp_dengue_users_url %>" data-toggle="tooltip" data-placement="right" title="Gp Users"><i class="fa fa-user-md"></i>   <!-- GP User List -->
+                </a>
+              <% end %>
+             <!--  <a href="<%= new_mobile_user_url %>" data-toggle="tooltip" data-placement="right" title="Add New Mobile User"><i class="fa fa-hand-pointer"></i> --> 
+                <!-- Add New Hotspot  -->
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+                

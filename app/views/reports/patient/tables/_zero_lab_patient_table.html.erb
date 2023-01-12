@@ -1,0 +1,37 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+  <thead>
+    <tr>
+      <th>Sr#</th>
+      <th>District</th>
+      <th>Lab</th>
+      <th>Suspected</th>
+      <th>Probable</th>
+      <th>Confirmed</th>
+      <th width="15%">Zero Reporting</th>
+    </tr>                    
+  </thead>
+  <tbody>
+    <% if is_zero_patient_filters_active? %>
+      <% @labs.each_with_index do |lab, index| %>
+          <tr>
+            <!-- Base Data -->
+            <td class="text-center"><%= index + 1  %></td>
+            <td><%= get_data_zero_lab_patient(lab)[:district] rescue nil %></td>
+            <td><%= lab.hospital_name %></td>
+
+            <!-- display all informations -->
+            <td class="text-center"><%= @patient_provisional_diagnosis[["Suspected", lab.district_id, lab.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @patient_provisional_diagnosis[["Probable", lab.district_id, lab.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @patient_provisional_diagnosis[["Confirmed", lab.district_id, lab.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @zero_patient[[lab.district_id, lab.hospital_name]].to_i %></td>
+          </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

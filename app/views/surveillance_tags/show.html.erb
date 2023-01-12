@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @surveillance_tag.name %>
+</p>
+
+<p>
+  <strong>Tag type:</strong>
+  <%= @surveillance_tag.tag_type %>
+</p>
+
+<%= link_to 'Edit', edit_surveillance_tag_path(@surveillance_tag) %> |
+<%= link_to 'Back', surveillance_tags_path %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @slideshow.name %>
+</p>
+
+<p>
+  <strong>Activity type:</strong>
+  <%= @slideshow.activity_type %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @slideshow.user_id %>
+</p>
+
+<p>
+  <strong>Activity ids:</strong>
+  <%= @slideshow.activity_ids %>
+</p>
+
+<p>
+  <strong>Department:</strong>
+  <%= @slideshow.department_id %>
+</p>
+
+<%= link_to 'Edit', edit_slideshow_path(@slideshow) %> |
+<%= link_to 'Back', slideshows_path %>

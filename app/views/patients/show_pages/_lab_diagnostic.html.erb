@@ -1,0 +1,142 @@
+<div class="row p-custom">
+	<div class="col">
+	  <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+	      Lab and Diagnostic Information
+	  </h6>
+	</div>
+</div>    
+
+<% if f.object.persisted? %>
+	<% if pd == "Confirmed" and @patient.patient_status != 'In Process'%>
+		<div class="row p-custom pointer-events">
+	<% else %>
+    	<div class="row p-custom">
+	<% end %>
+<% else %>
+	<div class="row p-custom">
+<% end %>
+
+	<div class="col" id= "advised_test" style="display: none;">
+	  	<div class="form-group">
+    		<label style="padding-bottom: 8px;">Advised Test</label></br>
+	    		<label>NS1</label>
+	    		<%= f.check_box :advised_test,  {:multiple => true}, "ns1", nil %>
+	    		<label>PCR</label>
+	    		<%= f.check_box :advised_test,  {:multiple => true}, "pcr", nil %>
+	    		<label>IGG</label>
+	    		<%= f.check_box :advised_test,  {:multiple => true}, "igg", nil %>
+	    		<label>IGM</label>
+	    		<%= f.check_box :advised_test,  {:multiple => true}, "igm", nil %>
+		</div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	      <label>NS1</label>
+	      <%= f.select :ns1, lab_diagnostic_list, {:include_blank => "Select"}, {class: "form-control"} %>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	      <label>PCR</label>
+	      <%= f.select :pcr, lab_diagnostic_list, {:include_blank => "Select"}, {class: "form-control"} %>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	      <label>IGM</label>
+	      <%= f.select :igm, lab_diagnostic_list, {:include_blank => "Select"}, {class: "form-control"} %>
+	  </div>
+	</div>
+
+	<div class="col" id="igg_div" style="display: none;">
+	  <div class="form-group">
+	      <label>IGG</label>
+	      <%= f.select :igg, lab_diagnostic_list, {:include_blank => "Select"}, {class: "form-control"} %>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	      <label>Diagnosis</label>
+	      <%= f.select :diagnosis, diagnosis_list, {:include_blank => "Select"}, {class: "form-control"} %>
+	  </div>
+	</div>
+
+	<div class="col">
+	  <div class="form-group">
+	      <label>Dengue Virus Type</label>
+	      <%= f.select :dengue_virus_type, dengue_virus_type_list, {:include_blank => "Select"}, {class: "form-control"} %>
+	  </div>
+	</div>
+
+
+
+	 <div class="col" id ="r_ordering_date" style="display: none;">
+        <div class="form-group">
+            <label>Report Ordering Date</label>
+            <%= f.date_field :report_ordering_date, class: "form-control" %>
+        </div>
+    </div>
+
+     <div class="col" id ="r_receiving_date" style="display: none;">
+        <div class="form-group">
+            <label>Report Receiving Date</label>
+            <%= f.date_field :report_receiving_date, class: "form-control", :readonly => true %>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+$("#patient_lab_result_attributes_ns1").change(function() {
+	if (this.value != "") {
+		$("#igg_div")[0].style.display = "block";
+	}
+});
+$("#patient_lab_result_attributes_pcr").change(function() {
+	if (this.value != "") {
+		$("#igg_div")[0].style.display = "block";
+	}
+});
+$("#patient_lab_result_attributes_igm").change(function() {
+	if (this.value != "") {
+		$("#igg_div")[0].style.display = "block";
+	}
+});
+$("#patient_lab_result_attributes_advised_test_ns1").change(function() {
+	if (this.value == "ns1") {
+		$("#r_ordering_date")[0].style.display = "block";
+		$("#r_receiving_date")[0].style.display = "block";
+	}
+});
+$("#patient_lab_result_attributes_advised_test_pcr").change(function() {
+	if (this.value == "pcr") {
+		$("#r_ordering_date")[0].style.display = "block";
+		$("#r_receiving_date")[0].style.display = "block";
+	}
+});
+$("#patient_lab_result_attributes_advised_test_igg").change(function() {
+	if (this.value == "igg") {
+		$("#r_ordering_date")[0].style.display = "block";
+		$("#r_receiving_date")[0].style.display = "block";
+	}
+});
+$("#patient_lab_result_attributes_advised_test_igm").change(function() {
+	if (this.value == "igm") {
+		$("#r_ordering_date")[0].style.display = "block";
+		$("#r_receiving_date")[0].style.display = "block";
+	}
+});
+
+  $("#patient_lab_result_attributes_report_ordering_date").change(function() {
+    var date_r = this.value
+    document.getElementById("patient_lab_result_attributes_report_receiving_date").setAttribute("min", date_r);
+    document.getElementById("patient_lab_result_attributes_report_receiving_date").removeAttribute("readonly");
+  });
+
+</script>
+

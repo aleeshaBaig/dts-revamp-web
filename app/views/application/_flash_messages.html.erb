@@ -1,0 +1,22 @@
+
+<% if flash[:alert].present? %>
+  <script type="text/javascript">
+    toastr.error("<%= flash[:alert] %>")
+  </script>
+<% end %>
+<% if flash[:notice].present? %>
+  <script type="text/javascript">
+    toastr.success("<%= flash[:notice] %>");
+  </script>
+<% end %>
+
+<script type="text/javascript">
+	$(document).ajaxStart(function () {
+    $(".loader").show();
+  }).ajaxStop(function () {
+      setTimeout(function(){ 
+        $(".loader").hide();
+      }, 50);
+  });
+
+</script>

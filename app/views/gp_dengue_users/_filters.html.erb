@@ -1,0 +1,194 @@
+<div class="row">
+    <div class="col-md-12">
+        <%= form_for gp_dengue_users_path, method: :get do |f| %>
+            <div class="row p-custom">
+                <div class="col-md-2">
+                    <div class="form-group">
+                    <label>Email</label>
+                    <input class="form-control" type="text"  name="email" value='<%= (params[:email].present?)? "#{params[:email]}" : nil %>' />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control" type="text"  name="gp_name" value='<%= (params[:gp_name].present?)? "#{params[:gp_name]}" : nil %>' />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                    <label>Clinic Name</label>
+                    <input class="form-control" type="text"  name="clinic_name" value='<%= (params[:clinic_name].present?)? "#{params[:clinic_name]}" : nil %>' />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                    <label>Contact No#</label>
+                    <input class="form-control phone_contact" type="text"  name="contact_no" value='<%= (params[:contact_no].present?)? "#{params[:contact_no]}" : nil %>' />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                    <label>PMDC No#</label>
+                    <input class="form-control" type="text"  name="pmdc_number" value='<%= (params[:pmdc_number].present?)? "#{params[:pmdc_number]}" : nil %>' />
+                    </div>
+                </div>
+                
+
+                <% if !current_user.lab_user? and !current_user.hospital_user? %>
+                    <div class="col-md-2">
+                    <div class="form-group">
+                        <label> District:</label>
+                            <%= select_tag :district_id, options_for_select(all_districts,{:selected => params[:district_id]}), {class: 'form-control', :include_blank => "All"}%>
+                    </div>
+                    </div>
+
+                    <div class="col-md-2">
+                    <div class="form-group">
+                        <label> Tehsil:</label>
+                            <%= select_tag :tehsil_id, options_for_select(tehsil_information(params[:district_id]),{:selected => params[:tehsil_id]}), {class: 'form-control', :include_blank => "All"}%>
+                    </div>
+                    </div>
+
+                    <div class="col-md-2">
+                    <div class="form-group">
+                        <label> UCs:</label>
+                            <%= select_tag :uc_id, options_for_select(ucs_information(params[:tehsil_id]),{:selected => params[:uc_id]}), {class: 'form-control', :include_blank => "All"}%>
+                    </div>
+                    </div>  
+                <% else %>
+                    <div style="display: none;">
+                        <input class="form-control" type="text" id="district" name="district_id" value='<%= (params[:district_id].present?)? "#{params[:district_id]}" : "" %>' />
+                        <input class="form-control" type="text" id="tehsil" name="tehsil_id" value='<%= (params[:tehsil_id].present?)? "#{params[:tehsil_id]}" : "" %>' />
+                        <input class="form-control" type="text" id="uc" name="uc_id" value='<%= (params[:uc_id].present?)? "#{params[:uc_id]}" : "" %>' />
+                    </div>
+                <% end %>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                    <label>Date From</label>
+                        <input type="text" class="form-control date_from" name="datefrom" value='<%= (params[:datefrom].present?)? "#{params[:datefrom]}" : nil %>' readonly>
+                    </div>
+                </div>
+                            
+                <div class="col-md-2">
+                    <div class="form-group">
+                    <label>Date To</label>
+                    <input type="text" class="form-control date_to" name="dateto" value='<%= (params[:dateto].present?)? "#{params[:dateto]}" : nil %>' readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-custom">
+
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                </div>
+                
+            </div>
+        <% end %>
+    </div>
+
+</div>
+<script type="text/javascript">
+function resetData(){
+    $("select").val("");
+    $("input[type=text], input[type=date]").val("");
+};
+
+ $("#district_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#tehsil_id").removeAttr('disabled');
+        $("select#tehsil_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#tehsil_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#tehsil_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#tehsil_id");
+        }
+      },
+    });
+  });
+
+
+  $("#district_id").change(function() {
+    var dist = document.getElementById("district_id").value;
+    $.ajax({
+      url:'/ajax/populate_hospital?&district='+dist,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#hospital_id").removeAttr('disabled');
+        $("select#hospital_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#hospital_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#hospital_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#hospital");
+        }
+      },
+    });
+  });
+
+ $("#tehsil_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#uc_id").removeAttr('disabled');
+        $("select#uc_id option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#uc_id");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#uc_id");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#uc_id");
+        }
+      },
+    });
+  });
+
+  
+
+</script>

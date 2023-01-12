@@ -1,0 +1,90 @@
+<div class="app-admin-wrap layout-horizontal-bar clearfix">
+  <div class="main-content-wrap  d-flex flex-column">
+    <div class="main-content"> 
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-body p-0">
+                <h5 class="card-title p-custom1">
+                  GP Patients
+                </h5>
+                <%= render '/gp_dengue_patients/filters' %>
+                <div class="separator-breadcrumb border-top mb-3"></div>
+                <div class="listing-tbl-area">
+                  <%= link_to 'Export to Excel',gp_dengue_patients_path(request.parameters.merge({format: :xls})), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%> 
+                  <div class="table-responsive mt-3">
+                    <table class="table table-bordered table-hover listing-tbl datatable" width="100%">
+                      <thead>
+                          <tr>
+                            <th rowspan="2">Sr No.</th>
+                            <th colspan="7">Patient Demographics</th>
+                            <th colspan="4">Address</th>
+                            <th colspan="3">Activity Details</th>
+                            <th rowspan="2">Picture</th>
+                            
+                          </tr>
+                          <tr>
+                            <th>Patient Id</th>
+                            <th>Patient Name</th>
+                            <th>Gender</th>
+                            <th>CNIC</th>
+                            <th>Contact#</th>
+                            <th>Provisional Diagnosis</th>
+                            <th>Referred hospital</th>                            
+                            <th>Address</th>
+                            <th>District</th>
+                            <th>Tehsil</th>
+                            <th>Uc</th>
+                            <th>Activity Time</th>
+                            <th>Entered By</th>
+                            <th>GPs District</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <% @gp_dengue_patients.each_with_index do |gp_dengue_patient, index| %>
+                          <tr>
+                            <td class="text-center"><%= index + 1 %></td>
+                            <td class="text-center"><%= gp_dengue_patient.id %></td>
+                            <td class="text-center"><%= gp_dengue_patient.patient_name %></td>
+                            <td class="text-center"><%= gp_dengue_patient.gender %></td>
+                            <td class="text-center"><%= gp_dengue_patient.cnic %></td>
+                            <td class="text-center"><%= gp_dengue_patient.contact_no %></td>
+                            <td class="text-center"><%= gp_dengue_patient.provisional_diagnosis %></td>
+                            <td class="text-center"><%= gp_dengue_patient.hospital_name || 'N/A' %></td>
+                            <% current_address = gp_dengue_patient.current_address %>
+                            <td class="text-center"><%= current_address.try(:address) %></td>
+                            <td class="text-center"><%= current_address.try(:district_name) %></td>
+                            <td class="text-center"><%= current_address.try(:tehsil_name) %></td>
+                            <td class="text-center"><%= current_address.try(:uc_name) %></td>
+                            <td class="text-center"><%= (gp_dengue_patient.activity_time.to_datetime.strftime("on %m/%d/%Y at %I:%M%p")) rescue "N/A" %></td>
+                            <% gp_dengue_user = gp_dengue_patient.gp_dengue_user %>
+                            <td class="text-center"><%= gp_dengue_user.try(:name) %></td>
+                            <td class="text-center"><%= gp_dengue_user.try(:district_name) %></td>
+                            <td class="text-center">
+                              <% if gp_dengue_patient.before_picture.present? %>
+                                <a href="<%= nfs_picture_path(picture_url: "#{gp_dengue_patient.before_picture}") %>" data-toggle="lightbox" data-max-width="600"><img src="<%= nfs_picture_path(picture_url: gp_dengue_patient.before_picture) %>" alt="No Image Found" class="rounded mx-auto d-block" width="80"></a>
+                              <% end %>
+                            </td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-center">
+                    <% if @gp_dengue_patients.present? %> 
+                      <%= will_paginate @gp_dengue_patients, :class => 'apple_pagination'  %>
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @gp_dengue_patients.total_entries %></div> 
+                    <% else %> 
+                      <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+                    <% end %>
+                  </div>
+             
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

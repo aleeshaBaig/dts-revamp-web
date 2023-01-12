@@ -1,0 +1,35 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+  <thead>
+    <tr>
+      <th>Sr#</th>
+      <th>Category</th>
+      <th>Facility Type</th>
+      <th>District</th>
+      <th>Hospital</th>
+      <th>Suspected</th>
+      <th>Probable</th>
+      <th>Confirmed</th>
+      <th width="15%">Zero Reporting</th>
+    </tr>                    
+  </thead>
+  <tbody>
+    <% if is_zero_patient_filters_active? %>
+      <% @hospitals.each_with_index do |hospital, index| %>
+          <tr>
+            <!-- Base Data -->
+            <td class="text-center"><%= index + 1  %></td>
+            <td><%= get_data_zero_patient(hospital)[:category] rescue nil %></td>
+            <td><%= get_data_zero_patient(hospital)[:facility_type] rescue nil%></td>
+            <td><%= get_data_zero_patient(hospital)[:district] rescue nil %></td>
+            <td><%= hospital.hospital_name %></td>
+
+            <!-- display all informations -->
+            <td class="text-center"><%= @patient_provisional_diagnosis[["Suspected", hospital.district_id, hospital.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @patient_provisional_diagnosis[["Probable", hospital.district_id, hospital.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @patient_provisional_diagnosis[["Confirmed", hospital.district_id, hospital.hospital_name]].to_i %></td>
+            <td class="text-center"><%= @zero_patient[[hospital.district_id, hospital.hospital_name]].to_i %></td>
+          </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

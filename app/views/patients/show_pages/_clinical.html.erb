@@ -1,0 +1,100 @@
+<div class="row p-custom">
+  <div class="col">
+    <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">Clinical Information</h6>
+  </div>
+</div>  
+<div class="row p-custom">
+  <div class="col">
+    <div class="form-group">
+      <label>Date of Onset of Fever</label>
+      <input type="text" class="form-control" value="<%= date form.date_of_onset %>" readonly>
+    </div>
+  </div>  
+
+  <div class="col">
+    <div class="form-group">
+      <label>Fever Lasting For</label>
+      <input type="text" class="form-control" value="<%= date form.date_of_onset %>" readonly>
+    </div>
+  </div>  
+
+  <div class="col">
+    <div class="form-group">
+      <label>Fever (>2 AND < THAN 10days Duration)</label>
+      <input type="text" class="form-control" value="<%= get_yesno form.fever %>" readonly>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="form-group">
+      <label>Previous H/O Dengue Fever</label>
+      <input type="text" class="form-control" value="<%= get_yesno form.previous_dengue_fever %>" readonly>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="form-group">
+      <label>Appearance of Associated Symptoms</label>
+      <input type="text" class="form-control" value="<%= get_yesno form.associated_symptom %>" readonly>
+    </div>
+  </div>
+</div>
+
+<div class="row p-custom">
+  <div class="col">
+    <div class="form-group">
+      <label>Provisional Diagnosis</label>
+      <input type="text" class="form-control" value="<%= form.provisional_diagnosis %>" readonly>
+    </div>
+  </div>
+  <div class="col">
+    <div class="form-group">
+      <label>Patient Outcome</label>
+      <input type="text" class="form-control" value="<%= form.patient_outcome %>" readonly>
+    </div>
+  </div>
+  
+  <% if form.patient_outcome == "Death" %>
+    <div class="col">
+      <div class="form-group">
+        <label>Death Date</label>
+        <input type="text" class="form-control" value="<%= form.death_date %>" readonly>
+      </div>
+    </div>
+  <% elsif form.patient_outcome == "Discharged" %>
+    <div class="col">
+      <div class="form-group">
+        <label>Discharge Date</label>
+        <input type="text" class="form-control" value="<%= form.discharge_date %>" readonly>
+      </div>
+    </div>
+  <% elsif form.patient_outcome == "LAMA" %>
+    <div class="col">
+      <div class="form-group">
+        <label>LAMA Date</label>
+        <input type="text" class="form-control" value="<%= form.lama_date %>" readonly>
+      </div>
+    </div>
+  <% elsif form.patient_outcome == "Admitted" %>
+    <div class="col">
+      <div class="form-group">
+        <label>Admission Date</label>
+        <input type="text" class="form-control" value="<%= form.admission_date %>" readonly>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="col">
+    <div class="form-group">
+      <label>Other Diagnosed Fever</label>
+      <input type="text" class="form-control" value="<%= form.other_diagnosed_fever %>" readonly>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="form-group">
+      <label>Patient Condition </label>
+      <input type="text" class="form-control" value="<%= form.patient_condition %>" readonly>
+    </div>
+  </div>
+</div>

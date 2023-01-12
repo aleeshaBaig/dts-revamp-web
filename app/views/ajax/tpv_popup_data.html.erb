@@ -1,0 +1,21 @@
+<h1 id="firstHeading" class="firstHeading">TPV Activity Details</h1>
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+	<thead>
+		<tr>
+			<td>Job ID</td>
+            <td>User</td>
+			<td>Larvae Found</td>
+			<td>Type</td>
+			<td>Entry Date/Time</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= @job_id %></td>
+            <td><%= @username %></td>
+			<td><%= get_yesno(@activity.larvae_found) %></td>
+			<td><%= @p_type %></td>
+			<td><%= @activity.created_at.strftime("%m/%d/%Y at %I:%M%p")%></td>
+		</tr>
+	</tbody>
+</table>

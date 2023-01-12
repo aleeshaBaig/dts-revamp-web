@@ -1,0 +1,86 @@
+<style>
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+tfoot{
+  background: #ebebeb;
+  font-size: 14px;
+}
+</style>
+
+<div class="main-content-wrap  d-flex flex-column">
+	<div class="main-content"> 
+	  <%= render :partial => '/reports/activities/filters/activity_duration' %>
+    <%= link_to 'Export to Excel', activity_duration_reports_activities_path(request.parameters.merge({format: :xls})), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%></br>
+		<div class="row m-t-15">
+  		<div class="col-md-12">
+    		<div class="card">
+          <h5 class="card-title p-custom1">Activity Duration Report</h5>
+      		<div class="card-body p-0">
+            <div class="col-md-12">
+              <div class="table-responsive mt-3">
+                <table id="p_table" class="table table-bordered table-hover listing-tbl datatable" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Sr No </th>
+                      <th>District</th>
+
+                      <th>Less Than 1 Minute</th>
+                      <th>1-2 Minute</th>
+                      <th>2-5 Minute</th>
+                      <th>5-10 Minute</th>
+                      <th>10-15 Minute</th>
+                      <th>15-20 Minute</th>
+                      <th>More Than 20 Minute</th>
+                    </tr>                    
+                  </thead>
+                  <tbody>
+                    <% @data.each_with_index do |data,i| %>
+                      <tr class="text-center">
+                        <% total = 0 %>
+                        <td><%= i+1 %></td>
+                        <td><%= data.district_name %></td>
+                        <td class="t1"><%= data.less_than_one_minute %></td>
+                        <td class="t2"><%= data.one_to_two_minute %></td>
+                        <td class="t3"><%= data.two_to_five_minute %></td>
+                        <td class="t4"><%= data.five_to_ten_minute %></td>
+                        <td class="t5"><%= data.ten_to_fifteen_minute %></td>
+                        <td class="t6"><%= data.fifteen_to_twenty_minute %></td>
+                        <td class="t7"><%= data.more_than_twenty_minute %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th class="text-center" colspan="2">Grand Total</th>
+                      <th class="text-center t1s"></th>
+                      <th class="text-center t2s"></th>
+                      <th class="text-center t3s"></th>
+                      <th class="text-center t4s"></th>
+                      <th class="text-center t5s"></th>
+                      <th class="text-center t6s"></th>
+                      <th class="text-center t7s"></th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+        	</div>
+      	</div>
+    	</div>
+  	</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+  var t1 = 0; var t2 = 0; var t3 = 0; var t4 = 0; var t5 = 0; var t6 = 0; var t7 = 0;
+  $(".t1").each(function(){t1 += parseInt($(this).text());});
+  $(".t2").each(function(){t2 += parseInt($(this).text());});
+  $(".t3").each(function(){t3 += parseInt($(this).text());});
+  $(".t4").each(function(){t4 += parseInt($(this).text());});
+  $(".t5").each(function(){t5 += parseInt($(this).text());});
+  $(".t6").each(function(){t6 += parseInt($(this).text());});
+  $(".t7").each(function(){t7 += parseInt($(this).text());});
+  $(".t1s").text(t1);$(".t2s").text(t2);$(".t3s").text(t3);$(".t4s").text(t4);$(".t5s").text(t5);$(".t6s").text(t6);$(".t7s").text(t7);
+</script>

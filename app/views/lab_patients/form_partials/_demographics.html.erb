@@ -1,0 +1,76 @@
+<div class="row p-custom">
+  <div class="col">
+    <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+        Patient Demographics
+    </h6>
+  </div>
+</div>
+
+<div class="row p-custom">
+  <div class="col">
+    <div class="form-group">
+      <% if current_user.is_lab_patient_users? %>
+        <label>Lab</label>
+        <input type="text" class="form-control" value="<%= current_user.lab.try(:lab_name) %>" readonly>
+      <% else %>
+        <%= f.association :lab, label_method: :lab_name, value_method: :id, include_blank: '-Select-', input_html: {class: 'form-control user_district'}%>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="form-group">
+      <%= f.input :p_name, label: 'Patient Name', input_html:{class: "form-control", :onkeypress => "return onlyAlphabets(event,this);", :maxlength => 20 }%>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="form-group">
+      <%= f.input :fh_name, label: 'Father  / Husband Name', input_html:{class: "form-control", :onkeypress => "return onlyAlphabets(event,this);" , :maxlength => 20}%>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="form-group">
+      <%= f.input :gender, collection: genders, include_blank: "-Select-", input_html:{class: "form-control"}%>
+    </div>
+  </div>
+
+</div>
+
+<div class="row p-custom">
+
+  <div class="col">
+    <div class="form-group">
+
+      <%= f.input :age, input_html:{class: "form-control", onkeypress: "limit(this)", onkeyup: "limit(this)" }%>
+
+    </div>
+  </div>
+
+
+  <div class="col">
+    <div class="form-group">
+      <%= f.input :cnic_type, label: "Relationship" ,collection: guardians_relations, include_blank: "-Select-", input_html:{class: "form-control"}%>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="form-group">
+      <%= f.input :cnic, input_html:{class: "form-control cnic"}, :minlength => 13, :maxlength => 13 %>
+    </div>
+  </div>
+
+  
+  <div class="col">
+    <div class="form-group">
+      <%= f.input :contact_no, input_html:{class: "form-control phone_contact", :minlength => 11, :maxlength => 11,:onkeypress => "return onlyNumerics(event,this);" }%>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="form-group">
+      <%= f.input :other_contact_no, label: "Guardian's Contact Number", input_html:{class: "form-control phone_contact", :minlength => 11, :maxlength => 11,:onkeypress => "return onlyNumerics(event,this);"}%>
+    </div>
+  </div>    
+</div>

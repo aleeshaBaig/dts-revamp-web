@@ -1,0 +1,66 @@
+<style type="text/css">
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+
+</style>
+
+<div class="main-content-wrap  d-flex flex-column">
+	<%= render :partial => 'filter', :locals => {} %>
+  <div class="row m-t-15">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="row">
+          <div class="col-md-8">
+            <h5 class="card-title p-custom1">Third Party Audit</h5>
+          </div>
+
+          <div class="col-md-2 mt-1">
+            <%#= link_to 'Export to Excel', users_path(format: :xls), :class => 'btn btn-sm btn-success btn-block', :title => "Export to Excel"%>
+          </div>
+        </div>
+        <div class="separator-breadcrumb border-top mb-3"></div>
+        <div class="listing-tbl-area table-responsive">
+          <table id="p_table" class="table table-bordered table-hover listing-tbl">
+            <thead>
+              <tr>
+                <th>DISTRICT</th>
+                <% if params[:town].present? %>
+                  <th scope="col" abbr="Iactivity" rowspan="2">Town</th>
+                <% else %>
+                  <th scope="col" abbr="Iactivity" rowspan="2">Department</th>
+                <% end %>                
+                <th>DATE</th>
+                <th>COUNT</th>
+                <th>REPORT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @result.present? %>
+	              <% @result.each do |r| %>
+	                <tr>
+	                  <td scope="row" abbr="Name"><%= r[0][0] %></td>
+                    <td scope="row" abbr="Name"><%= r[0][2] %></td>
+                    <td scope="row" abbr="Name" class="text-center"><%= r[0][1].try(:to_date) rescue nil %></td>
+                    <td scope="row" abbr="Name" class="text-center"><%= r[1] %></td>
+                    <td class="tbl-td-color2 text-center">
+                      <% if current_user.valid_generate_tpv? %>
+                        <% if params[:town].present? %>
+                          <%=link_to "Generate", {:controller => :third_party_audits, :action => :generate_report, :datefrom => r[0][1], :town => r[0][2], :district => r[0][0], :type =>  params[:type] }, target: '_blank'%>
+                        <% else %>
+                          <%=link_to "Generate", {:controller => :third_party_audits, :action => :generate_report, :datefrom => r[0][1], :department => r[0][2], :district => r[0][0], :type =>  params[:type]  }, target: '_blank'%>
+                        <% end %>
+                      <% end %>
+                    </td>
+	                </tr>
+	              <% end %>
+	            <% end %>
+            </tbody>
+          </table>
+          <div style="color: red; text-align: center;" id="flash_message"><% if flash[:message].present? %> <span><%= flash[:message] %></span><% end %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

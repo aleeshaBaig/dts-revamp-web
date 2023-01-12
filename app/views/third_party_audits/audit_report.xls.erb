@@ -1,0 +1,134 @@
+<table id="p_table" class="table table-bordered table-hover listing-tbl">
+              <thead>
+                <tr>
+                    <th scope="col" abbr="Visitor">Job ID</th>
+                    <th scope="col" abbr="Activity">Date</th>
+                    <th scope="col" abbr="Date">District</th>
+                    <th scope="col" abbr="Date">Town</th>
+
+                    <th scope="col" abbr="Visitor">Latitude</th>
+                    <th scope="col" abbr="Visitor">Longitude</th>
+                    
+                    <th scope="col" abbr="Time">Auditor</th>
+                    <th scope="col" abbr="Time">Auditor Dept</th>
+                    <th scope="col" abbr="Time">Auditee</th>
+                    <th scope="col" abbr="Time">Auditee Dept</th>
+                    <th scope="col" abbr="Picture">Response</th>
+                    <th scope="col" abbr="Picture">Comments</th>
+                    <% if params[:type] == "rest" %>
+                      <th scope="col" abbr="Picture">Larvae Found</th>
+                      <th scope="col" abbr="Picture">Larvae Found Earlier</th>
+                      <th scope="col" abbr="Picture">Larviciding Activity Conducted</th>
+                      <th scope="col" abbr="Picture">Larviciding Activity Type</th>
+                      <th scope="col" abbr="Picture">Reason for Not Conducting Larviciding</th>
+                    <% elsif params[:type] == "cr" %>
+                      <th scope="col" abbr="Picture">Larvae Found</th>
+                      <th scope="col" abbr="Picture">Case Response</th>
+                      <th scope="col" abbr="Picture">Status of Case Response</th>
+                      <th scope="col" abbr="Picture">SOP followed in Case Response</th>
+                    <% elsif params[:type] == "indoor" or params[:type] == "outdoor" %>
+                      <th scope="col" abbr="Picture">Team Visited for Surveillance</th>
+                      <th scope="col" abbr="Picture">Awareness Material Shared</th>
+                      <th scope="col" abbr="Picture">No. of Containers</th>
+                      <th scope="col" abbr="Picture">Rooftop Checked</th>
+                      <th scope="col" abbr="Picture">Time Taken for Surveillance</th>
+                      <th scope="col" abbr="Picture">Larvae Found Earlier</th>
+                      <th scope="col" abbr="Picture">Larvae Found Now</th>
+                    <% end %>
+                      
+
+                    <!-- <th scope="col" abbr="Picture">View Activities</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <% if @result.present? %>
+  	              <% @result.each_with_index do |r, i| %>
+                    <% if params[:type] == "rest" %>
+                      <% if r.is_satisfactory? %>
+                        <% flag = true %>
+                      <% else %>
+                        <% flag = false %>
+                      <% end %>
+                      <% elsif params[:type] == "cr" %>
+                        <% if r.is_satisfactory? %>
+                          <% flag = true %>
+                        <% else %>
+                          <% flag = false %>
+                        <% end %>
+                      <% elsif params[:type] == "indoor" or params[:type] == "outdoor" %>
+                        <% if r.is_satisfactory_indoor? %>
+                          <% flag = true %>
+                        <% else %>
+                          <% flag = false %>
+                        <% end %>
+                      <% end %>
+                      <% if i.even? %>
+                          <tr class="even">
+                      <% else %>
+                          <tr class="odd">
+                      <% end %> 
+                      <% if flag == true %>
+                        <font color="#01DF01">
+                        <!-- <td><a href="/single_activity_map?activity_id=<%#= r.activity_id %>"><%#= r.activity_id %></a></td> -->
+                        <td><%= r.activity_id %></td>
+                        <td><%= r.a_date %></td>
+                        <td><%= r.district_name %></td>
+                        <td><%= r.tehsil_name %></td>
+
+                        <td><%= r.latitude %></td>
+                        <td><%= r.longitude %></td>
+                        
+                        <td><%= r.auditor %></td>
+                        <td><%= get_department_name(r.auditor_dep) %></td>
+                        <td><%= get_username(r.auditee) %></td>
+                        <td><%= r.auditee_dep %></td>
+                        <td>Satisfactory</td>
+                        <td><%= r.comments %></td>
+                        <!-- <td><%#= link_to "View Activites List", show_all_activities_against_audit_report_path(:activity_id => r.activity_id) %></td> -->
+                        </font>
+                      <% else %>
+                        <font color="#FF0000">
+                        <!-- <td><a href="/single_activity_map?activity_id=<%= r.activity_id %>"><%= r.activity_id %></a></td> -->
+                        <td><%= r.activity_id %></td>
+                        <td><%= r.a_date %></td>
+                        <td><%= r.district_name %></td>
+                        <td><%= r.tehsil_name %></td>
+
+                        <td><%= r.latitude %></td>
+                        <td><%= r.longitude %></td>
+
+                        <!-- <td><%#= r.uc_name %></td> -->
+                        <td><%= r.auditor %></td>
+                        <td><%= get_department_name(r.auditor_dep) %></td>
+                        <td><%= get_username(r.auditee) %></td>
+                        <td><%= r.auditee_dep %></td>
+                        <td>Non-compliance</td>
+                        <td><%= r.comments %></td>
+                        <!-- <td><%#= link_to "View Activites List", show_all_activities_against_audit_report_path(:activity_id => r.activity_id) %></td> -->
+                        </font>
+                      <% end %>
+                      <% if params[:type] == "rest" %>
+                        <td><%= r.larvae_found ? "Yes" : "No" %></td>
+                        <td><%= r.larvae_found_before ? "Yes" : "No" %></td>
+                        <td><%= r.larviciding ? "Yes" : "No" %></td>
+                        <td><%= r.larviciding_type %></td>
+                        <td><%= r.remarks %></td>
+                      <% elsif params[:type] == "cr" %>
+                        <td><%= r.larvae_found ? "Yes" : "No" %></td>
+                        <td><%= r.conduction_place ? "Residence" : "Workplace" %></td>
+                        <td><%= r.response_conducted_at_place ? "Yes" : "No" %></td>
+                        <td><%= r.sop_followed ? "Yes" : "No" %></td>
+                      <% elsif params[:type] == "indoor" or params[:type] == "outdoor" %>
+                        <td><%= r.visited_before ? "Yes" : "No" %></td>
+                        <td><%= r.material_provided ? "Yes" : "No" %></td>
+                        <td><%= SurveillanceAudit::NO_OF_CONTAINERS[r.no_of_containers_checked] %></td>
+                        <td><%= r.rooftop_checked.present? ? (r.rooftop_checked ? "Yes" : "No") : 'N/A' %></td>
+                        <td><%= SurveillanceAudit::TIME_TAKEN[r.time_taken] %></td>
+                        <td><%= r.larvae_found_earlier ? "Yes" : "No" %></td>
+                        <td><%= r.larvae_found ? "Yes" : "No" %></td>
+                      <% end %>
+                    </tr>
+                  <% end %>
+  	            <% end %>
+              </tbody>
+            </table>

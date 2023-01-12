@@ -1,0 +1,109 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-body p-0 m-t-10">
+                <!-- <h5 class="card-title m-0 p-custom2">Filter Records</h5>
+                <div class="separator-breadcrumb border-top mb-3"></div> -->
+                <%= form_for mobile_users_path, method: :get do |f| %>
+                    <div class="row p-custom">
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <%= text_field_tag :username , params[:username], class: 'form-control'  %>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>District</label>
+                                <%= select_tag "district_id", options_for_select(all_districts, :selected => params[:district_id]), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label> Tehsil</label>
+                                <%= select_tag :tehsil, options_for_select(tehsil_information(params[:district_id]),{:selected => params[:tehsil_id]}), {class: 'form-control', :include_blank => "All"}%>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                              <label>Role</label>
+                              <%= select_tag :role, options_for_select(['TPV', 'Anti Dengue'].map{|p| p},{:selected => params[:role]}), {class: 'form-control', :include_blank => "All"} %>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Status</label>
+                            <%= select_tag :status, options_for_select(hotspot_status_list,{:selected => params[:status]}), {class: 'form-control', :include_blank => "All"}%>
+                          </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row p-custom">
+        
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                             <button type="submit" class="btn filter-btn col-md-12 m-t-23">Filter</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+                        </div>
+                      
+                    </div>
+
+                    
+
+               <% end %>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+ $("#district_id").change(function() {
+    $.ajax({
+      url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+        // Clear all options from sub category select 
+        $("select#tehsil").removeAttr('disabled');
+        $("select#tehsil option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#tehsil");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#tehsil");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#tehsil");
+        }
+      },
+    });
+  });
+
+ function resetData(){
+  $("select, input, textarea").val("");
+};
+
+ </script>   

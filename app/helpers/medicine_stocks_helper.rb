@@ -1,0 +1,2 @@
+module MedicineStocksHelper
+end

@@ -1,0 +1,85 @@
+<div class="row p-custom">
+    <div class="col">
+        <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">
+            Patient Demographics
+        </h6>
+    </div>
+</div>
+
+<div class="row p-custom">
+    <div class="col">
+        <div class="form-group">
+            <label>Patient CNIC/Passport</label>
+            <input type="text" class="form-control" value="<%= form.p_search_type == 'CNIC' ? form.cnic : form.passport %>" readonly>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label>Hospital Name*</label>
+            <input type="text" class="form-control" value="<%= form.hospital %>" readonly>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label>Patient Name*</label>
+            <input type="text" class="form-control" value="<%= form.patient_name %>" readonly>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label>Father  / Husband Name*</label>
+            <input type="text" class="form-control" value="<%= form.fh_name %>" readonly>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label>Gender*</label>
+            <input type="text" class="form-control" value="<%= form.gender %>" readonly>
+        </div>
+    </div>
+</div>
+
+<div class="row p-custom">
+    <div class="col">
+        <div class="form-group">
+            <label>Phone Number*</label>
+            <input type="text" class="form-control" value="<%= form.patient_contact %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>Guardian's Relation</label>
+            <input type="text" class="form-control" value="<%= form.cnic_relation %>" readonly>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="form-group">
+            <label>Age*</label>
+            <input type="text" class="form-control" value="<%= form.age %>" readonly>
+        </div>
+    </div>
+    <% if form.age == 0 %>    
+        <div class="col">
+            <div class="form-group">
+                <label>Age in Months</label>          
+                <input type="text" class="form-control" value="<%= form.age_month %>" readonly>
+            </div>
+        </div>
+    <% end %>
+
+    <div class="col">
+        <div class="form-group">
+            <label>Guardian's Contact Number</label>
+            <input type="text" class="form-control" value="<%= form.relation_contact %>" readonly>
+        </div>
+    </div>        
+
+    <div class="col">
+        <div class="form-group">
+            <label>Reporting Date*</label>
+            <input type="text" class="form-control" value="<%= date form.reporting_date %>" readonly>
+        </div>
+    </div>  
+</div>

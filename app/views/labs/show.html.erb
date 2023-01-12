@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Lab name:</strong>
+  <%= @lab.lab_name %>
+</p>
+
+<p>
+  <strong>District:</strong>
+  <%= @lab.district_id %>
+</p>
+
+<p>
+  <strong>Lab type:</strong>
+  <%= @lab.lab_type %>
+</p>
+
+<%= link_to 'Edit', edit_lab_path(@lab) %> |
+<%= link_to 'Back', labs_path %>

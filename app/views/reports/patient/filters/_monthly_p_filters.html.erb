@@ -1,0 +1,188 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="card ">
+			<div class="card-body p-0 m-t-10">
+        <div class="row p-custom">
+          <div class="col-md-2">
+            <div class="form-group">
+              <label>Province</label>
+              <%= select_tag "province", options_for_select(all_provinces, :selected => params[:province]), {class: 'form-control', :include_blank => "-Select-"} %>
+            </div>
+          </div>
+
+        	<div class="col-md-2">
+        		<div class="form-group">
+        			<label>District</label>
+        			<%= select_tag "district", options_for_select(district_information(params[:province]), :selected => params[:district]), {class: 'form-control user_district', :include_blank => "-Select-"} %>
+        		</div>
+        	</div>
+
+        	<div class="col-md-2">
+        		<div class="form-group">
+        			<label>Tehsil</label>
+        			<%= select_tag "tehsil", options_for_select(tehsil_information(params[:district]), :selected => params[:tehsil]), {class: 'form-control user_tehsil', :include_blank => "-Select-"} %>
+        		</div>
+        	</div>
+
+        	<div class="col-md-2">
+        		<div class="form-group">
+        			<label>UC</label>
+        			<%= select_tag "uc", options_for_select(ucs_information(params[:tehsil]), :selected => params[:uc]), {class: 'form-control user_uc', :include_blank => "-Select-"} %>
+        		</div>
+        	</div>
+
+        	<div class="col-md-2">
+        		<div class="form-group">
+        			<label>Month</label>
+        			<%= select_tag "month", options_for_select(all_months, :selected => params[:month]), {class: 'form-control', :include_blank => "-Select-"} %>
+        		</div>
+        	</div>
+
+        	<div class="col-md-2">
+        		<div class="form-group">
+        			<label>Year</label>
+        			<%= select_tag "year", options_for_select(all_years, :selected => params[:year]), {class: 'form-control', :include_blank => "-Select-"} %>
+        		</div>
+        	</div>
+        </div>
+
+        <div class="row p-custom">
+        	<div class="col-md-2"></div>
+        	<div class="col-md-2"></div>
+        	<div class="col-md-2"></div>
+        	<div class="col-md-2"></div>
+
+        	<div class="col-md-2">
+        		<button type="submit" class="btn filter-btn col-md-12 m-t-23" onclick="filter_patients()">Filter</button>
+        	</div>
+        	<div class="col-md-2">
+        		<button type="button" class="btn  reset-btn col-md-12 m-t-23" onclick="resetData()">Reset</button>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $("#province").change(function() {
+    $.ajax({
+      url:'/ajax/populate_province_district?province_id='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+
+        // Clear all options from District Dropdown
+        $("select#district").removeAttr('disabled');
+        $("select#district option").remove();
+
+        // Clear all options from Tehsil Dropdown
+        $("select#tehsil").removeAttr('disabled');
+        $("select#tehsil option").remove();
+
+        // Append -Select- Value to Tehsil Dropdown
+        var tehsil_row = "<option value=\"" + "" + "\">" + "-Select-" + "</option>";
+        $(tehsil_row).appendTo("select#tehsil");
+
+        // Clear all options from UC Dropdown
+        $("select#uc").removeAttr('disabled');
+        $("select#uc option").remove();
+
+        // Append -Select- Value to UC Dropdown
+        var uc_row = "<option value=\"" + "" + "\">" + "-Select-" + "</option>";
+        $(uc_row).appendTo("select#uc");
+
+        // Fill sub category select
+        if (transport.length >= 1) {
+          var row = "<option value=\"" + "" + "\">" + "-Select-" + "</option>";
+          $(row).appendTo("select#district");
+          //// Fill sub category select
+          $.each(transport, function(i) {
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#district");
+          });
+        } else {
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#district");
+        }
+      },
+    });
+  });
+
+	$("#district").change(function() {
+		$.ajax({
+			url:'/ajax/populate_tehsil?district='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+
+        // Clear all options from Tehsil Dropdown
+        $("select#tehsil").removeAttr('disabled');
+        $("select#tehsil option").remove();
+
+        // Clear all options from UC Dropdown
+        $("select#uc").removeAttr('disabled');
+        $("select#uc option").remove();
+
+        var uc_row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+        $(uc_row).appendTo("select#uc");
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#tehsil");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#tehsil");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#tehsil");
+        }
+      },
+    });
+  });
+
+  $("#tehsil").change(function() {
+    $.ajax({
+      url:'/ajax/populate_uc?town='+this.value,
+      dataType: 'json',
+      success: function(transport) {
+        // console.log(transport);
+
+        // Clear all options from UC Dropdown
+        $("select#uc").removeAttr('disabled');
+        $("select#uc option").remove();
+
+        // Fill sub category select 
+        if (transport.length >= 1){
+          var row = "<option value=\"" + "" + "\">" + "Select" + "</option>";
+          $(row).appendTo("select#uc");
+          //// Fill sub category select
+          $.each(transport, function(i){
+            row = "<option value=\"" + transport[i][1] + "\">" + transport[i][0] + "</option>";
+            $(row).appendTo("select#uc");
+          });
+        }else{
+          var row = "<option value=\"" + "" + "\">" + "" + "</option>";
+          $(row).appendTo("select#uc");
+        }
+      },
+    });
+  });
+
+  function filter_patients() {
+  	window.location = "?" + "district=" + $("#district").val() + "&tehsil=" + $("#tehsil").val() + "&uc=" + $("#uc").val() + "&month=" + $("#month").val() + "&year=" + $("#year").val() + "&province=" + $("#province").val();
+  };
+
+  function resetData() {
+  	$("#province").val("");
+  	$("#district").val("");
+    $("#tehsil").val("");
+    $("#uc").val("");
+    $("#month").val("");
+    $("#year").val("");
+    window.location.href = "<%= monthly_patients_reports_patient_index_path %>";
+  }
+</script>

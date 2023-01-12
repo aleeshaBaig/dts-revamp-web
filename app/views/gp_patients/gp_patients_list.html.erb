@@ -1,0 +1,179 @@
+<style type="text/css">
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+</style>
+<div class="main-content-wrap  d-flex flex-column">
+  <%= render :partial => 'gp_patients/filter', :locals => {} %>
+  <div class="row m-t-15">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="row">
+          <div class="col-md-10">
+            <h5 class="card-title p-custom1">GP Patients List</h5>
+          </div>
+
+          <div class="col-md-2 mt-2 pr-4">
+            <%= link_to 'Export to Excel', gp_patients_list_path(format: :xls, cnic: params[:cnic], p_name: params[:p_name], r_date: params[:r_date], prov_diagnosis: params[:prov_diagnosis],district: params[:district], tehsil: params[:tehsil], uc: params[:uc], d_from: params[:d_from], d_to: params[:d_to], added_by: params[:added_by]), :class => 'btn btn-success float-right filter-btn2', :title => "Export to Excel"%>
+          </div>
+        </div>
+        <div class="separator-breadcrumb border-top mb-3"></div>
+        <div class="listing-tbl-area table-responsive">
+          <table class="table table-bordered table-hover listing-tbl">
+            <thead>
+              <tr>
+                <th>Sr. #</th>
+                <th>GP User ID</th>
+                <th>Patient Name</th>
+                <th>Father/Husband Name</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                <th>CNIC</th>
+                <th>Phone Number</th>
+                <th>Occupation</th>
+                <th>District</th>
+                <th>Town/Tehsil</th>
+                <th>UC Name</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Provisional Diagnosis</th>
+                <th>Diagnosis</th>
+                <th>Dengue Type</th>
+                <th>Onset Date Fever</th>
+                <th>Prev Dengue Fever</th>
+                <th>Fever</th>
+                <th>Warning Signs</th>
+                <th>Antigen Performed</th>
+                <th>IgM Performed</th>
+                <th>IgG Performed</th>
+                <th>WBC First Reading</th>
+                <th>WBC First Reading Date</th>
+                <th>Patient Status</th>
+                <th>Comments</th>
+                <th>Reporting Date</th>
+                <th>Added By</th>
+                
+                
+                <!-- <th>Year of Birth</th> -->
+
+                <% if false %>
+                <th>Patient Type</th>
+                <th>Patient Condition</th>
+                <th>Street No/Name</th>
+                <th>House No.</th>
+                <th>Viral Detection Performed</th>
+                <th>Hospital Name</th>
+                <th>Locality</th>
+                <% end %>
+
+                
+
+                <% if current_user.role == "patient_admin" and (current_user.designation == "Data Entry Operator" or current_user.designation == "Provisional Incharge" or current_user.designation == "Admin") %>
+                <th>Edit</th>
+                <% end %>
+                <% if current_user.username == "adg.epc" %>
+                <th>Delete</th>
+                <% end %>
+
+              </tr>
+            </thead>
+            <tbody>
+              <% if @patients.present? %>
+                <% @patients.each_with_index do |gp_patient, index| %>
+                  <% if index.even? %>
+                  <tr class="even">
+                  <% else %>
+                  <tr class="odd">
+                  <% end %>
+
+                    <td><%= index + 1 %></td>
+                    <td><%= gp_patient.gp_user_id %></td>
+                    <td><%= gp_patient.patient_name %></td>
+                    <td><%= gp_patient.fh_name %></td>
+                    <td><%= gp_patient.gender %></td>
+                    <td><%= gp_patient.dob %></td>
+                    <td><%= gp_patient.cnic %></td>
+                    <td><%= gp_patient.phone_number %></td>
+                    <td><%= gp_patient.occupation %></td>
+                    <td><%= gp_patient.district %></td>
+                    <td><%= gp_patient.town_tehsil %></td>
+                    <td><%= gp_patient.uc_name %></td>
+                    <td><%= gp_patient.lat %></td>
+                    <td><%= gp_patient.long %></td>
+                    <td><%= gp_patient.provisional_diagnosis %></td>
+                    <td><%= gp_patient.diagnosis %></td>
+                    <td><%= gp_patient.dengue_type %></td>
+                    <% if gp_patient.onset_date_fever.present? %>
+                    <!-- <td><%#= gp_patient.onset_date_fever.strftime("%d/%m/%Y %H:%M:%S") %></td> -->
+                        <td><%= gp_patient.onset_date_fever.to_date.to_formatted_s(:long_ordinal) %></td>
+                    <% else %>
+                        <td>Not Present</td>
+                    <% end %>
+                    <td><%= gp_patient.prev_dengue_fever %></td>
+                    <td><%= gp_patient.fever %></td>
+                    <td><%= gp_patient.warning_signs %></td>
+                    <td><%= gp_patient.antigen_performed %></td>
+                    <td><%= gp_patient.igm_performed %></td>
+                    <td><%= gp_patient.igg_performed %></td>
+                    <td><%= gp_patient.wbc_first_reading %></td>
+                    <td><%= gp_patient.wbc_first_date %></td>
+                    <td><%= gp_patient.patient_status %></td>
+                    <td><%= gp_patient.comments %></td>
+                    <% if gp_patient.reporting_date.present? %>
+                    <!-- <td><%#= gp_patient.reporting_date.strftime("%d/%m/%Y %H:%M:%S") %></td> -->
+                    <td><%= gp_patient.reporting_date.to_date.to_formatted_s(:long_ordinal) %></td>
+                    <% else %>
+                    <td>Not Present</td>
+                    <% end %>
+                      <!-- Added By -->
+                    <!-- -------- -->
+                    <td><%= gp_patient.gp_user.try(:name) %></td>
+                   
+                   
+                    <% if false %>
+                    <td><%= gp_patient.patient_type %></td>
+                    <td><%= gp_patient.patient_condition %></td>
+                    <td><%= gp_patient.street_no_name %></td>
+                    <td><%= gp_patient.house_no %></td>
+                    <td><%= gp_patient.viral_detection_performed %></td>
+                    <td><%= gp_patient.hospital_name %></td>
+                    <td><%= gp_patient.locality %></td>
+                    <% end %>
+
+                    <!-- -------- -->
+                  
+
+                    <!-- ----------- -->
+                    <!-- Edit Action -->
+                    <!-- ----------- -->
+                    <% if current_user.role == "patient_admin" and (current_user.designation == "Data Entry Operator" or current_user.designation == "Provisional Incharge" or current_user.designation == "Admin") %>
+                    <td><%= link_to 'Edit', edit_gp_patients_list_path(gp_patient) %></td>
+                    <% end %>
+
+                    <!-- ------------- -->
+                    <!-- Delete Action -->
+                    <!-- ------------- -->
+                    <% if current_user.username == "adg.epc" %>
+                    <td><%= link_to 'Delete', gp_patient, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                    <% end %>
+
+                  </tr>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+          <div style="color: red; text-align: center;" id="flash_message"><% if flash[:message].present? %> <span><%= flash[:message] %></span><% end %></div>
+        </div>
+        <div class="text-center">
+          <% if @patients.present? %> 
+                  <%= will_paginate @patients, :class => 'apple_pagination'  %>
+                  <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b><%= @patients.total_entries %></div> 
+                <% else %> 
+                  <div class="apple_pagination"><b style="font-weight: bold;">Total Records: </b> 0 </div> 
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

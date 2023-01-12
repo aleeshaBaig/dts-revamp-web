@@ -1,0 +1,87 @@
+<ul class="navbar-nav mr-auto"style="margin-left: 1%;">
+  <li class="nav-item active m-l-1">
+    <a class="nav-link" href="<%= default_home_path %>">
+      <i class="nav-icon fa fa-dashboard mr-1"></i> Dashboard <span class="sr-only">(current)</span></a>
+  </li>
+
+  <!-- Hospital Information -->
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"><i class="nav-icon fa fa-bug mr-1"></i>Insecticides</a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" href="/insecticide_stocks">Insecticide Stock</a>
+    </div>
+  </li>
+
+  <% if current_user.hotspot_status? %>
+    <li class="nav-item active m-l-1">
+      <a class="nav-link" href="<%= hotspots_path %>">
+      <i class="nav-icon fa fa-map-marker mr-1"></i> Hotspots</a>
+    </li>
+  <% end %>
+
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      <i class="nav-icon fa fa-map mr-1"></i> Maps</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="<%= heat_map_path %>">Heat Map</a>
+        <a class="dropdown-item" href="<%= case_response_evidence_path %>">Case Response Evidence</a>
+      </div>
+  </li>
+
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      <i class="nav-icon fa fa-chart-line mr-1"></i>Activities</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="<%= line_list_activities_patients_path %>">Patient Activity List</a>
+        <a class="dropdown-item" href="<%= line_list_activities_simples_path %>">Simple Activity List</a>
+        <a class="dropdown-item" href="/bogus_activities">Bogus Activity List</a>
+        <a class="dropdown-item" href="<%= summary_of_activities_town_wise_path %>">Town Wise Activities</a>
+        <a class="dropdown-item" href="<%= summary_of_activities_district_wise_path %>">District Wise Activities</a>
+        <a class="dropdown-item" href="<%= summary_of_activities_dept_wise_path %>">Department Wise Activities</a>
+        <a class="dropdown-item" href="<%= third_party_audits_path %>">Third Party Audit</a>
+        <a class="dropdown-item" href="<%= audit_report_third_party_audits_path %>">Audit Report</a>
+        <a class="dropdown-item" href="<%= hotspot_visit_summary_path %>">Hotspot Visit Summary</a>
+        <a class="dropdown-item" href="<%= district_wise_hotspot_coverage_path %>">District Wise Hotspot Coverage</a>
+        <a class="dropdown-item" href="<%= line_list_activities_vector_surveillances_path %>">Vector Surveillance Activity List</a>
+      </div>
+  </li>
+
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      <i class="nav-icon fa fa-address-card mr-1"></i>User Reports</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="<%= summary_of_activities_user_wise_reports_activities_path %>">User Wise Activities</a>
+        <a class="dropdown-item" href="<%= user_wise_larva_report_path %>">User Wise Dormancy Report</a>
+      </div>
+    </a>
+  </li>
+
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      <i class="nav-icon fa fa-wheelchair mr-1"></i>Patients
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" href="/patients">Patients Listing</a>
+      <a class="dropdown-item" href="/released_patients">Released Patients</a>
+      <a class="dropdown-item" href="/gp_patients_list">Legacy GP Patients Listing</a>
+      <a class="dropdown-item" href="/gp_dengue_patients">GP Patients Listing</a>
+    </div>
+  </li>
+
+  <li class="nav-item dropdown m-l-1">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      <i class="nav-icon fa fa-chart-bar mr-1"></i>Patient Reports
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" href="<%= epidemiological_reports_patient_index_path %>">Epidemiological Report</a>
+      <a class="dropdown-item" href="<%= monthly_patients_reports_patient_index_path %>">Monthly Patients</a>
+      <a class="dropdown-item" href="<%= zero_patient_reports_patient_index_path %>">Zero Patient Report</a>
+       <a class="dropdown-item" href="<%= zero_lab_patient_reports_patient_index_path %>">Lab Zero Patient Report</a>
+      <a class="dropdown-item" href="<%= provisional_diagnosis_uc_wise_reports_patient_index_path %>">Provisional Diagnosis UC- Wise</a>
+      
+    </div>
+  </li>
+
+
+  <%=  render '/application/help' %>
+</ul>

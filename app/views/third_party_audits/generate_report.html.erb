@@ -1,0 +1,90 @@
+<style type="text/css">
+.customizer2 .handle2 {
+    position: absolute;
+    display: flex;
+    top: 300px;
+    left: 208px;
+    cursor: pointer;
+    padding: 10px 8px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: -3px 0 4px rgba(0,0,0,.06);
+    font-size: 15px;
+    transition: all .3s ease-in-out;
+    white-space: nowrap;
+    height: 43px;
+    transform: rotate(-90deg);
+}
+
+.customizer2 .handle2, .customizer2 .handle2:hover {
+    background: #135591;
+    color: #fff;
+    left: 12px;
+}
+
+.admin-icon{
+  margin-right: 16px;
+}
+
+th {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+
+</style>
+
+<body class="text-left">
+  <div class="app-admin-wrap layout-horizontal-bar clearfix">
+    <div class="main-content-wrap  d-flex flex-column">
+      <div class="main-content"> 
+        <%#= render :partial => 'filter', :locals => {} %>
+        <div class="row m-t-15">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body p-0">
+                <h5 class="card-title p-custom1">TPV Audit Report-Samples</h5>
+                
+                  <div class="separator-breadcrumb border-top mb-3"></div>
+                    <div class="listing-tbl-area table-responsive">
+                      <div style="color: red; text-align: center;" id="flash_message"><% if flash[:message].present? %> <span><%= flash[:message] %></span><% end %></div>
+                      <table class="table table-bordered table-hover listing-tbl">
+                        <thead>
+                          <tr>
+                            <th scope="col" abbr="Iactivity" rowspan="2">User</th>
+                            <th scope="col" abbr="Iactivity" rowspan="2">Town</th>
+                            <th scope="col" abbr="Iactivity" rowspan="2">Department</th>
+                            <th scope="col" abbr="Iactivity" rowspan="2">UC</th>
+                            <th scope="col" abbr="Iactivity" rowspan="2">Activity ID</th>  
+                            <th scope="col" abbr="Iactivity" colspan="1">Category</th>
+                            <th scope="col" abbr="Iactivity" colspan="1">Address</th>
+                          </tr>
+                        </thead>
+                        <% @result.each_with_index do |r,i| %>
+                          <% if i.even? %>
+                          <tr class="even">
+                        <% else %>
+                          <tr class="odd">
+                        <% end %>
+                        <td scope="row" abbr="Name"><%= r.user.try(:username) %></td>
+                        <% if r.tehsil_name.present? and !r.tehsil_name.include? "null_string" %>
+                          <td scope="row" abbr="Name"><%= r.tehsil_name %></td>
+                        <% else %>
+                          <td scope="row" abbr="Name"></td>
+                        <% end %>
+                        <td scope="row" abbr="Name"><%= r.department_name %></td>
+                        <td scope="row" abbr="Name"><%= r.uc_name %></td>
+                        <td scope="row" abbr="Name"><%= r.id %></td>
+                        <td scope="row" abbr="Name"><%= get_category(@activity_wise_type, r.id) %></td>
+                        <td scope="row" abbr="Name"><%= r.description %></td>
+                        </tr>
+                        <% end %>
+                      </table>
+                    </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </body> 

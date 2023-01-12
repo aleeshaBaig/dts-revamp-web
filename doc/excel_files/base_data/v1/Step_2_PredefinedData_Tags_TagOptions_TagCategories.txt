@@ -1,0 +1,507 @@
+{
+  "message": "Success",
+  "code": 200,
+  "status": true,
+  "data": {
+    "form_options": [
+      {
+        "option_id": "1",
+        "option_name": "CATEGORY_YES_NO_LARVAE"
+      },
+      {
+        "option_id": "2",
+        "option_name": "CATEGORY_POSITIVE_NEGATIVE_LARVAE"
+      },
+      {
+        "option_id": "3",
+        "option_name": "CATEGORY_INDOOR_OUTDOOR"
+      },
+      {
+        "option_id": "4",
+        "option_name": "CATEGORY_PUBLIC_PRIVATE"
+      },
+      {
+        "option_id": "5",
+        "option_name": "CATEGORY_PATIENT"
+      },
+      {
+        "option_id": "6",
+        "option_name": "CATEGORY_YES_NO_MOSQUITO"
+      },
+      {
+        "option_id": "7",
+        "option_name": "CATEGORY_POSITIVE_NEGATIVE_MOSQUITO"
+      },
+      {
+        "option_id": "8",
+        "option_name": "CATEGORY_IS_INSPECTOR"
+      },
+      {
+        "option_id": "9",
+        "option_name": "CATEGORY_DISTRICT"
+      },
+      {
+        "option_id": "10",
+        "option_name": "CATEGORY_IRS_PATIENT"
+      },
+      {
+        "option_id": "11",
+        "option_name": "CATEGORY_UC"
+      },
+      {
+        "option_id": "12",
+        "option_name": "CATEGORY_POSITIVE_LARVAE"
+      },
+      {
+        "option_id": "13",
+        "option_name": "CATEGORY_TOWN"
+      }
+    ],
+    "categories": [
+      {
+        "category_id": "1",
+        "category_name": "Hotspots",
+        "category_name_en": "Hotspots",
+        "category_name_ur": "ہوٹ سپاٹ",
+        "tags": [
+          {
+            "tag_id": "1",
+            "category_id": "1",
+            "tag": "godowns",
+            "tag_name_en": "Godowns",
+            "tag_name_ur": "گودام",
+            "tag_image": "godowns",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "2",
+            "category_id": "1",
+            "tag": "water_ponding",
+            "tag_name_en": "Water Ponding",
+            "tag_name_ur": "پانی کی تالاب",
+            "tag_image": "water_ponding",
+            "tag_options": "1,2,9,13"
+          },
+          {
+            "tag_id": "3",
+            "category_id": "1",
+            "tag": "factories",
+            "tag_name_en": "Factories",
+            "tag_name_ur": "فیکٹریاں",
+            "tag_image": "factories",
+            "tag_options": "1,2,9,13"
+          },
+          {
+            "tag_id": "4",
+            "category_id": "1",
+            "tag": "nursery",
+            "tag_name_en": "Nursery",
+            "tag_name_ur": "نرسری",
+            "tag_image": "nursery",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "5",
+            "category_id": "1",
+            "tag": "swimming_pools",
+            "tag_name_en": "Swimming Pools",
+            "tag_name_ur": "تیراکی کے تالاب",
+            "tag_image": "swimming_pools",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "6",
+            "category_id": "1",
+            "tag": "underconstruction",
+            "tag_name_en": "Under Construction Buildings",
+            "tag_name_ur": "زیر تعمیر عمارات",
+            "tag_image": "under_construction_buildings",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "7",
+            "category_id": "1",
+            "tag": "marriage_halls",
+            "tag_name_en": "Marriage Halls",
+            "tag_name_ur": "میرج ہال",
+            "tag_image": "marriage_halls",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "8",
+            "category_id": "1",
+            "tag": "abandoned_buildings",
+            "tag_name_en": "Abandoned Buildings",
+            "tag_name_ur": "ترک کردی گئی عمارتیں",
+            "tag_image": "abandoned_buildings",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "9",
+            "category_id": "1",
+            "tag": "service_stations",
+            "tag_name_en": "Service Stations",
+            "tag_name_ur": "سروس اسٹیشن",
+            "tag_image": "service_stations",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "10",
+            "category_id": "1",
+            "tag": "graveyard",
+            "tag_name_en": "Graveyards",
+            "tag_name_ur": "قبرستان",
+            "tag_image": "graveyard",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "11",
+            "category_id": "1",
+            "tag": "school",
+            "tag_name_en": "School",
+            "tag_name_ur": "اسکول",
+            "tag_image": "school",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "12",
+            "category_id": "1",
+            "tag": "hotels",
+            "tag_name_en": "Hotels",
+            "tag_name_ur": "ہوٹلوں",
+            "tag_image": "hotel",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "13",
+            "category_id": "1",
+            "tag": "garbage",
+            "tag_name_en": "Garbage Sites",
+            "tag_name_ur": "کوڑا کرکٹ والی جگیں",
+            "tag_image": "garbage_sites",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "14",
+            "category_id": "1",
+            "tag": "parks",
+            "tag_name_en": "Parks",
+            "tag_name_ur": "پارکس",
+            "tag_image": "parks",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "15",
+            "category_id": "1",
+            "tag": "mosques",
+            "tag_name_en": "Mosques/Religious Places/Shrines",
+            "tag_name_ur": "مساجد / مذہبی مقامات / زیارتیں",
+            "tag_image": "mosques",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "16",
+            "category_id": "1",
+            "tag": "workshops",
+            "tag_name_en": "Workshops",
+            "tag_name_ur": "ورکشاپس",
+            "tag_image": "workshops",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "17",
+            "category_id": "1",
+            "tag": "junkyard",
+            "tag_name_en": "Junkyards",
+            "tag_name_ur": "کباڑیوں",
+            "tag_image": "junkyard",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "18",
+            "category_id": "1",
+            "tag": "tyres",
+            "tag_name_en": "Tyre Shops",
+            "tag_name_ur": "ٹائر شاپس",
+            "tag_image": "tyre_shops",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "19",
+            "category_id": "1",
+            "tag": "bus_terminal",
+            "tag_name_en": "Bus Terminals",
+            "tag_name_ur": "بس ٹرمینلز",
+            "tag_image": "bus_terminal",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "20",
+            "category_id": "1",
+            "tag": "colleges",
+            "tag_name_en": "Colleges",
+            "tag_name_ur": "کالجز",
+            "tag_image": "college",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "21",
+            "category_id": "1",
+            "tag": "railway_station",
+            "tag_name_en": "Railway Stations and Workshops",
+            "tag_name_ur": "ریلوے اسٹیشن اور ورکشاپس",
+            "tag_image": "railway_stations",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "22",
+            "category_id": "1",
+            "tag": "roof_top",
+            "tag_name_en": "Rooftops of high rise buildings",
+            "tag_name_ur": "اونچی عمارتوں کی چھتیں",
+            "tag_image": "rooftops_of_high_rise_buildings",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "23",
+            "category_id": "1",
+            "tag": "grid_station",
+            "tag_name_en": "Grid Stations",
+            "tag_name_ur": "گرڈ اسٹیشنز",
+            "tag_image": "grid_stations",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "24",
+            "category_id": "1",
+            "tag": "tube_well",
+            "tag_name_en": "Tube Wells",
+            "tag_name_ur": "ٹیوب ویلز",
+            "tag_image": "tube_wells",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "25",
+            "category_id": "1",
+            "tag": "filtration_plant",
+            "tag_name_en": "Filtration Plants",
+            "tag_name_ur": "فلٹریشن پلانٹس",
+            "tag_image": "filtration_plants",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "26",
+            "category_id": "1",
+            "tag": "historical_monuments",
+            "tag_name_en": "Historical Monuments",
+            "tag_name_ur": "تاریخی یادگار",
+            "tag_image": "historical monuments",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "27",
+            "category_id": "1",
+            "tag": "parking_stands",
+            "tag_name_en": "Parking Stands",
+            "tag_name_ur": "پارکنگ اسٹینڈز",
+            "tag_image": "parking_stands",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "28",
+            "category_id": "1",
+            "tag": "dairy_farms",
+            "tag_name_en": "Diary Farms",
+            "tag_name_ur": "ڈیری فارم",
+            "tag_image": "dairy_farms",
+            "tag_options": "1,2,9,11,13"
+          }
+        ]
+      },
+      {
+        "category_id": "2",
+        "category_name": "Patient",
+        "category_name_en": "Patient",
+        "category_name_ur": "مریض",
+        "tags": [
+          {
+            "tag_id": "29",
+            "category_id": "2",
+            "tag": "patient",
+            "tag_name_en": "Patient",
+            "tag_name_ur": "مریض",
+            "tag_image": "patient",
+            "tag_options": "3"
+          },
+          {
+            "tag_id": "30",
+            "category_id": "2",
+            "tag": "patient_surveillance",
+            "tag_name_en": "patient surveillance",
+            "tag_name_ur": "مریضوں کی نگرانی",
+            "tag_image": "patient_surveillance",
+            "tag_options": "9"
+          },
+          {
+            "tag_id": "31",
+            "category_id": "2",
+            "tag": "patient_irs",
+            "tag_name_en": "Patient IRS",
+            "tag_name_ur": "آئی آر ایس مریض",
+            "tag_image": "patient_irs",
+            "tag_options": "9"
+          }
+        ]
+      },
+      {
+        "category_id": "3",
+        "category_name_en": "Larvae",
+        "category_name_ur": "لاروا",
+        "tags": [
+          {
+            "tag_id": "32",
+            "category_id": "3",
+            "tag": "irs",
+            "tag_name_en": "IRS",
+            "tag_name_ur": "آئی آر ایس",
+            "tag_image": "irs",
+            "tag_options": ""
+          },
+          {
+            "tag_id": "33",
+            "category_id": "3",
+            "tag": "fogging",
+            "tag_name_en": "Fogging",
+            "tag_name_ur": "فوگنگ",
+            "tag_image": "fogging",
+            "tag_options": "3"
+          },
+          {
+            "tag_id": "34",
+            "category_id": "3",
+            "tag": "larviciding",
+            "tag_name_en": "Larviciding",
+            "tag_name_ur": "لارویسائڈنگ",
+            "tag_image": "larviciding",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "35",
+            "category_id": "3",
+            "tag": "ovi_trap",
+            "tag_name_en": "Ovi Trap",
+            "tag_name_ur": "اووی ٹریپ",
+            "tag_image": "ovi_trap",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "36",
+            "category_id": "3",
+            "tag": "adult_mosquitoes",
+            "tag_name_en": "Adult Mosquitoes",
+            "tag_name_ur": "بالغ مچھر",
+            "tag_image": "adult_mosquito",
+            "tag_options": "6,7,9,11,13"
+          },
+          {
+            "tag_id": "37",
+            "category_id": "3",
+            "tag": "machli",
+            "tag_name_en": "Machli",
+            "tag_name_ur": "مچھلی",
+            "tag_image": "",
+            "tag_options": ""
+          }
+        ]
+      },
+      {
+        "category_id": "4",
+        "category_name": "General",
+        "category_name_en": "General",
+        "category_name_ur": "جنرل",
+        "tags": [
+          {
+            "tag_id": "38",
+            "category_id": "4",
+            "tag": "Damaged Tap",
+            "tag_name_en": "Damaged Tap",
+            "tag_name_ur": "خراب نلکا",
+            "tag_image": "",
+            "tag_options": "3"
+          },
+          {
+            "tag_id": "39",
+            "category_id": "4",
+            "tag": "grass_cutting",
+            "tag_name_en": "Grass Cutting",
+            "tag_name_ur": "گھاس کاٹنا",
+            "tag_image": "",
+            "tag_options": ""
+          },
+          {
+            "tag_id": "40",
+            "category_id": "4",
+            "tag": "garbage",
+            "tag_name_en": "Garbage",
+            "tag_name_ur": "کوڑا کرکٹ",
+            "tag_image": "",
+            "tag_options": "3"
+          },
+          {
+            "tag_id": "41",
+            "category_id": "4",
+            "tag": "water_drainage",
+            "tag_name_en": "Water Drainage",
+            "tag_name_ur": "پانی خشک کرنا",
+            "tag_image": "",
+            "tag_options": "3"
+          },
+          {
+            "tag_id": "42",
+            "category_id": "4",
+            "tag": "awarness",
+            "tag_name_en": "Awarness",
+            "tag_name_ur": "بیداری",
+            "tag_image": "",
+            "tag_options": "9,11,13"
+          },
+          {
+            "tag_id": "43",
+            "category_id": "4",
+            "tag": "khara_pani",
+            "tag_name_en": "Khara Pani",
+            "tag_name_ur": "کھڑا پانی",
+            "tag_image": "",
+            "tag_options": "1,2,9,11,13"
+          },
+          {
+            "tag_id": "44",
+            "category_id": "4",
+            "tag": "others",
+            "tag_name_en": "Others",
+            "tag_name_ur": "دیگر اشیاء",
+            "tag_image": "",
+            "tag_options": ""
+          }
+        ]
+      },
+      {
+        "category_id": "5",
+        "category_name": "House Keeping",
+        "category_name_en": "House Keeping",
+        "category_name_ur": "ہاؤس کیپنگ",
+        "tags": [
+          {
+            "tag_id": "45",
+            "category_id": "5",
+            "tag": "house_keeping",
+            "tag_name_en": "House Keeping",
+            "tag_name_ur": "ہاؤس کیپنگ",
+            "tag_image": "",
+            "tag_options": ""
+          }
+        ]
+      }
+    ]
+  }
+}

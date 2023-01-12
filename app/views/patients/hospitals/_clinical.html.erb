@@ -1,0 +1,298 @@
+
+<div class="row p-custom">
+  <div class="col">
+    <h6 class="card-title p-custom1" style="font-weight: 700; font-size: 15px;padding: 10px 0 0 0;">Clinical Information</h6>
+  </div>
+</div>  
+<div class="row p-custom pointer-events <%= is_disabled_confirmed_dpc_user?(form) ? 'disabledbutton' : ''%>">
+  
+  <div class="col">
+      <div class="form-group">
+          <label>Date of Onset of Fever</label>
+          <%= form.date_field :date_of_onset, class: "form-control", max: Date.today %>
+      </div>
+  </div>  
+  <div class="col">
+      <div class="form-group">
+          <label>Fever Lasting For</label>
+          <%= form.date_field :fever_last_till, class: "form-control" , max: Date.today%>
+      </div>
+  </div>  
+  <div class="col">
+    <div class="form-group">
+        <label>Fever (>2 AND < THAN 10days Duration)*</label>
+        <div class="radio-btn-area">
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              Yes <%= form.radio_button :fever, true, class: "form-check-input", :checked => true %>
+            </label>
+          </div>
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              No <%= form.radio_button :fever, false, class: "form-check-input" %>
+            </label>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="form-group">
+        <label>Previous H/O Dengue Fever*</label>
+        <div class="radio-btn-area">
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              Yes <%= form.radio_button :previous_dengue_fever, true, class: "form-check-input" %>
+            </label>
+          </div>
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              No <%= form.radio_button :previous_dengue_fever, false, class: "form-check-input" %>
+            </label>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="form-group">
+        <label>Appearance of Associated Symptoms*</label>
+        <div class="radio-btn-area">
+          <% if form.object.persisted? and form.object.lab_user_id.nil? %>
+            <div class="form-check-inline">
+              <label class="form-check-label">
+                Yes <%= form.radio_button :associated_symptom, true, class: "form-check-input",:disabled => true %>
+              </label>
+            </div>
+            <div class="form-check-inline">
+              <label class="form-check-label">
+                No <%= form.radio_button :associated_symptom, false, class: "form-check-input",:disabled => true %>
+              </label>
+            </div>
+          <% else %>
+            <div class="form-check-inline">
+              <label class="form-check-label">
+                Yes <%= form.radio_button :associated_symptom, true, class: "form-check-input" %>
+              </label>
+            </div>
+            <div class="form-check-inline">
+              <label class="form-check-label">
+                No <%= form.radio_button :associated_symptom, false, class: "form-check-input" %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="row p-custom">
+  <div class="col">
+      <div class="form-group">
+          <label>Provisional Diagnosis*</label>
+          <% if form.object.persisted? and current_user.role != "epc_user" %>
+            <%# if (form.object.provisional_diagnosis == "Confirmed" or form.object.provisional_diagnosis == "Non-Dengue" and form.object.patient_status == 'In Process' )%>
+            <% if (form.object.provisional_diagnosis == "Non-Dengue" and form.object.patient_status == 'In Process' )%>
+              <%= form.select :provisional_diagnosis, provisional_diagnosis_list,{:include_blank => "Select"}, {class: "form-control",:disabled => true} %>
+            <% elsif (form.object.provisional_diagnosis == "Confirmed")%>
+              <%= form.select :provisional_diagnosis, provisional_diagnosis_list,{:include_blank => "Select"}, {class: "form-control",:disabled => true} %>
+            <% elsif form.object.provisional_diagnosis == "Probable" %>
+              <%= form.select :provisional_diagnosis, probable_provisional_diagnosis_list, {:include_blank => "Select"}, {class: "form-control"} %> 
+            <% else %>
+               <%= form.select :provisional_diagnosis, provisional_diagnosis_list, {:include_blank => "Select"}, {class: "form-control"} %>
+            <% end %>
+          <% elsif current_user.role == "epc_user" %>
+            <%= form.select :provisional_diagnosis, provisional_diagnosis_list, {:include_blank => "Select"}, {class: "form-control"} %>
+          <% elsif (params[:lab_patient_id].present? or form.object.lab_patient_id.present?) and form.object.provisional_diagnosis == "Confirmed" %>
+            <%= form.select :provisional_diagnosis, provisional_diagnosis_list,{:include_blank => "Select"}, {class: "form-control",:disabled => true} %>
+            <%= form.hidden_field :provisional_diagnosis, value: form.object.provisional_diagnosis, id: 'prov_dig_hidden' %>
+          <% else %>
+            <%= form.select :provisional_diagnosis, provisional_diagnosis_list, {:include_blank => "Select"}, {class: "form-control"} %>
+          <% end %>
+      </div>
+  </div>
+  <div class="col">
+      <div class="form-group">
+        <label>Patient Outcome*</label>
+            <%= form.select :patient_outcome, patient_outcomes_list, {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+
+  <div class="col" style="display: <%= @patient.patient_outcome.present? ? 'block': 'none' %>" id="show_patient_outcome">
+      <% if form.object.present? and form.object.patient_outcome == "Death" %>
+        <div class="form-group" id="death_date_div">
+      <% else %>
+        <div class="form-group" style="display:none;" id="death_date_div">
+      <% end %>
+        <label>Death Date*</label>
+          <%= form.date_field :death_date, class: "form-control", max: Date.today %>
+      </div>
+
+      <% if form.object.present? and form.object.patient_outcome == "Admitted" %>
+       <div class="form-group" id="admission_date_div">
+      <% else %>
+        <div class="form-group" style="display:none;" id="admission_date_div">
+      <% end %>
+        <label>Admission Date</label>
+          <%= form.date_field :admission_date, class: "form-control", max: Date.today %>
+      </div>
+
+      <% if form.object.present? and form.object.patient_outcome == "LAMA" %>
+       <div class="form-group" id="lama_date_div">
+      <% else %>
+        <div class="form-group" style="display:none;" id="lama_date_div">
+      <% end %>
+        <label>LAMA Date</label>
+          <%= form.date_field :lama_date, class: "form-control", max: Date.today %>
+      </div>
+
+      <% if form.object.present? and form.object.patient_outcome == "Discharged" %>
+       <div class="form-group" id="discharge_date_div">
+      <% else %>
+        <div class="form-group" style="display:none;" id="discharge_date_div">
+      <% end %>
+        <label>Discharge Date</label>
+          <%= form.date_field :discharge_date, class: "form-control", max: Date.today %>
+      </div>
+  </div>
+
+  <%= (form.hidden_field :patient_status, value: "#{params[:set_released_f].present? ? 'In Process' : form.object.patient_status }") %>
+
+  <div class="col" style="display:none;" id="other_fever_div">
+      <div class="form-group">
+          <label>Other Diagnosed Fever</label>
+          <%= form.select :other_diagnosed_fever, other_diagnosed_fevers_list, {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+
+  <div class="col">
+      <div class="form-group" style="display:none;" id="patient_condition_div">
+          <label>Patient Condition *</label>
+          <%= form.select :patient_condition, patient_conditions_list, {:include_blank => "Select"}, {class: "form-control"} %>
+      </div>
+  </div>
+</div>
+<script type="text/javascript">
+  
+  $("#patient_date_of_onset").change(function() {
+    var date_of_onset = this.value
+    document.getElementsById("patient_fever_last_till")[0].setAttribute("min", date_of_onset);
+  });
+
+  $("#patient_fever_last_till").change(function() {
+    var onset = document.getElementsByTagName('patient_date_of_onset');
+    if (onset)
+    {
+      radiobtn = document.getElementById("patient_fever_false");
+      radiobtn.checked = true;
+    }
+  });
+    
+
+<% if @patient.lab_user_id.nil? %>
+  $('input[type=radio][name="patient[associated_symptom]"]').click(function () {
+    radiobtn_fever_f = document.getElementById("patient_fever_false");
+    radiobtn_fever_t = document.getElementById("patient_fever_true");
+
+    
+    if (this.value == 'false' && radiobtn_fever_f.value == 'false') {
+          <% unless params[:lab_patient_id].present? or form.object.lab_patient_id.present? %>
+            $("#patient_provisional_diagnosis").val("Non-Dengue");
+          <% end %>
+          $("#other_fever_div")[0].style.display = "block";
+          $("#patient_other_diagnosed_fever").prop('required',true);
+          <% unless (current_user.dpc_user? and @patient.provisional_diagnosis == "Confirmed") %>
+            $("#patient_patient_status").val("");
+          <% end %>
+        }
+    else if (this.value == 'true' && radiobtn_fever_t.value == 'true') {
+          <% unless params[:lab_patient_id].present? or form.object.lab_patient_id.present? %>
+            $("#patient_provisional_diagnosis").val("Suspected");
+          <% end %>
+          $("#cbc_htc_sec")[0].style.display = "block"; 
+          $("#other_fever_div")[0].style.display = "none";
+          $("#patient_other_diagnosed_fever").prop('required',false);
+        }
+  });
+<% end %>
+
+
+$("#patient_patient_outcome").change(function() {
+
+    var provisional_diagnosis = $("#patient_provisional_diagnosis").val();
+    // console.log(provisional_diagnosis);
+    if (this.value == "Death" || this.value == "Discharged" || this.value == "LAMA") 
+    {
+      $("#patient_patient_status").val("Closed");
+    }
+    else if (provisional_diagnosis != "Non-Dengue")
+    {
+      $("#patient_patient_status").val("In Process");
+    }
+
+    if (this.value == "Death") 
+    {
+      $("#death_date_div")[0].style.display = "block";
+      $("#discharge_date_div")[0].style.display = "none";
+      $("#admission_date_div")[0].style.display = "none";
+      $("#lama_date_div")[0].style.display = "none";
+    }
+    else if (this.value == "Discharged")
+    {
+      $("#death_date_div")[0].style.display = "none";
+      $("#discharge_date_div")[0].style.display = "block";
+      $("#admission_date_div")[0].style.display = "none";
+      $("#lama_date_div")[0].style.display = "none";
+    }
+    else if (this.value == "LAMA")
+    {
+      $("#death_date_div")[0].style.display = "none";
+      $("#discharge_date_div")[0].style.display = "none";
+      $("#admission_date_div")[0].style.display = "none";
+      $("#lama_date_div")[0].style.display = "block";
+    }
+    else if (this.value == "Admitted")
+    {
+      $("#death_date_div")[0].style.display = "none";
+      $("#discharge_date_div")[0].style.display = "none";
+      $("#admission_date_div")[0].style.display = "block";
+      $("#lama_date_div")[0].style.display = "none";
+    }
+    else
+    {
+      $("#death_date_div")[0].style.display = "none";
+      $("#discharge_date_div")[0].style.display = "none";
+      $("#admission_date_div")[0].style.display = "none";
+      $("#lama_date_div")[0].style.display = "none";
+    }
+
+
+    // !!  Missing Space Between Patient Outcome and Patient Condition when we change Patient outcome and display dates /......
+    <% if @patient.patient_outcome.present? %>
+      <% if @patient.patient_outcome == 'Outpatient' %>
+        $('#show_patient_outcome').hide();
+      <% else %>
+        $('#show_patient_outcome').show();
+      <% end %>
+    <% end %>
+
+    $('#show_patient_outcome').hide();
+    if($(this).val() != ''){
+      if($(this).val() == 'Outpatient'){
+        $('#show_patient_outcome').hide();
+      }else{
+        $('#show_patient_outcome').show();
+      }
+      console.log($(this).val());
+    }else{
+      $('#show_patient_outcome').hide();
+    }
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+   });
+</script>
+
+<script>
+  <% if current_user.dpc_user? and @patient.provisional_diagnosis == "Confirmed" and form.object.new_record? and (form.object.lab_patient_id != nil or params[:lab_patient_id] != nil) %>
+    $("#patient_condition_confirmed").attr("required", "true");
+  <% end %>
+</script>
